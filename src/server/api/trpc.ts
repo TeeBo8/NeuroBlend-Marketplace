@@ -1,0 +1,75 @@
+import { initTRPC, TRPCError } from '@trpc/server';
+import superjson from 'superjson';
+import { ZodError } from 'zod';
+import { db } from '@/server/db';
+import { auth, type SessionUser } from '@/server/auth/config';
+import { headers } from 'next/headers';
+
+export const createTRPCContext = async () => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  return {
+    db,
+    session,
+  };
+};
+
+const t = initTRPC.context<typeof createTRPCContext>().create({
+  transformer: superjson,
+  errorFormatter({ shape, error }) {
+    return {
+      ...shape,
+      data: {
+        ...shape.data,
+        zodError:
+          error.cause instanceof ZodError ? error.cause.flatten() : null,
+      },
+    };
+  },
+});
+
+export const createCallerFactory = t.createCallerFactory;
+
+export const createTRPCRouter = t.router;
+
+// Public procedure - anyone can access
+export const publicProcedure = t.procedure;
+
+// Protected procedure - requires authentication
+export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
+  if (!ctx.session?.user) {
+    throw new TRPCError({ code: 'UNAUTHORIZED' });
+  }
+  // Cast user to include role field
+  const user = ctx.session.user as SessionUser;
+  return next({
+    ctx: {
+      session: { ...ctx.session, user },
+    },
+  });
+});
+
+// Vendor procedure - requires vendor role
+export const vendorProcedure = protectedProcedure.use(({ ctx, next }) => {
+  const role = ctx.session.user.role;
+  if (role !== 'vendor' && role !== 'admin') {
+    throw new TRPCError({
+      code: 'FORBIDDEN',
+      message: 'You must be a vendor to access this resource',
+    });
+  }
+  return next({ ctx });
+});
+
+// Admin procedure - requires admin role
+export const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
+  if (ctx.session.user.role !== 'admin') {
+    throw new TRPCError({
+      code: 'FORBIDDEN',
+      message: 'You must be an admin to access this resource',
+    });
+  }
+  return next({ ctx });
+});
