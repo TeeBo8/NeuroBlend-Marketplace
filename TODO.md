@@ -89,16 +89,11 @@
 
 ### Priorité 1 - Critique (pour que l'app fonctionne)
 
-- [ ] **Configurer les variables d'environnement Vercel**:
-  ```
-  DATABASE_URL=postgresql://... (depuis Neon/Vercel Postgres)
-  BETTER_AUTH_SECRET=<SECRET_RETIRE>
-  NEXT_PUBLIC_APP_URL=https://neuro-blend-marketplace.vercel.app
-  ```
+- [x] **Configurer les variables d'environnement Vercel** ✅
 
-- [ ] **Créer les tables dans la base de données**:
+- [x] **Créer les tables dans la base de données** ✅
   ```bash
-  pnpm drizzle-kit push
+  pnpm drizzle-kit push  # Fait le 4 février 2026
   ```
 
 - [ ] **Redéployer sur Vercel** après configuration des env vars
