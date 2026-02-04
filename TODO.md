@@ -96,7 +96,7 @@
   pnpm drizzle-kit push  # Fait le 4 février 2026
   ```
 
-- [ ] **Redéployer sur Vercel** après configuration des env vars
+- [x] **Redéployer sur Vercel** ✅ (fix: ajout vercel.json avec framework: nextjs)
 
 ### Priorité 2 - Pages essentielles
 
