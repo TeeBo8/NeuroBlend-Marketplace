@@ -9,9 +9,14 @@ import { vendors, orders, orderItems, products } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2026-01-28.clover',
-});
+const getStripe = () => {
+  if (!process.env.STRIPE_SECRET_KEY) {
+    throw new Error('STRIPE_SECRET_KEY is not configured');
+  }
+  return new Stripe(process.env.STRIPE_SECRET_KEY, {
+    apiVersion: '2026-01-28.clover',
+  });
+};
 
 const cartItemSchema = z.object({
   productId: z.string(),
@@ -45,7 +50,7 @@ export const paymentRouter = createTRPCRouter({
 
     if (vendor.stripeAccountId) {
       // Return existing account link for onboarding
-      const accountLink = await stripe.accountLinks.create({
+      const accountLink = await getStripe().accountLinks.create({
         account: vendor.stripeAccountId,
         refresh_url: `${process.env.NEXT_PUBLIC_APP_URL}/vendor/payouts?refresh=true`,
         return_url: `${process.env.NEXT_PUBLIC_APP_URL}/vendor/payouts?success=true`,
@@ -56,7 +61,7 @@ export const paymentRouter = createTRPCRouter({
     }
 
     // Create new Stripe Connect account
-    const account = await stripe.accounts.create({
+    const account = await getStripe().accounts.create({
       type: 'express',
       country: 'FR',
       email: vendor.user.email,
@@ -81,7 +86,7 @@ export const paymentRouter = createTRPCRouter({
       .where(eq(vendors.id, vendor.id));
 
     // Create account link for onboarding
-    const accountLink = await stripe.accountLinks.create({
+    const accountLink = await getStripe().accountLinks.create({
       account: account.id,
       refresh_url: `${process.env.NEXT_PUBLIC_APP_URL}/vendor/payouts?refresh=true`,
       return_url: `${process.env.NEXT_PUBLIC_APP_URL}/vendor/payouts?success=true`,
@@ -105,7 +110,7 @@ export const paymentRouter = createTRPCRouter({
       };
     }
 
-    const account = await stripe.accounts.retrieve(vendor.stripeAccountId);
+    const account = await getStripe().accounts.retrieve(vendor.stripeAccountId);
 
     const onboardingComplete = account.details_submitted ?? false;
     const payoutsEnabled = account.payouts_enabled ?? false;
@@ -142,7 +147,7 @@ export const paymentRouter = createTRPCRouter({
       });
     }
 
-    const loginLink = await stripe.accounts.createLoginLink(
+    const loginLink = await getStripe().accounts.createLoginLink(
       vendor.stripeAccountId
     );
 
@@ -252,7 +257,7 @@ export const paymentRouter = createTRPCRouter({
       const orderNumber = `NB-${Date.now()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
 
       // Create checkout session with Stripe Connect
-      const session = await stripe.checkout.sessions.create({
+      const session = await getStripe().checkout.sessions.create({
         mode: 'payment',
         customer_email: ctx.session.user.email || undefined,
         line_items: lineItems,
@@ -295,7 +300,7 @@ export const paymentRouter = createTRPCRouter({
   verifyCheckout: protectedProcedure
     .input(z.object({ sessionId: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const session = await stripe.checkout.sessions.retrieve(input.sessionId, {
+      const session = await getStripe().checkout.sessions.retrieve(input.sessionId, {
         expand: ['payment_intent'],
       });
 
