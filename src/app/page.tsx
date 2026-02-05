@@ -4,7 +4,7 @@ import { APP_NAME, PRODUCT_CATEGORIES } from "@/lib/constants";
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen">
+    <>
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 text-white">
         <div className="container mx-auto px-4 py-24 md:py-32">
@@ -124,67 +124,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 bg-gray-900 text-gray-400">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-white font-bold text-lg mb-4">{APP_NAME}</h3>
-              <p className="text-sm">
-                La marketplace de café pour les esprits atypiques.
-              </p>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">Marketplace</h4>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <Link href="/products" className="hover:text-white">
-                    Tous les produits
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/vendors" className="hover:text-white">
-                    Nos torréfacteurs
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">Support</h4>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <Link href="/faq" className="hover:text-white">
-                    FAQ
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/contact" className="hover:text-white">
-                    Contact
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">Vendeurs</h4>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <Link href="/vendor/register" className="hover:text-white">
-                    Devenir vendeur
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/vendor/dashboard" className="hover:text-white">
-                    Espace vendeur
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
-            <p>&copy; {new Date().getFullYear()} {APP_NAME}. Tous droits réservés.</p>
-          </div>
-        </div>
-      </footer>
-    </main>
+    </>
   );
 }
