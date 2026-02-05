@@ -105,11 +105,11 @@
   - [x] Footer
   - [x] Mobile menu
 
-- [ ] **Authentification**:
-  - [ ] Page `/auth/login`
-  - [ ] Page `/auth/register`
-  - [ ] Page `/auth/forgot-password`
-  - [ ] Composant AuthProvider
+- [x] **Authentification**: ✅ (feat: login, register, forgot-password + useSession dans header/mobile-nav)
+  - [x] Page `/login`
+  - [x] Page `/register`
+  - [x] Page `/forgot-password`
+  - [x] Session intégrée dans Header & MobileNav (useSession, signOut, user dropdown)
 
 - [ ] **Catalogue**:
   - [ ] Page `/products` - Liste produits avec filtres
