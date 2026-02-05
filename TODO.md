@@ -100,10 +100,10 @@
 
 ### Priorité 2 - Pages essentielles
 
-- [ ] **Layout & Navigation**:
-  - [ ] Header avec navigation
-  - [ ] Footer
-  - [ ] Mobile menu
+- [x] **Layout & Navigation**: ✅ (feat: header sticky, footer, mobile nav sheet)
+  - [x] Header avec navigation
+  - [x] Footer
+  - [x] Mobile menu
 
 - [ ] **Authentification**:
   - [ ] Page `/auth/login`
