@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Menu, Coffee } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import { Menu, Coffee, LogOut, LayoutDashboard, Store } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -14,14 +14,24 @@ import {
 } from '@/components/ui/sheet';
 import { Separator } from '@/components/ui/separator';
 import { APP_NAME, NAV_LINKS } from '@/lib/constants';
+import { useSession, signOut } from '@/lib/auth-client';
 import { cn } from '@/lib/utils';
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const { data: session } = useSession();
 
   const handleLinkClick = () => {
     setOpen(false);
+  };
+
+  const handleSignOut = async () => {
+    setOpen(false);
+    await signOut();
+    router.push('/');
+    router.refresh();
   };
 
   return (
@@ -64,36 +74,74 @@ export function MobileNav() {
 
         <Separator className="my-6" />
 
-        {/* Auth Links */}
-        <div className="flex flex-col gap-3">
-          <Button asChild className="w-full">
-            <Link href="/register" onClick={handleLinkClick}>
-              Inscription
+        {session?.user ? (
+          /* Logged in state */
+          <div className="flex flex-col gap-1">
+            <div className="px-4 py-2 mb-2">
+              <p className="font-medium text-gray-900">{session.user.name}</p>
+              <p className="text-sm text-gray-500">{session.user.email}</p>
+            </div>
+            <Link
+              href="/dashboard"
+              onClick={handleLinkClick}
+              className="flex items-center gap-3 px-4 py-3 text-base font-medium rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+            >
+              <LayoutDashboard className="h-5 w-5" />
+              Mon tableau de bord
             </Link>
-          </Button>
-          <Button variant="outline" asChild className="w-full">
-            <Link href="/login" onClick={handleLinkClick}>
-              Connexion
-            </Link>
-          </Button>
-        </div>
+            {(session.user as { role?: string }).role === 'vendor' && (
+              <Link
+                href="/vendor/dashboard"
+                onClick={handleLinkClick}
+                className="flex items-center gap-3 px-4 py-3 text-base font-medium rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+              >
+                <Store className="h-5 w-5" />
+                Espace vendeur
+              </Link>
+            )}
+            <Separator className="my-3" />
+            <button
+              onClick={handleSignOut}
+              className="flex items-center gap-3 px-4 py-3 text-base font-medium rounded-md text-red-600 hover:bg-red-50 transition-colors w-full text-left"
+            >
+              <LogOut className="h-5 w-5" />
+              Se déconnecter
+            </button>
+          </div>
+        ) : (
+          /* Not logged in state */
+          <>
+            <div className="flex flex-col gap-3">
+              <Button asChild className="w-full">
+                <Link href="/register" onClick={handleLinkClick}>
+                  Inscription
+                </Link>
+              </Button>
+              <Button variant="outline" asChild className="w-full">
+                <Link href="/login" onClick={handleLinkClick}>
+                  Connexion
+                </Link>
+              </Button>
+            </div>
 
-        <Separator className="my-6" />
+            <Separator className="my-6" />
 
-        {/* Vendor CTA */}
-        <div className="rounded-lg bg-purple-50 p-4">
-          <p className="text-sm font-medium text-purple-900 mb-2">
-            Vous êtes torréfacteur ?
-          </p>
-          <p className="text-xs text-purple-700 mb-3">
-            Rejoignez notre marketplace et vendez vos créations.
-          </p>
-          <Button variant="outline" size="sm" asChild className="w-full">
-            <Link href="/vendor/register" onClick={handleLinkClick}>
-              Devenir vendeur
-            </Link>
-          </Button>
-        </div>
+            {/* Vendor CTA */}
+            <div className="rounded-lg bg-purple-50 p-4">
+              <p className="text-sm font-medium text-purple-900 mb-2">
+                Vous êtes torréfacteur ?
+              </p>
+              <p className="text-xs text-purple-700 mb-3">
+                Rejoignez notre marketplace et vendez vos créations.
+              </p>
+              <Button variant="outline" size="sm" asChild className="w-full">
+                <Link href="/vendor/register" onClick={handleLinkClick}>
+                  Devenir vendeur
+                </Link>
+              </Button>
+            </div>
+          </>
+        )}
       </SheetContent>
     </Sheet>
   );
