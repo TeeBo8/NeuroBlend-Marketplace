@@ -29,18 +29,23 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const result = await signIn.email({ email, password });
+      const { data, error } = await signIn.email({ email, password });
 
-      if (result.error) {
-        toast.error(result.error.message || 'Email ou mot de passe incorrect');
+      if (error) {
+        toast.error(error.message || 'Email ou mot de passe incorrect');
         return;
       }
 
-      toast.success('Connexion réussie !');
-      router.push('/');
-      router.refresh();
-    } catch {
-      toast.error('Une erreur est survenue. Veuillez réessayer.');
+      if (data) {
+        toast.success('Connexion réussie !');
+        router.push('/');
+        router.refresh();
+      }
+    } catch (err) {
+      console.error('Login error:', err);
+      toast.error(
+        err instanceof Error ? err.message : 'Une erreur est survenue. Veuillez réessayer.'
+      );
     } finally {
       setIsLoading(false);
     }

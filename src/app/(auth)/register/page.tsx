@@ -42,18 +42,23 @@ export default function RegisterPage() {
     setIsLoading(true);
 
     try {
-      const result = await signUp.email({ name, email, password });
+      const { data, error } = await signUp.email({ name, email, password });
 
-      if (result.error) {
-        toast.error(result.error.message || "Erreur lors de l'inscription");
+      if (error) {
+        toast.error(error.message || "Erreur lors de l'inscription");
         return;
       }
 
-      toast.success('Compte créé avec succès !');
-      router.push('/');
-      router.refresh();
-    } catch {
-      toast.error('Une erreur est survenue. Veuillez réessayer.');
+      if (data) {
+        toast.success('Compte créé avec succès !');
+        router.push('/');
+        router.refresh();
+      }
+    } catch (err) {
+      console.error('Register error:', err);
+      toast.error(
+        err instanceof Error ? err.message : 'Une erreur est survenue. Veuillez réessayer.'
+      );
     } finally {
       setIsLoading(false);
     }
