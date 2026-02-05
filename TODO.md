@@ -124,12 +124,14 @@
   - [x] Bouton "Ajouter au panier" connecté sur page produit
   - [x] Badge compteur panier dans le header
 
-### Priorité 3 - Espace Client
+### Priorité 3 - Espace Client ✅
 
-- [ ] Page `/account` - Dashboard client
-- [ ] Page `/account/orders` - Historique commandes
-- [ ] Page `/account/orders/[id]` - Détail commande
-- [ ] Page `/account/settings` - Paramètres compte
+- [x] Page `/account` - Dashboard client (stats, commandes récentes, quick links)
+- [x] Page `/account/orders` - Historique commandes (filtres statut, infinite scroll)
+- [x] Page `/account/orders/[id]` - Détail commande (timeline, articles, adresse, suivi)
+- [x] Page `/account/settings` - Paramètres compte (profil éditable, infos compte)
+- [x] Layout `(account)` - Sidebar nav + auth guard + responsive
+- [x] Fix lien "Mon tableau de bord" header/mobile → `/account`
 
 ### Priorité 4 - Espace Vendeur
 

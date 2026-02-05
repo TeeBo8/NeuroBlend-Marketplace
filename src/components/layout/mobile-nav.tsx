@@ -82,7 +82,7 @@ export function MobileNav() {
               <p className="text-sm text-gray-500">{session.user.email}</p>
             </div>
             <Link
-              href="/dashboard"
+              href="/account"
               onClick={handleLinkClick}
               className="flex items-center gap-3 px-4 py-3 text-base font-medium rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
             >
