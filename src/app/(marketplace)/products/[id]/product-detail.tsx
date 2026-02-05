@@ -20,6 +20,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { cn, formatPrice, formatDate } from '@/lib/utils';
 import { PRODUCT_CATEGORIES, ROAST_LEVELS } from '@/lib/constants';
+import { useCartStore } from '@/stores/cart-store';
+import { toast } from 'sonner';
 
 function StarRating({ rating }: { rating: number }) {
   return (
@@ -291,6 +293,23 @@ export function ProductDetail({ id }: { id: string }) {
               size="lg"
               className="w-full bg-purple-600 hover:bg-purple-700 text-lg py-6"
               disabled={product.stock === 0}
+              onClick={() => {
+                useCartStore.getState().addItem({
+                  productId: product.id,
+                  name: product.name,
+                  price: parseFloat(product.price),
+                  imageUrl: product.imageUrl ?? undefined,
+                  vendorId: product.vendorId,
+                  vendorName: product.vendor?.businessName ?? 'Vendeur',
+                });
+                toast.success('Produit ajouté au panier', {
+                  description: product.name,
+                  action: {
+                    label: 'Voir le panier',
+                    onClick: () => window.location.href = '/cart',
+                  },
+                });
+              }}
             >
               <ShoppingCart className="w-5 h-5 mr-2" />
               {product.stock === 0

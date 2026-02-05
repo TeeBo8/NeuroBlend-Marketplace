@@ -16,11 +16,13 @@ import { APP_NAME, NAV_LINKS } from '@/lib/constants';
 import { useSession, signOut } from '@/lib/auth-client';
 import { MobileNav } from './mobile-nav';
 import { cn } from '@/lib/utils';
+import { useCartStore } from '@/stores/cart-store';
 
 export function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const { data: session, isPending } = useSession();
+  const itemCount = useCartStore((s) => s.getItemCount());
 
   const handleSignOut = async () => {
     await signOut();
@@ -67,6 +69,11 @@ export function Header() {
             <Button variant="ghost" size="icon" className="relative" asChild>
               <Link href="/cart" aria-label="Panier">
                 <ShoppingCart className="h-5 w-5" />
+                {itemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-purple-600 text-[11px] font-bold text-white">
+                    {itemCount > 99 ? '99+' : itemCount}
+                  </span>
+                )}
               </Link>
             </Button>
 

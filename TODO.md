@@ -117,10 +117,12 @@
   - [x] Page `/categories/[category]` - Produits par catégorie (hero thématique, cross-nav)
   - [x] Composant réutilisable `ProductCard` + `ProductCardSkeleton`
 
-- [ ] **Panier & Checkout**:
-  - [ ] Page `/cart` - Panier
-  - [ ] Page `/checkout` - Formulaire checkout
-  - [ ] Page `/checkout/success` - Confirmation commande
+- [x] **Panier & Checkout**: ✅ (feat: cart page, checkout with Stripe, success confirmation + add-to-cart hooked up + header badge)
+  - [x] Page `/cart` - Panier (quantité +/-, suppression, récapitulatif, état vide)
+  - [x] Page `/checkout` - Formulaire checkout (adresse livraison, résumé, redirection Stripe)
+  - [x] Page `/checkout/success` - Confirmation commande (vérification paiement, détails commande)
+  - [x] Bouton "Ajouter au panier" connecté sur page produit
+  - [x] Badge compteur panier dans le header
 
 ### Priorité 3 - Espace Client
 
