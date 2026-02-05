@@ -111,10 +111,11 @@
   - [x] Page `/forgot-password`
   - [x] Session intégrée dans Header & MobileNav (useSession, signOut, user dropdown)
 
-- [ ] **Catalogue**:
-  - [ ] Page `/products` - Liste produits avec filtres
-  - [ ] Page `/products/[id]` - Détail produit
-  - [ ] Page `/categories/[category]` - Produits par catégorie
+- [x] **Catalogue**: ✅ (feat: product listing, detail, category pages with filters + infinite scroll)
+  - [x] Page `/products` - Liste produits avec filtres (search, catégorie) + infinite scroll
+  - [x] Page `/products/[id]` - Détail produit (image, prix, vendor, avis, intensité, notes)
+  - [x] Page `/categories/[category]` - Produits par catégorie (hero thématique, cross-nav)
+  - [x] Composant réutilisable `ProductCard` + `ProductCardSkeleton`
 
 - [ ] **Panier & Checkout**:
   - [ ] Page `/cart` - Panier
@@ -275,4 +276,4 @@ src/
 
 ---
 
-*Dernière mise à jour: 4 février 2026*
+*Dernière mise à jour: 5 février 2026*
