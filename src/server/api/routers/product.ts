@@ -1,9 +1,10 @@
 import { z } from 'zod';
-import { eq, and, desc, ilike, sql } from 'drizzle-orm';
+import { eq, and, desc, ilike } from 'drizzle-orm';
 import {
   createTRPCRouter,
   publicProcedure,
   vendorProcedure,
+  adminProcedure,
 } from '../trpc';
 import { products, vendors } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
@@ -326,6 +327,88 @@ export const productRouter = createTRPCRouter({
       await ctx.db.delete(products).where(eq(products.id, input.id));
 
       return { success: true };
+    }),
+
+  // Admin: List all products (including inactive)
+  adminList: adminProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).default(50),
+        cursor: z.string().optional(),
+        search: z.string().optional(),
+        category: z.enum(['HPI', 'ADHD', 'hypersensitive']).optional(),
+        active: z.boolean().optional(),
+        featured: z.boolean().optional(),
+        vendorId: z.string().optional(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const conditions = [];
+
+      if (input.category) {
+        conditions.push(eq(products.category, input.category));
+      }
+      if (input.active !== undefined) {
+        conditions.push(eq(products.active, input.active));
+      }
+      if (input.featured !== undefined) {
+        conditions.push(eq(products.featured, input.featured));
+      }
+      if (input.vendorId) {
+        conditions.push(eq(products.vendorId, input.vendorId));
+      }
+      if (input.search) {
+        conditions.push(ilike(products.name, `%${input.search}%`));
+      }
+
+      const items = await ctx.db.query.products.findMany({
+        where: conditions.length > 0 ? and(...conditions) : undefined,
+        limit: input.limit + 1,
+        orderBy: [desc(products.createdAt)],
+        with: {
+          vendor: {
+            columns: {
+              id: true,
+              businessName: true,
+            },
+          },
+        },
+      });
+
+      let nextCursor: typeof input.cursor | undefined = undefined;
+      if (items.length > input.limit) {
+        const nextItem = items.pop();
+        nextCursor = nextItem!.id;
+      }
+
+      return { items, nextCursor };
+    }),
+
+  // Admin: Toggle product active status
+  adminToggleActive: adminProcedure
+    .input(z.object({ productId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const product = await ctx.db.query.products.findFirst({
+        where: eq(products.id, input.productId),
+      });
+
+      if (!product) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Product not found',
+        });
+      }
+
+      const [updatedProduct] = await ctx.db
+        .update(products)
+        .set({
+          active: !product.active,
+          updatedAt: new Date(),
+        })
+        .where(eq(products.id, input.productId))
+        .returning();
+
+      return updatedProduct;
     }),
 
   // Get vendor's own products

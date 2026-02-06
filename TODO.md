@@ -147,11 +147,11 @@
 
 ### Priorité 5 - Administration
 
-- [ ] Page `/admin/dashboard` - Dashboard admin
-- [ ] Page `/admin/users` - Gestion utilisateurs
-- [ ] Page `/admin/vendors` - Gestion vendeurs
-- [ ] Page `/admin/orders` - Toutes les commandes
-- [ ] Page `/admin/products` - Tous les produits
+- [x] Page `/admin/dashboard` - Dashboard admin
+- [x] Page `/admin/users` - Gestion utilisateurs
+- [x] Page `/admin/vendors` - Gestion vendeurs
+- [x] Page `/admin/orders` - Toutes les commandes
+- [x] Page `/admin/products` - Tous les produits
 
 ### Priorité 6 - Fonctionnalités avancées
 

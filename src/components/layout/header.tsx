@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { ShoppingCart, Coffee, LogOut, LayoutDashboard, Store } from 'lucide-react';
+import { ShoppingCart, Coffee, LogOut, LayoutDashboard, Store, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -106,11 +106,19 @@ export function Header() {
                           Mon tableau de bord
                         </Link>
                       </DropdownMenuItem>
-                      {(session.user as { role?: string }).role === 'vendor' && (
+                      {((session.user as { role?: string }).role === 'vendor' || (session.user as { role?: string }).role === 'admin') && (
                         <DropdownMenuItem asChild>
                           <Link href="/vendor/dashboard">
                             <Store className="mr-2 h-4 w-4" />
                             Espace vendeur
+                          </Link>
+                        </DropdownMenuItem>
+                      )}
+                      {(session.user as { role?: string }).role === 'admin' && (
+                        <DropdownMenuItem asChild>
+                          <Link href="/admin/dashboard">
+                            <Shield className="mr-2 h-4 w-4" />
+                            Administration
                           </Link>
                         </DropdownMenuItem>
                       )}

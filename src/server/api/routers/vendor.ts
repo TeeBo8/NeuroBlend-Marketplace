@@ -150,6 +150,45 @@ export const vendorRouter = createTRPCRouter({
       return updatedVendor;
     }),
 
+  // Admin: List all vendors
+  adminList: adminProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).default(50),
+        cursor: z.string().optional(),
+        approved: z.boolean().optional(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const conditions = [];
+
+      if (input.approved !== undefined) {
+        conditions.push(eq(vendors.approved, input.approved));
+      }
+
+      const items = await ctx.db.query.vendors.findMany({
+        where: conditions.length > 0 ? conditions[0] : undefined,
+        limit: input.limit + 1,
+        with: {
+          user: {
+            columns: {
+              id: true,
+              email: true,
+              name: true,
+            },
+          },
+        },
+      });
+
+      let nextCursor: typeof input.cursor | undefined = undefined;
+      if (items.length > input.limit) {
+        const nextItem = items.pop();
+        nextCursor = nextItem!.id;
+      }
+
+      return { items, nextCursor };
+    }),
+
   // Admin: Get pending vendor applications
   pendingApplications: adminProcedure
     .input(
