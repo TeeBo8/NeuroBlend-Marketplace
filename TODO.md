@@ -184,12 +184,12 @@
 
 ### Priorité 7 - Finitions
 
-- [ ] SEO (meta tags, sitemap)
-- [ ] Tests (Vitest)
-- [ ] Responsive design complet
-- [ ] Loading states & skeletons
-- [ ] Error boundaries
-- [ ] 404 et pages d'erreur personnalisées
+- [x] **SEO (meta tags, sitemap)**: ✅ (metadataBase, sitemap.ts, robots.ts, enriched metadata)
+- [x] **Tests (Vitest)**: ✅ (65 tests - utils, constants, cart-store)
+- [x] **Responsive design complet**: ✅ (sidebar nav mobile, checkout grid, skeleton max-width)
+- [x] **Loading states & skeletons**: ✅ (loading.tsx pour chaque route group)
+- [x] **Error boundaries**: ✅ (error.tsx global + par route group)
+- [x] **404 et pages d'erreur personnalisées**: ✅ (not-found.tsx custom NeuroBlend)
 
 ---
 
