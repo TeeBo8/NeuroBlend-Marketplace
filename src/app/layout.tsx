@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { APP_NAME, APP_DESCRIPTION } from "@/lib/constants";
+import { Chatbot } from "@/components/ai/chatbot";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -59,6 +60,7 @@ export default function RootLayout({
           <Header />
           <main className="min-h-[calc(100vh-4rem)]">{children}</main>
           <Footer />
+          <Chatbot />
           <Toaster richColors position="top-right" />
         </TRPCProvider>
       </body>

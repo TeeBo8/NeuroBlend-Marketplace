@@ -5,9 +5,10 @@ import {
   protectedProcedure,
   vendorProcedure,
 } from '../trpc';
-import { vendors, orders, orderItems, products } from '@/server/db/schema';
+import { vendors, orders, orderItems, products, users } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
 import Stripe from 'stripe';
+import { sendOrderConfirmationEmail } from '@/lib/email';
 
 const getStripe = () => {
   if (!process.env.STRIPE_SECRET_KEY) {
@@ -377,8 +378,23 @@ export const paymentRouter = createTRPCRouter({
         });
       }
 
-      // TODO: Send order confirmation email
-      // TODO: Notify vendor
+      // Send order confirmation email
+      const user = await ctx.db.query.users.findFirst({
+        where: eq(users.id, ctx.session.user.id),
+        columns: { email: true, name: true },
+      });
+      if (user?.email) {
+        sendOrderConfirmationEmail(user.email, {
+          name: user.name || 'Client',
+          orderNumber: metadata.orderNumber,
+          total: `${subtotal.toFixed(2)} €`,
+          items: items.map((i) => ({
+            name: i.productName,
+            quantity: i.quantity,
+            price: `${(parseFloat(i.price) * i.quantity).toFixed(2)} €`,
+          })),
+        });
+      }
 
       return order;
     }),

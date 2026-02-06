@@ -22,6 +22,8 @@ import { cn, formatPrice, formatDate } from '@/lib/utils';
 import { PRODUCT_CATEGORIES, ROAST_LEVELS } from '@/lib/constants';
 import { useCartStore } from '@/stores/cart-store';
 import { toast } from 'sonner';
+import { ReviewForm } from '@/components/product/review-form';
+import { ProductRecommendations } from '@/components/ai/product-recommendations';
 
 function StarRating({ rating }: { rating: number }) {
   return (
@@ -288,6 +290,14 @@ export function ProductDetail({ id }: { id: string }) {
               </div>
             )}
 
+            {/* AI Recommendation */}
+            <div className="mb-6">
+              <ProductRecommendations
+                category={product.category}
+                currentProductName={product.name}
+              />
+            </div>
+
             {/* Add to Cart */}
             <Button
               size="lg"
@@ -373,20 +383,29 @@ export function ProductDetail({ id }: { id: string }) {
       )}
 
       {/* Reviews */}
-      {product.reviews && product.reviews.length > 0 && (
-        <section className="bg-gray-50">
-          <div className="container mx-auto px-4 py-12">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">
-                Avis clients ({product.reviews.length})
-              </h2>
+      <section className="bg-gray-50">
+        <div className="container mx-auto px-4 py-12">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">
+              Avis clients{product.reviews && product.reviews.length > 0 ? ` (${product.reviews.length})` : ''}
+            </h2>
+            {product.reviews && product.reviews.length > 0 && (
               <div className="flex items-center gap-2">
                 <StarRating rating={Math.round(averageRating)} />
                 <span className="text-sm font-medium text-gray-700">
                   {averageRating.toFixed(1)}/5
                 </span>
               </div>
-            </div>
+            )}
+          </div>
+
+          {/* Review Form */}
+          <div className="mb-6">
+            <ReviewForm productId={product.id} />
+          </div>
+
+          {/* Existing Reviews */}
+          {product.reviews && product.reviews.length > 0 && (
             <div className="space-y-4">
               {product.reviews.map((review) => (
                 <Card key={review.id}>
@@ -429,9 +448,9 @@ export function ProductDetail({ id }: { id: string }) {
                 </Card>
               ))}
             </div>
-          </div>
-        </section>
-      )}
+          )}
+        </div>
+      </section>
 
       <Separator />
     </>

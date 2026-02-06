@@ -153,28 +153,34 @@
 - [x] Page `/admin/orders` - Toutes les commandes
 - [x] Page `/admin/products` - Tous les produits
 
-### Priorité 6 - Fonctionnalités avancées
+### Priorité 6 - Fonctionnalités avancées ✅
 
-- [ ] **Abonnements**:
-  - [ ] Page `/subscriptions` - Plans d'abonnement
-  - [ ] Gestion abonnements utilisateur
-  - [ ] Stripe Billing intégration
+- [x] **Avis clients**: ✅ (router tRPC review, ReviewForm avec étoiles interactives, intégré page produit)
+  - [x] Composant ReviewForm avec star rating interactif
+  - [x] Affichage avis sur page produit avec badge "vérifié"
+  - [x] Router tRPC `review` (create, byProduct, myReviews, delete)
 
-- [ ] **Avis clients**:
-  - [ ] Composant ReviewForm
-  - [ ] Affichage avis sur page produit
+- [x] **UploadThing**: ✅ (config serveur, route handler, composant ImageUpload avec drag & drop)
+  - [x] Configuration upload images (`src/server/uploadthing.ts`)
+  - [x] Route handler `/api/uploadthing`
+  - [x] Composant `ImageUpload` avec preview et suppression
+  - [x] Intégré dans le formulaire produit vendeur
 
-- [ ] **Emails (Resend)**:
-  - [ ] Configuration Resend
-  - [ ] Templates emails (confirmation commande, bienvenue, etc.)
+- [x] **Emails (Resend)**: ✅ (client Resend, templates HTML, emails transactionnels)
+  - [x] Configuration Resend (`src/lib/email.ts`)
+  - [x] Templates emails: bienvenue, confirmation commande, approbation vendeur
+  - [x] Intégré dans les routers vendor (approval) et payment (order confirmation)
 
-- [ ] **AI Features (Vercel AI SDK)**:
-  - [ ] Chatbot assistant
-  - [ ] Recommandations produits
+- [x] **Abonnements**: ✅ (page pricing, Stripe Billing checkout, webhook, gestion)
+  - [x] Page `/subscriptions` - 3 plans (Découverte, Essentiel, Premium)
+  - [x] Router tRPC `subscription` (getPlans, mySubscription, createCheckout, manage)
+  - [x] Webhook Stripe (`/api/webhooks/stripe`) pour subscription events
+  - [x] Lien "Abonnements" dans la navigation
 
-- [ ] **UploadThing**:
-  - [ ] Configuration upload images
-  - [ ] Upload images produits
+- [x] **AI Features (Vercel AI SDK + Gemini)**: ✅ (chatbot flottant, recommandations produit)
+  - [x] Chatbot assistant flottant (`useChat` v3 + Gemini 2.5 Flash)
+  - [x] Recommandations produit AI sur page produit
+  - [x] Routes API `/api/chat` et `/api/recommendations`
 
 ### Priorité 7 - Finitions
 
@@ -204,15 +210,14 @@ STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
 
-# Resend (quand prêt)
+# Resend
 RESEND_API_KEY=
 
-# UploadThing (quand prêt)
-UPLOADTHING_SECRET=
-UPLOADTHING_APP_ID=
+# UploadThing
+UPLOADTHING_TOKEN=
 
-# AI (quand prêt)
-ANTHROPIC_API_KEY=
+# AI (Gemini)
+GOOGLE_GENERATIVE_AI_API_KEY=
 ```
 
 ---

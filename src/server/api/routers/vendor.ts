@@ -8,6 +8,7 @@ import {
 } from '../trpc';
 import { vendors, users } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
+import { sendVendorApprovedEmail } from '@/lib/email';
 
 export const vendorRouter = createTRPCRouter({
   // Get vendor by ID (public)
@@ -234,7 +235,14 @@ export const vendorRouter = createTRPCRouter({
         });
       }
 
-      // TODO: Send approval email
+      // Send approval email
+      const vendorUser = await ctx.db.query.users.findFirst({
+        where: eq(users.id, updatedVendor.userId),
+        columns: { email: true },
+      });
+      if (vendorUser?.email) {
+        sendVendorApprovedEmail(vendorUser.email, updatedVendor.businessName);
+      }
 
       return updatedVendor;
     }),

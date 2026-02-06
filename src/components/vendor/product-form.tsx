@@ -4,8 +4,6 @@ import { useState } from 'react';
 import {
   Loader2,
   Save,
-  ImagePlus,
-  X,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -20,6 +18,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { PRODUCT_CATEGORIES, ROAST_LEVELS } from '@/lib/constants';
+import { ImageUpload } from '@/components/vendor/image-upload';
 
 export type ProductFormData = {
   name: string;
@@ -317,55 +316,8 @@ export function ProductForm({
         <CardHeader>
           <CardTitle className="text-lg">Image</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="imageUrl">URL de l&apos;image</Label>
-            <div className="flex gap-2">
-              <Input
-                id="imageUrl"
-                type="url"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                placeholder="https://example.com/image.jpg"
-                className="flex-1"
-              />
-              {imageUrl && (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setImageUrl('')}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              )}
-            </div>
-          </div>
-
-          {imageUrl && (
-            <div className="relative w-32 h-32 rounded-lg overflow-hidden bg-gray-100 border">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={imageUrl}
-                alt="Aperçu"
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = 'none';
-                }}
-              />
-            </div>
-          )}
-
-          {!imageUrl && (
-            <div className="flex items-center justify-center h-32 rounded-lg border-2 border-dashed border-gray-200 bg-gray-50">
-              <div className="text-center">
-                <ImagePlus className="h-8 w-8 text-gray-300 mx-auto mb-2" />
-                <p className="text-sm text-gray-400">
-                  Ajoutez l&apos;URL de votre image
-                </p>
-              </div>
-            </div>
-          )}
+        <CardContent>
+          <ImageUpload value={imageUrl} onChange={setImageUrl} />
         </CardContent>
       </Card>
 

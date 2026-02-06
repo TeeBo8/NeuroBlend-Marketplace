@@ -57,9 +57,53 @@ export const COLORS = {
   warning: '#ED8936',
 } as const;
 
+// Subscription plans
+export const SUBSCRIPTION_PLANS = [
+  {
+    id: 'decouverte',
+    name: 'Découverte',
+    price: 9.90,
+    capsules: 5,
+    features: [
+      '5 capsules par mois',
+      'Livraison offerte',
+      'Sélection du mois',
+    ],
+    highlight: false,
+  },
+  {
+    id: 'essentiel',
+    name: 'Essentiel',
+    price: 14.90,
+    capsules: 10,
+    features: [
+      '10 capsules par mois',
+      'Livraison offerte',
+      '-5% sur la boutique',
+      'Accès aux nouveautés en avant-première',
+    ],
+    highlight: true,
+  },
+  {
+    id: 'premium',
+    name: 'Premium',
+    price: 24.90,
+    capsules: 20,
+    features: [
+      '20 capsules par mois',
+      'Livraison offerte',
+      '-10% sur la boutique',
+      'Produits exclusifs',
+      'Profil gustatif personnalisé',
+    ],
+    highlight: false,
+  },
+] as const;
+
 // Navigation links
 export const NAV_LINKS = [
   { href: '/products', label: 'Produits' },
+  { href: '/subscriptions', label: 'Abonnements' },
   { href: '/products?category=HPI', label: 'HPI' },
   { href: '/products?category=ADHD', label: 'ADHD' },
   { href: '/products?category=hypersensitive', label: 'Hypersensible' },
