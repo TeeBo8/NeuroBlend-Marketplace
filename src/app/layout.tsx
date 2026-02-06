@@ -14,8 +14,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: {
-    default: APP_NAME,
+    default: `${APP_NAME} - Café pour esprits neuroatypiques`,
     template: `%s | ${APP_NAME}`,
   },
   description: APP_DESCRIPTION,
@@ -28,23 +29,43 @@ export const metadata: Metadata = {
     "neuroatypique",
     "marketplace",
     "torréfacteur",
+    "café artisanal",
+    "capsules compatibles",
+    "neurodiversité",
   ],
   authors: [{ name: APP_NAME }],
+  creator: APP_NAME,
+  publisher: APP_NAME,
+  formatDetection: {
+    email: false,
+    telephone: false,
+  },
   openGraph: {
     type: "website",
     locale: "fr_FR",
     siteName: APP_NAME,
-    title: APP_NAME,
+    title: `${APP_NAME} - Café pour esprits neuroatypiques`,
     description: APP_DESCRIPTION,
+    url: "/",
   },
   twitter: {
     card: "summary_large_image",
-    title: APP_NAME,
+    title: `${APP_NAME} - Café pour esprits neuroatypiques`,
     description: APP_DESCRIPTION,
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  alternates: {
+    canonical: "/",
   },
 };
 

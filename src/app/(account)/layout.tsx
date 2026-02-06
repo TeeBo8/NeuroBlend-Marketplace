@@ -106,7 +106,7 @@ export default function AccountLayout({
             <Separator />
 
             {/* Navigation */}
-            <nav className="flex md:flex-col gap-1">
+            <nav className="flex overflow-x-auto md:flex-col gap-1 -mx-1 px-1 pb-2 md:pb-0">
               {ACCOUNT_NAV.map((item) => {
                 const Icon = item.icon;
                 const active = isActive(item.href);
@@ -115,14 +115,14 @@ export default function AccountLayout({
                     key={item.href}
                     href={item.href}
                     className={cn(
-                      'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
+                      'flex items-center gap-2 md:gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors whitespace-nowrap',
                       active
                         ? 'bg-purple-50 text-purple-700'
                         : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                     )}
                   >
                     <Icon className="h-4 w-4 shrink-0" />
-                    <span className="hidden md:inline">{item.label}</span>
+                    <span>{item.label}</span>
                   </Link>
                 );
               })}
