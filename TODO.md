@@ -133,15 +133,17 @@
 - [x] Layout `(account)` - Sidebar nav + auth guard + responsive
 - [x] Fix lien "Mon tableau de bord" header/mobile → `/account`
 
-### Priorité 4 - Espace Vendeur
+### Priorité 4 - Espace Vendeur ✅
 
-- [ ] Page `/vendor/register` - Inscription vendeur
-- [ ] Page `/vendor/dashboard` - Dashboard vendeur
-- [ ] Page `/vendor/products` - Gestion produits
-- [ ] Page `/vendor/products/new` - Créer produit
-- [ ] Page `/vendor/products/[id]/edit` - Modifier produit
-- [ ] Page `/vendor/orders` - Commandes reçues
-- [ ] Page `/vendor/payouts` - Stripe Connect onboarding
+- [x] Layout `(vendor)` - Sidebar nav + auth/role guard + responsive + bouton "Nouveau produit"
+- [x] Page `/vendor/register` - Inscription vendeur (bénéfices, formulaire, redirection si déjà vendeur)
+- [x] Page `/vendor/dashboard` - Dashboard vendeur (stats, alertes validation/Stripe, commandes récentes, quick links)
+- [x] Page `/vendor/products` - Gestion produits (liste, actions, suppression avec confirmation)
+- [x] Page `/vendor/products/new` - Créer produit (formulaire complet : info, prix, stock, caractéristiques, image)
+- [x] Page `/vendor/products/[id]/edit` - Modifier produit (formulaire pré-rempli, suppression)
+- [x] Page `/vendor/orders` - Commandes reçues (filtres statut, détails client/items, actions statut, suivi)
+- [x] Page `/vendor/payouts` - Stripe Connect onboarding (checklist statut, configuration, dashboard Stripe)
+- [x] Composant réutilisable `ProductForm` (partagé entre new/edit)
 
 ### Priorité 5 - Administration
 
@@ -280,4 +282,4 @@ src/
 
 ---
 
-*Dernière mise à jour: 5 février 2026*
+*Dernière mise à jour: 6 février 2026*
