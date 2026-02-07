@@ -16,12 +16,35 @@ export function ContactForm() {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate sending (replace with Resend integration later)
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get('name') as string,
+      email: formData.get('email') as string,
+      subject: formData.get('subject') as string,
+      message: formData.get('message') as string,
+    };
 
-    setIsSent(true);
-    setIsLoading(false);
-    toast.success('Message envoyé ! Nous vous répondrons sous 24-48h.');
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        toast.error(result.error || 'Une erreur est survenue.');
+        return;
+      }
+
+      setIsSent(true);
+      toast.success('Message envoyé ! Nous vous répondrons sous 24-48h.');
+    } catch {
+      toast.error("Impossible d'envoyer le message. Vérifiez votre connexion.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (isSent) {
@@ -53,6 +76,7 @@ export function ContactForm() {
           <Label htmlFor="name">Nom</Label>
           <Input
             id="name"
+            name="name"
             placeholder="Votre nom"
             required
             disabled={isLoading}
@@ -62,6 +86,7 @@ export function ContactForm() {
           <Label htmlFor="email">Email</Label>
           <Input
             id="email"
+            name="email"
             type="email"
             placeholder="vous@exemple.com"
             required
@@ -73,6 +98,7 @@ export function ContactForm() {
         <Label htmlFor="subject">Sujet</Label>
         <Input
           id="subject"
+          name="subject"
           placeholder="De quoi souhaitez-vous parler ?"
           required
           disabled={isLoading}
@@ -82,6 +108,7 @@ export function ContactForm() {
         <Label htmlFor="message">Message</Label>
         <Textarea
           id="message"
+          name="message"
           placeholder="Votre message..."
           rows={5}
           required
