@@ -3,7 +3,7 @@
 ## Statut Actuel
 - **Build Vercel**: Passé
 - **URL**: https://neuro-blend-marketplace.vercel.app
-- **Problème actuel**: Erreur 404 NOT_FOUND (probablement car les tables DB n'existent pas encore)
+- **Phase en cours**: Roadmap V2 — Post-Audit
 
 ---
 
@@ -287,4 +287,165 @@ src/
 
 ---
 
-*Dernière mise à jour: 6 février 2026*
+## Roadmap V2 — Post-Audit (7 février 2026)
+
+> Audit réalisé par Claude navigateur + validé et ajusté par Claude Code.
+> Les phases sont ordonnées par priorité d'impact business.
+
+---
+
+### PHASE 1 : Corriger les bugs critiques (Priorité MAX)
+
+**Pourquoi** : 8 liens du footer mènent en 404. Un visiteur qui veut en savoir plus avant d'acheter perd confiance immédiatement.
+
+#### 1.1 — Créer les pages manquantes (8 pages 404 du footer)
+
+- [ ] `/about` — Page "À propos" (histoire de NeuroBlend, mission, valeurs, le fondateur)
+- [ ] `/contact` — Page Contact (formulaire email simple avec Resend)
+- [ ] `/faq` — Page FAQ (reprendre la FAQ abonnements + questions générales marketplace)
+- [ ] `/shipping` — Page Livraison (délais, zones, tarifs, politique retour)
+- [ ] `/privacy` — Politique de confidentialité (template RGPD adapté)
+- [ ] `/terms` — Conditions Générales de Vente (template CGV marketplace)
+- [ ] `/cookies` — Politique Cookies (informations sur les cookies utilisés)
+- [ ] `/vendors` — Page "Nos torréfacteurs" (listing public des vendeurs actifs avec profil)
+
+#### 1.2 — Corriger l'accessibilité
+
+- [ ] Ajouter `aria-label="Ouvrir le chat"` au bouton flottant du chatbot
+- [ ] Ajouter `aria-label="Fermer le chat"` au bouton close du chatbot
+- [ ] Ajouter `aria-label` au champ input du chatbot
+- [ ] Vérifier le contraste du texte "Propulsé par Gemini" (purple-200 — probablement sous le ratio WCAG AA 4.5:1)
+
+#### 1.3 — SEO de base manquant
+
+- [ ] Créer une image OG (1200x630px) avec logo + baseline NeuroBlend
+- [ ] Ajouter `og:image` dans le metadata du layout racine
+- [ ] Ajouter `twitter:image` dans le metadata du layout racine
+- [ ] Ajouter des exports `metadata` aux pages auth (login, register, forgot-password — actuellement client components sans metadata)
+- [ ] Mettre à jour le sitemap.ts pour inclure les nouvelles pages (/about, /faq, /contact, etc.)
+
+---
+
+### PHASE 2 : Landing page qui convertit
+
+**Pourquoi** : La homepage actuelle est fonctionnelle mais ne convertit pas. Il manque de l'émotion, de la preuve sociale et de la différenciation. Pour un public neuroatypique, la page doit valider émotionnellement qu'ils sont au bon endroit.
+
+#### 2.1 — Refonte du Hero section
+
+- [ ] Titre plus émotionnel : "Votre cerveau mérite un café à sa hauteur"
+- [ ] Sous-titre avec bénéfice clair : "Des blends créés par des torréfacteurs artisanaux, adaptés aux profils HPI, ADHD et Hypersensibles"
+- [ ] Badges de confiance ("100% artisanal", "Livraison offerte", "Sans engagement")
+- [ ] CTA principal renforcé : "Trouver mon blend idéal"
+
+#### 2.2 — Section preuve sociale (nouvelle)
+
+- [ ] Section "Ils ont trouvé leur blend" avec 3-4 témoignages (fictifs pour le MVP — prénom + profil neuro)
+- [ ] Compteur animé : "X esprits neuroatypiques nous font confiance"
+
+#### 2.3 — Section "Pourquoi NeuroBlend ?" (nouvelle)
+
+- [ ] 3-4 cards avec icônes expliquant la proposition de valeur unique :
+  - "Adapté à votre profil cognitif"
+  - "Torréfacteurs artisanaux"
+  - "Communauté neuroatypique"
+  - "Sans engagement"
+
+#### 2.4 — Améliorer les cards profils (HPI/ADHD/Hypersensible)
+
+- [ ] Remplacer les lettres dans cercles violets par des icônes/illustrations plus parlantes
+- [ ] Ajouter une courte description du bénéfice café pour chaque profil
+
+#### 2.5 — Section abonnements teaser sur la homepage
+
+- [ ] Ajouter un aperçu des 3 plans d'abonnement avec pricing cards
+- [ ] CTA vers la page `/subscriptions`
+
+#### 2.6 — Section torréfacteurs améliorée
+
+- [ ] Remplacer le simple CTA "Vous êtes torréfacteur ?" par 2-3 mini-profils de torréfacteurs partenaires
+- [ ] Ajoute de la confiance pour les acheteurs (vrais artisans derrière les produits)
+
+#### 2.7 — Footer enrichi
+
+- [ ] Ajouter les liens réseaux sociaux (Instagram, LinkedIn, TikTok)
+- [ ] Ajouter un formulaire newsletter ("Recevez nos découvertes café chaque semaine")
+
+---
+
+### PHASE 3 : Landing page vendeur (torréfacteurs)
+
+**Pourquoi** : Le bouton "Devenir torréfacteur" mène directement à la page d'inscription protégée. Un torréfacteur qui découvre le site doit d'abord comprendre la proposition de valeur AVANT de créer un compte.
+
+#### 3.1 — Page `/vendor/landing` (accessible SANS connexion)
+
+- [ ] Hero : "Vendez votre café à 15-20% de la population française"
+- [ ] Proposition de valeur : 0€ d'inscription, 15% de commission, communauté ciblée
+- [ ] 3 étapes visuelles : Inscrivez-vous → Ajoutez vos produits → Vendez
+- [ ] FAQ vendeur (questions courantes des torréfacteurs)
+- [ ] Témoignages torréfacteurs (fictifs au début)
+- [ ] CTA : "Créer mon espace vendeur gratuitement" → redirige vers `/vendor/register`
+- [ ] Modifier le bouton "Devenir torréfacteur" de la homepage pour pointer vers cette page
+
+---
+
+### PHASE 4 : Fonctionnalités manquantes
+
+#### 4.1 — Bannière cookies RGPD
+
+- [ ] Implémenter une bannière de consentement cookies conforme RGPD/CNIL
+- [ ] Stocker le consentement en cookie/localStorage
+- [ ] Conditionner le chargement des scripts analytics au consentement
+
+#### 4.2 — Produits de démonstration (seed data)
+
+- [ ] Créer un script de seed (`src/server/db/seed.ts`)
+- [ ] 6-9 produits fictifs (2-3 par catégorie HPI/ADHD/Hypersensible)
+- [ ] Avec images, descriptions, notes de dégustation, prix, intensité
+- [ ] Créer un vendeur test associé
+- [ ] Marqués comme produits de démonstration
+
+#### 4.3 — Quiz interactif de recommandation
+
+- [ ] Mini-quiz en 3 questions :
+  - "Comment fonctionne votre esprit ?" (analytique/créatif/intense)
+  - "Qu'attendez-vous de votre café ?" (focus/calme/énergie)
+  - "Quelle intensité préférez-vous ?" (doux/équilibré/corsé)
+- [ ] Résultat : recommandation de profil + produits adaptés
+- [ ] Intégrer sur la homepage ou comme page dédiée `/quiz`
+
+---
+
+### PHASE 5 : Optimisations
+
+#### 5.1 — SEO avancé
+
+- [ ] Schema.org markup (Product, Organization, FAQ, BreadcrumbList)
+- [ ] Pages catégories avec contenu SEO enrichi
+- [ ] Metadata unique et optimisée par page
+
+#### 5.2 — Analytics
+
+- [ ] Intégrer un analytics privacy-friendly (Plausible ou PostHog)
+- [ ] Event tracking : inscription, ajout panier, clic CTA, ouverture chat, complétion quiz
+
+#### 5.3 — Performance
+
+- [ ] Optimiser les images uploadées en WebP/AVIF
+- [ ] Preload des fonts critiques (Inter)
+- [ ] Audit Lighthouse et corrections
+
+---
+
+### Résumé des phases
+
+| Phase | Contenu | Impact |
+|-------|---------|--------|
+| **1** | Corriger 404, accessibilité, SEO de base | Confiance & compliance |
+| **2** | Refonte landing page | Conversion visiteurs |
+| **3** | Landing page vendeur | Acquisition torréfacteurs |
+| **4** | Cookies RGPD, seed data, quiz | Fonctionnalités & UX |
+| **5** | Schema.org, analytics, performance | Croissance & SEO |
+
+---
+
+*Dernière mise à jour: 7 février 2026*

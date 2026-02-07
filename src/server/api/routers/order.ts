@@ -6,7 +6,7 @@ import {
   vendorProcedure,
   adminProcedure,
 } from '../trpc';
-import { orders, orderItems, vendors } from '@/server/db/schema';
+import { orders, vendors } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
 
 export const orderRouter = createTRPCRouter({

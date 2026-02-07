@@ -252,7 +252,6 @@ export const paymentRouter = createTRPCRouter({
 
       const commissionRate = parseFloat(vendor.commissionRate || '15') / 100;
       const commission = subtotal * commissionRate;
-      const vendorAmount = Math.round((subtotal - commission) * 100);
 
       // Generate order number
       const orderNumber = `NB-${Date.now()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
