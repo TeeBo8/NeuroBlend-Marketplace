@@ -294,35 +294,34 @@ src/
 
 ---
 
-### PHASE 1 : Corriger les bugs critiques (Priorité MAX)
+### PHASE 1 : Corriger les bugs critiques (Priorité MAX) ✅
 
 **Pourquoi** : 8 liens du footer mènent en 404. Un visiteur qui veut en savoir plus avant d'acheter perd confiance immédiatement.
 
-#### 1.1 — Créer les pages manquantes (8 pages 404 du footer)
+#### 1.1 — Créer les pages manquantes (8 pages 404 du footer) ✅
 
-- [ ] `/about` — Page "À propos" (histoire de NeuroBlend, mission, valeurs, le fondateur)
-- [ ] `/contact` — Page Contact (formulaire email simple avec Resend)
-- [ ] `/faq` — Page FAQ (reprendre la FAQ abonnements + questions générales marketplace)
-- [ ] `/shipping` — Page Livraison (délais, zones, tarifs, politique retour)
-- [ ] `/privacy` — Politique de confidentialité (template RGPD adapté)
-- [ ] `/terms` — Conditions Générales de Vente (template CGV marketplace)
-- [ ] `/cookies` — Politique Cookies (informations sur les cookies utilisés)
-- [ ] `/vendors` — Page "Nos torréfacteurs" (listing public des vendeurs actifs avec profil)
+- [x] `/about` — Page "À propos" (histoire de NeuroBlend, mission, valeurs, le fondateur)
+- [x] `/contact` — Page Contact (formulaire email simple avec Resend)
+- [x] `/faq` — Page FAQ (reprendre la FAQ abonnements + questions générales marketplace)
+- [x] `/shipping` — Page Livraison (délais, zones, tarifs, politique retour)
+- [x] `/privacy` — Politique de confidentialité (template RGPD adapté)
+- [x] `/terms` — Conditions Générales de Vente (template CGV marketplace)
+- [x] `/cookies` — Politique Cookies (informations sur les cookies utilisés)
+- [x] `/vendors` — Page "Nos torréfacteurs" (listing public des vendeurs actifs avec profil + tRPC)
 
-#### 1.2 — Corriger l'accessibilité
+#### 1.2 — Corriger l'accessibilité ✅
 
-- [ ] Ajouter `aria-label="Ouvrir le chat"` au bouton flottant du chatbot
-- [ ] Ajouter `aria-label="Fermer le chat"` au bouton close du chatbot
-- [ ] Ajouter `aria-label` au champ input du chatbot
-- [ ] Vérifier le contraste du texte "Propulsé par Gemini" (purple-200 — probablement sous le ratio WCAG AA 4.5:1)
+- [x] Ajouter `aria-label="Ouvrir le chat"` au bouton flottant du chatbot
+- [x] Ajouter `aria-label="Fermer le chat"` au bouton close du chatbot
+- [x] Ajouter `aria-label="Votre message"` au champ input du chatbot
+- [x] Contraste amélioré : `text-purple-200` → `text-purple-100` pour "Propulsé par Gemini"
 
-#### 1.3 — SEO de base manquant
+#### 1.3 — SEO de base manquant ✅
 
-- [ ] Créer une image OG (1200x630px) avec logo + baseline NeuroBlend
-- [ ] Ajouter `og:image` dans le metadata du layout racine
-- [ ] Ajouter `twitter:image` dans le metadata du layout racine
-- [ ] Ajouter des exports `metadata` aux pages auth (login, register, forgot-password — actuellement client components sans metadata)
-- [ ] Mettre à jour le sitemap.ts pour inclure les nouvelles pages (/about, /faq, /contact, etc.)
+- [x] Créer une image OG (1200x630px) via `opengraph-image.tsx` (génération dynamique Next.js)
+- [x] `og:image` et `twitter:image` servis automatiquement par Next.js via le fichier opengraph-image.tsx
+- [x] Ajouter des exports `metadata` aux pages auth (login, register, forgot-password — via layouts dédiés)
+- [x] Mettre à jour le sitemap.ts pour inclure les 8 nouvelles pages
 
 ---
 
@@ -440,7 +439,7 @@ src/
 
 | Phase | Contenu | Impact |
 |-------|---------|--------|
-| **1** | Corriger 404, accessibilité, SEO de base | Confiance & compliance |
+| **1** | ~~Corriger 404, accessibilité, SEO de base~~ | ✅ Terminé |
 | **2** | Refonte landing page | Conversion visiteurs |
 | **3** | Landing page vendeur | Acquisition torréfacteurs |
 | **4** | Cookies RGPD, seed data, quiz | Fonctionnalités & UX |
@@ -448,4 +447,4 @@ src/
 
 ---
 
-*Dernière mise à jour: 7 février 2026*
+*Dernière mise à jour: 7 février 2026 — Phase 1 terminée (commit fad7a30)*
