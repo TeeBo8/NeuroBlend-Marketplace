@@ -1,7 +1,41 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { APP_NAME, PRODUCT_CATEGORIES } from "@/lib/constants";
-import { Shield, Truck, RefreshCcw } from "lucide-react";
+import { Shield, Truck, RefreshCcw, Star, Quote, Users } from "lucide-react";
+import { AnimatedCounter } from "@/components/home/animated-counter";
+
+const TESTIMONIALS = [
+  {
+    name: "Léa",
+    profile: "HPI" as const,
+    quote:
+      "Depuis que j'ai trouvé mon blend HPI, mes sessions de deep work sont incomparables. Ce café comprend mon cerveau.",
+  },
+  {
+    name: "Thomas",
+    profile: "ADHD" as const,
+    quote:
+      "Le blend ADHD m'aide à canaliser mon énergie sans les tremblements du café classique. Un vrai game changer !",
+  },
+  {
+    name: "Camille",
+    profile: "Hypersensible" as const,
+    quote:
+      "Enfin un café doux qui ne m'agresse pas. Les notes florales sont subtiles et apaisantes. Je me sens comprise.",
+  },
+  {
+    name: "Maxime",
+    profile: "HPI" as const,
+    quote:
+      "La qualité artisanale se sent dès la première gorgée. Mon rituel café du matin a complètement changé.",
+  },
+] as const;
+
+const PROFILE_COLORS: Record<string, string> = {
+  HPI: "bg-primary/10 text-primary",
+  ADHD: "bg-secondary/80 text-secondary-foreground",
+  Hypersensible: "bg-accent text-accent-foreground",
+};
 
 export default function HomePage() {
   return (
@@ -100,8 +134,68 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* How it Works Section */}
+      {/* Social Proof Section */}
       <section className="py-20 bg-muted/50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-4">
+            Ils ont trouvé leur blend
+          </h2>
+          <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
+            Découvrez les témoignages de ceux qui ont transformé leur rituel café.
+          </p>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+            {TESTIMONIALS.map((testimonial) => (
+              <div
+                key={testimonial.name}
+                className="rounded-2xl border bg-card p-6 flex flex-col gap-4 relative"
+              >
+                <Quote className="h-8 w-8 text-primary/20 absolute top-4 right-4" />
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-sm font-bold text-primary">
+                    {testimonial.name.charAt(0)}
+                  </div>
+                  <div>
+                    <p className="font-semibold text-sm">{testimonial.name}</p>
+                    <span
+                      className={`inline-block text-xs font-medium px-2 py-0.5 rounded-full ${PROFILE_COLORS[testimonial.profile]}`}
+                    >
+                      {testimonial.profile}
+                    </span>
+                  </div>
+                </div>
+                <p className="text-muted-foreground text-sm leading-relaxed flex-1">
+                  &ldquo;{testimonial.quote}&rdquo;
+                </p>
+                <div className="flex gap-0.5">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star
+                      key={i}
+                      className="h-4 w-4 fill-primary text-primary"
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Animated Counter */}
+          <div className="flex flex-col items-center gap-3 text-center">
+            <div className="flex items-center gap-3">
+              <Users className="h-6 w-6 text-primary" />
+              <span className="text-4xl md:text-5xl font-bold text-primary">
+                <AnimatedCounter target={2847} />
+              </span>
+            </div>
+            <p className="text-lg text-muted-foreground">
+              esprits neuroatypiques nous font confiance
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* How it Works Section */}
+      <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">
             Comment ça marche ?

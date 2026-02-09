@@ -345,10 +345,10 @@ src/
 - [x] Adapter les composants principaux aux couleurs sémantiques : Header, Footer, Mobile Nav, Homepage (Hero, Categories, How it Works, CTA)
 - [x] Migrer les couleurs hardcodées (`purple-*`, `gray-*`) dans le reste du projet (pages admin, vendor, account, product-card, etc.)
 
-#### 2.2 — Section preuve sociale (nouvelle)
+#### 2.2 — Section preuve sociale (nouvelle) ✅
 
-- [ ] Section "Ils ont trouvé leur blend" avec 3-4 témoignages (fictifs pour le MVP — prénom + profil neuro)
-- [ ] Compteur animé : "X esprits neuroatypiques nous font confiance"
+- [x] Section "Ils ont trouvé leur blend" avec 3-4 témoignages (fictifs pour le MVP — prénom + profil neuro)
+- [x] Compteur animé : "X esprits neuroatypiques nous font confiance"
 
 #### 2.3 — Section "Pourquoi NeuroBlend ?" (nouvelle)
 
