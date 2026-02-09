@@ -131,7 +131,7 @@ export default function HomePage() {
                 className="bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10 text-base px-8 py-6"
                 asChild
               >
-                <Link href="/vendor/register">Devenir torréfacteur</Link>
+                <Link href="/vendor/landing">Devenir torréfacteur</Link>
               </Button>
             </div>
           </div>
@@ -443,7 +443,7 @@ export default function HomePage() {
             passionnée. Commission de seulement 15% par vente.
           </p>
           <Button size="lg" variant="secondary" asChild>
-            <Link href="/vendor/register">Créer mon espace vendeur</Link>
+            <Link href="/vendor/landing">Créer mon espace vendeur</Link>
           </Button>
         </div>
       </section>

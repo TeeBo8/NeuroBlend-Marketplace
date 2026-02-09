@@ -368,15 +368,15 @@ src/
 - [x] Ajouter un aperçu des 3 plans d'abonnement avec pricing cards
 - [x] CTA vers la page `/subscriptions`
 
-#### 2.6 — Section torréfacteurs améliorée
+#### 2.6 — Section torréfacteurs améliorée ✅
 
-- [ ] Remplacer le simple CTA "Vous êtes torréfacteur ?" par 2-3 mini-profils de torréfacteurs partenaires
-- [ ] Ajoute de la confiance pour les acheteurs (vrais artisans derrière les produits)
+- [x] Remplacer le simple CTA "Vous êtes torréfacteur ?" par 2-3 mini-profils de torréfacteurs partenaires
+- [x] Ajoute de la confiance pour les acheteurs (vrais artisans derrière les produits)
 
-#### 2.7 — Footer enrichi
+#### 2.7 — Footer enrichi ✅
 
-- [ ] Ajouter les liens réseaux sociaux (Instagram, LinkedIn, TikTok)
-- [ ] Ajouter un formulaire newsletter ("Recevez nos découvertes café chaque semaine")
+- [x] Ajouter les liens réseaux sociaux (Instagram, LinkedIn, YouTube)
+- [x] Ajouter un formulaire newsletter ("Recevez nos découvertes café chaque semaine")
 
 ---
 
@@ -449,11 +449,11 @@ src/
 | Phase | Contenu | Impact |
 |-------|---------|--------|
 | **1** | ~~Corriger 404, accessibilité, SEO de base~~ | ✅ Terminé |
-| **2** | Refonte landing page | Conversion visiteurs |
+| **2** | ~~Refonte landing page~~ | ✅ Terminé |
 | **3** | Landing page vendeur | Acquisition torréfacteurs |
 | **4** | Cookies RGPD, seed data, quiz | Fonctionnalités & UX |
 | **5** | Schema.org, analytics, performance | Croissance & SEO |
 
 ---
 
-*Dernière mise à jour: 7 février 2026 — Phase 1 terminée (commit fad7a30)*
+*Dernière mise à jour: 9 février 2026 — Phase 2 terminée (commit a65e368)*

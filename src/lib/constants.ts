@@ -127,7 +127,7 @@ export const FOOTER_LINKS = {
     { href: '/cookies', label: 'Cookies' },
   ],
   vendor: [
-    { href: '/vendor/register', label: 'Devenir vendeur' },
+    { href: '/vendor/landing', label: 'Devenir vendeur' },
     { href: '/vendor/dashboard', label: 'Espace vendeur' },
   ],
 } as const;

@@ -58,7 +58,7 @@ export function VendorsContent() {
                   <Link href="/products">Voir les produits</Link>
                 </Button>
                 <Button asChild variant="outline">
-                  <Link href="/vendor/register">Devenir torréfacteur</Link>
+                  <Link href="/vendor/landing">Devenir torréfacteur</Link>
                 </Button>
               </div>
             </div>
@@ -126,7 +126,7 @@ export function VendorsContent() {
             commission de 15% uniquement.
           </p>
           <Button asChild className="bg-primary hover:bg-primary/90">
-            <Link href="/vendor/register">Devenir torréfacteur</Link>
+            <Link href="/vendor/landing">Devenir torréfacteur</Link>
           </Button>
         </div>
       </section>

@@ -135,7 +135,7 @@ export function MobileNav() {
                 Rejoignez notre marketplace et vendez vos créations.
               </p>
               <Button variant="outline" size="sm" asChild className="w-full">
-                <Link href="/vendor/register" onClick={handleLinkClick}>
+                <Link href="/vendor/landing" onClick={handleLinkClick}>
                   Devenir vendeur
                 </Link>
               </Button>

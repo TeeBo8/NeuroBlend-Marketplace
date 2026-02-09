@@ -36,6 +36,12 @@ export default function VendorLayout({
   const router = useRouter();
 
   const isRegisterPage = pathname === '/vendor/register';
+  const isLandingPage = pathname === '/vendor/landing';
+
+  // Landing page: no auth required, full-width layout
+  if (isLandingPage) {
+    return <>{children}</>;
+  }
 
   if (isPending) {
     return (
