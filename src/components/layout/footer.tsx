@@ -1,12 +1,19 @@
 import Link from 'next/link';
-import { Coffee } from 'lucide-react';
+import { Coffee, Instagram, Linkedin, Youtube } from 'lucide-react';
 import { APP_NAME, FOOTER_LINKS } from '@/lib/constants';
+import { NewsletterForm } from './newsletter-form';
 
 const footerSections = [
   { title: 'Marketplace', links: FOOTER_LINKS.marketplace },
   { title: 'Support', links: FOOTER_LINKS.support },
   { title: 'Légal', links: FOOTER_LINKS.legal },
   { title: 'Vendeurs', links: FOOTER_LINKS.vendor },
+] as const;
+
+const SOCIAL_LINKS = [
+  { icon: Instagram, href: "#", label: "Instagram" },
+  { icon: Linkedin, href: "#", label: "LinkedIn" },
+  { icon: Youtube, href: "#", label: "YouTube" },
 ] as const;
 
 export function Footer() {
@@ -22,10 +29,23 @@ export function Footer() {
               </div>
               <span className="text-xl font-bold text-foreground">{APP_NAME}</span>
             </Link>
-            <p className="text-sm text-muted-foreground max-w-xs">
+            <p className="text-sm text-muted-foreground max-w-xs mb-4">
               Capsules de café artisanales conçues pour les esprits neuroatypiques.
               HPI, ADHD, Hypersensibles.
             </p>
+            {/* Social Links */}
+            <div className="flex gap-3">
+              {SOCIAL_LINKS.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  aria-label={social.label}
+                  className="w-9 h-9 rounded-full bg-muted flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
+                >
+                  <social.icon className="h-4 w-4" />
+                </a>
+              ))}
+            </div>
           </div>
 
           {/* Link Sections */}
@@ -50,8 +70,19 @@ export function Footer() {
           ))}
         </div>
 
+        {/* Newsletter */}
+        <div className="mt-12 pt-8 border-t flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div>
+            <h3 className="font-semibold mb-1">Restez informé</h3>
+            <p className="text-sm text-muted-foreground">
+              Recevez nos nouveautés et conseils pour esprits neuroatypiques.
+            </p>
+          </div>
+          <NewsletterForm />
+        </div>
+
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-8 pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
             &copy; {new Date().getFullYear()} {APP_NAME}. Tous droits réservés.
           </p>

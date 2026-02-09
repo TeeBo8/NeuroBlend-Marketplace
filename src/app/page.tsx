@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { APP_NAME, PRODUCT_CATEGORIES, SUBSCRIPTION_PLANS } from "@/lib/constants";
-import { Shield, Truck, RefreshCcw, Star, Quote, Users, Brain, Coffee, Heart, Lock, Lightbulb, Zap, Feather, Check, type LucideIcon } from "lucide-react";
+import { Shield, Truck, RefreshCcw, Star, Quote, Users, Brain, Coffee, Heart, Lock, Lightbulb, Zap, Feather, Check, MapPin, type LucideIcon } from "lucide-react";
 import { AnimatedCounter } from "@/components/home/animated-counter";
 
 const TESTIMONIALS = [
@@ -51,6 +51,30 @@ const CATEGORY_DETAILS: Record<string, { icon: LucideIcon; benefit: string }> = 
     benefit: "Des arômes doux qui respectent votre sensibilité sensorielle",
   },
 };
+
+const ROASTERS = [
+  {
+    name: "Antoine Dubois",
+    location: "Lyon",
+    specialty: "Blend HPI",
+    quote:
+      "Chaque grain est sélectionné pour stimuler la créativité sans surexcitation. La torréfaction lente révèle des arômes complexes.",
+  },
+  {
+    name: "Marie Chen",
+    location: "Bordeaux",
+    specialty: "Blend ADHD",
+    quote:
+      "Je torréfie des cafés qui aident à canaliser l'énergie, pas à l'étouffer. L'équilibre est la clé.",
+  },
+  {
+    name: "Julien Moreau",
+    location: "Nantes",
+    specialty: "Blend Hypersensible",
+    quote:
+      "La douceur est un art. Mes blends respectent chaque sensibilité avec des profils aromatiques subtils.",
+  },
+] as const;
 
 export default function HomePage() {
   return (
@@ -365,6 +389,45 @@ export default function HomePage() {
             <Button variant="link" asChild>
               <Link href="/subscriptions">Comparer tous les plans →</Link>
             </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Roasters Section */}
+      <section className="py-20 bg-muted/50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-4">
+            Les artisans derrière vos capsules
+          </h2>
+          <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
+            Des torréfacteurs passionnés qui comprennent les besoins des esprits neuroatypiques.
+          </p>
+          <div className="grid md:grid-cols-3 gap-6">
+            {ROASTERS.map((roaster) => (
+              <div
+                key={roaster.name}
+                className="rounded-2xl border bg-card p-6 flex flex-col gap-4"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-lg font-bold text-primary">
+                    {roaster.name.charAt(0)}
+                  </div>
+                  <div>
+                    <p className="font-semibold">{roaster.name}</p>
+                    <p className="text-sm text-muted-foreground flex items-center gap-1">
+                      <MapPin className="h-3 w-3" />
+                      {roaster.location}
+                    </p>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed italic flex-1">
+                  &ldquo;{roaster.quote}&rdquo;
+                </p>
+                <span className="inline-flex self-start text-xs font-medium px-3 py-1 rounded-full bg-primary/10 text-primary">
+                  {roaster.specialty}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
