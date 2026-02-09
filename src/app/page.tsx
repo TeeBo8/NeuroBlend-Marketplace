@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { APP_NAME, PRODUCT_CATEGORIES } from "@/lib/constants";
-import { Shield, Truck, RefreshCcw, Star, Quote, Users } from "lucide-react";
+import { Shield, Truck, RefreshCcw, Star, Quote, Users, Brain, Coffee, Heart, Lock } from "lucide-react";
 import { AnimatedCounter } from "@/components/home/animated-counter";
 
 const TESTIMONIALS = [
@@ -194,8 +194,61 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* How it Works Section */}
+      {/* Why NeuroBlend Section */}
       <section className="py-20 bg-background">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-4">
+            Pourquoi NeuroBlend ?
+          </h2>
+          <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
+            Une marketplace pensée par et pour les esprits qui fonctionnent différemment.
+          </p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                icon: Brain,
+                title: "Adapté à votre profil cognitif",
+                description:
+                  "Des blends sélectionnés selon votre façon de penser : HPI, ADHD ou Hypersensible.",
+              },
+              {
+                icon: Coffee,
+                title: "Torréfacteurs artisanaux",
+                description:
+                  "Chaque café est créé par des artisans passionnés, en petits lots pour une qualité maximale.",
+              },
+              {
+                icon: Heart,
+                title: "Communauté neuroatypique",
+                description:
+                  "Rejoignez une communauté qui comprend votre singularité et partage vos sensibilités.",
+              },
+              {
+                icon: Lock,
+                title: "Sans engagement",
+                description:
+                  "Commandez à la carte ou abonnez-vous. Annulez à tout moment, sans justification.",
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="rounded-2xl border bg-card p-6 text-center transition-all hover:border-primary/50 hover:shadow-lg"
+              >
+                <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                  <item.icon className="h-7 w-7 text-primary" />
+                </div>
+                <h3 className="font-semibold mb-2">{item.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {item.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How it Works Section */}
+      <section className="py-20 bg-muted/50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">
             Comment ça marche ?

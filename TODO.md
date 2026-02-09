@@ -350,9 +350,9 @@ src/
 - [x] Section "Ils ont trouvé leur blend" avec 3-4 témoignages (fictifs pour le MVP — prénom + profil neuro)
 - [x] Compteur animé : "X esprits neuroatypiques nous font confiance"
 
-#### 2.3 — Section "Pourquoi NeuroBlend ?" (nouvelle)
+#### 2.3 — Section "Pourquoi NeuroBlend ?" (nouvelle) ✅
 
-- [ ] 3-4 cards avec icônes expliquant la proposition de valeur unique :
+- [x] 3-4 cards avec icônes expliquant la proposition de valeur unique :
   - "Adapté à votre profil cognitif"
   - "Torréfacteurs artisanaux"
   - "Communauté neuroatypique"
@@ -360,7 +360,7 @@ src/
 
 #### 2.4 — Améliorer les cards profils (HPI/ADHD/Hypersensible)
 
-- [ ] Remplacer les lettres dans cercles violets par des icônes/illustrations plus parlantes
+- [ ] Remplacer les lettres dans cercles  par des icônes/illustrations plus parlantes
 - [ ] Ajouter une courte description du bénéfice café pour chaque profil
 
 #### 2.5 — Section abonnements teaser sur la homepage
