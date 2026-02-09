@@ -358,10 +358,10 @@ src/
   - "Communauté neuroatypique"
   - "Sans engagement"
 
-#### 2.4 — Améliorer les cards profils (HPI/ADHD/Hypersensible)
+#### 2.4 — Améliorer les cards profils (HPI/ADHD/Hypersensible) ✅
 
-- [ ] Remplacer les lettres dans cercles  par des icônes/illustrations plus parlantes
-- [ ] Ajouter une courte description du bénéfice café pour chaque profil
+- [x] Remplacer les lettres dans cercles par des icônes/illustrations plus parlantes
+- [x] Ajouter une courte description du bénéfice café pour chaque profil
 
 #### 2.5 — Section abonnements teaser sur la homepage
 

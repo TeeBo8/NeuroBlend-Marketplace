@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { APP_NAME, PRODUCT_CATEGORIES } from "@/lib/constants";
-import { Shield, Truck, RefreshCcw, Star, Quote, Users, Brain, Coffee, Heart, Lock } from "lucide-react";
+import { Shield, Truck, RefreshCcw, Star, Quote, Users, Brain, Coffee, Heart, Lock, Lightbulb, Zap, Feather, type LucideIcon } from "lucide-react";
 import { AnimatedCounter } from "@/components/home/animated-counter";
 
 const TESTIMONIALS = [
@@ -35,6 +35,21 @@ const PROFILE_COLORS: Record<string, string> = {
   HPI: "bg-primary/10 text-primary",
   ADHD: "bg-secondary/80 text-secondary-foreground",
   Hypersensible: "bg-accent text-accent-foreground",
+};
+
+const CATEGORY_DETAILS: Record<string, { icon: LucideIcon; benefit: string }> = {
+  HPI: {
+    icon: Lightbulb,
+    benefit: "Stimule la pensée profonde et la créativité sans surexcitation",
+  },
+  ADHD: {
+    icon: Zap,
+    benefit: "Favorise la concentration et canalise l'énergie naturellement",
+  },
+  hypersensitive: {
+    icon: Feather,
+    benefit: "Des arômes doux qui respectent votre sensibilité sensorielle",
+  },
 };
 
 export default function HomePage() {
@@ -111,25 +126,38 @@ export default function HomePage() {
             adaptés à votre façon de penser et de ressentir.
           </p>
           <div className="grid md:grid-cols-3 gap-8">
-            {PRODUCT_CATEGORIES.map((category) => (
-              <Link
-                key={category.value}
-                href={`/products?category=${category.value}`}
-                className="group"
-              >
-                <div className="rounded-2xl border p-8 transition-all hover:border-primary/50 hover:shadow-lg bg-card">
-                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
-                    <span className="text-2xl font-bold text-primary">
-                      {category.value.charAt(0)}
-                    </span>
+            {PRODUCT_CATEGORIES.map((category) => {
+              const details = CATEGORY_DETAILS[category.value];
+              const Icon = details?.icon;
+              return (
+                <Link
+                  key={category.value}
+                  href={`/products?category=${category.value}`}
+                  className="group"
+                >
+                  <div className="rounded-2xl border p-8 transition-all hover:border-primary/50 hover:shadow-lg bg-card">
+                    <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
+                      {Icon ? (
+                        <Icon className="h-8 w-8 text-primary" />
+                      ) : (
+                        <span className="text-2xl font-bold text-primary">
+                          {category.value.charAt(0)}
+                        </span>
+                      )}
+                    </div>
+                    <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
+                      {category.label}
+                    </h3>
+                    <p className="text-muted-foreground">{category.description}</p>
+                    {details?.benefit && (
+                      <p className="text-sm text-primary/80 mt-3 font-medium">
+                        {details.benefit}
+                      </p>
+                    )}
                   </div>
-                  <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
-                    {category.label}
-                  </h3>
-                  <p className="text-muted-foreground">{category.description}</p>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
