@@ -363,10 +363,10 @@ src/
 - [x] Remplacer les lettres dans cercles par des icônes/illustrations plus parlantes
 - [x] Ajouter une courte description du bénéfice café pour chaque profil
 
-#### 2.5 — Section abonnements teaser sur la homepage
+#### 2.5 — Section abonnements teaser sur la homepage ✅
 
-- [ ] Ajouter un aperçu des 3 plans d'abonnement avec pricing cards
-- [ ] CTA vers la page `/subscriptions`
+- [x] Ajouter un aperçu des 3 plans d'abonnement avec pricing cards
+- [x] CTA vers la page `/subscriptions`
 
 #### 2.6 — Section torréfacteurs améliorée
 

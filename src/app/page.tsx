@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { APP_NAME, PRODUCT_CATEGORIES } from "@/lib/constants";
-import { Shield, Truck, RefreshCcw, Star, Quote, Users, Brain, Coffee, Heart, Lock, Lightbulb, Zap, Feather, type LucideIcon } from "lucide-react";
+import { APP_NAME, PRODUCT_CATEGORIES, SUBSCRIPTION_PLANS } from "@/lib/constants";
+import { Shield, Truck, RefreshCcw, Star, Quote, Users, Brain, Coffee, Heart, Lock, Lightbulb, Zap, Feather, Check, type LucideIcon } from "lucide-react";
 import { AnimatedCounter } from "@/components/home/animated-counter";
 
 const TESTIMONIALS = [
@@ -310,6 +310,61 @@ export default function HomePage() {
                 <p className="text-muted-foreground">{item.description}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Subscriptions Teaser Section */}
+      <section className="py-20 bg-background">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-4">
+            Recevez vos capsules chaque mois
+          </h2>
+          <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
+            Choisissez la formule qui correspond à votre consommation. Sans engagement, modifiable à tout moment.
+          </p>
+          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            {SUBSCRIPTION_PLANS.map((plan) => (
+              <div
+                key={plan.id}
+                className={`rounded-2xl border p-6 flex flex-col ${
+                  plan.highlight
+                    ? "border-primary shadow-lg ring-2 ring-primary/20 relative"
+                    : "bg-card"
+                }`}
+              >
+                {plan.highlight && (
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs font-semibold px-3 py-1 rounded-full">
+                    Populaire
+                  </span>
+                )}
+                <h3 className="text-lg font-semibold mb-1">{plan.name}</h3>
+                <div className="mb-4">
+                  <span className="text-3xl font-bold">{plan.price.toFixed(2).replace(".", ",")}€</span>
+                  <span className="text-muted-foreground text-sm">/mois</span>
+                </div>
+                <ul className="space-y-2 mb-6 flex-1">
+                  {plan.features.map((feature) => (
+                    <li key={feature} className="flex items-start gap-2 text-sm">
+                      <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Button
+                  variant={plan.highlight ? "default" : "outline"}
+                  className="w-full"
+                  asChild
+                >
+                  <Link href="/subscriptions">Choisir {plan.name}</Link>
+                </Button>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-8">
+            <Button variant="link" asChild>
+              <Link href="/subscriptions">Comparer tous les plans →</Link>
+            </Button>
           </div>
         </div>
       </section>
