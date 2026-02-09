@@ -61,8 +61,8 @@ export function OrdersContent() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Mes commandes</h1>
-        <p className="text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-foreground">Mes commandes</h1>
+        <p className="text-muted-foreground mt-1">
           Suivez et gérez toutes vos commandes.
         </p>
       </div>
@@ -76,8 +76,8 @@ export function OrdersContent() {
             className={cn(
               'px-3 py-1.5 rounded-full text-sm font-medium transition-colors',
               statusFilter === filter.value
-                ? 'bg-purple-600 text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-muted text-muted-foreground hover:bg-accent'
             )}
           >
             {filter.label}
@@ -92,21 +92,21 @@ export function OrdersContent() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex flex-col items-center justify-center py-16 text-center">
-              <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                <Package className="h-10 w-10 text-gray-300" />
+              <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mb-4">
+                <Package className="h-10 w-10 text-muted-foreground" />
               </div>
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">
+              <h2 className="text-lg font-semibold text-foreground mb-2">
                 {statusFilter === 'all'
                   ? 'Aucune commande'
                   : `Aucune commande "${ORDER_STATUSES[statusFilter as OrderStatus]?.label}"`}
               </h2>
-              <p className="text-gray-500 mb-6 max-w-sm">
+              <p className="text-muted-foreground mb-6 max-w-sm">
                 {statusFilter === 'all'
                   ? "Vous n'avez pas encore passé de commande. Explorez nos produits pour commencer !"
                   : 'Aucune commande ne correspond à ce filtre.'}
               </p>
               {statusFilter === 'all' ? (
-                <Button asChild className="bg-purple-600 hover:bg-purple-700">
+                <Button asChild className="bg-primary hover:bg-primary/90">
                   <Link href="/products">Découvrir nos produits</Link>
                 </Button>
               ) : (
@@ -132,14 +132,14 @@ export function OrdersContent() {
               <Link
                 key={order.id}
                 href={`/account/orders/${order.id}`}
-                className="block rounded-lg border hover:border-purple-200 hover:shadow-sm transition-all group"
+                className="block rounded-lg border hover:border-primary/30 hover:shadow-sm transition-all group"
               >
                 <div className="p-4 sm:p-5">
                   {/* Top row: order number, date, status, total */}
                   <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
                     <div>
                       <div className="flex items-center gap-2">
-                        <p className="font-semibold text-gray-900">
+                        <p className="font-semibold text-foreground">
                           {order.orderNumber}
                         </p>
                         <Badge
@@ -149,16 +149,16 @@ export function OrdersContent() {
                           {statusInfo?.label || status}
                         </Badge>
                       </div>
-                      <p className="text-sm text-gray-500 mt-0.5">
+                      <p className="text-sm text-muted-foreground mt-0.5">
                         {formatDate(order.createdAt)} &middot;{' '}
                         {order.vendor?.businessName || 'Vendeur'}
                       </p>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-lg font-bold text-gray-900">
+                      <span className="text-lg font-bold text-foreground">
                         {formatPrice(Number(order.total))}
                       </span>
-                      <ArrowRight className="h-4 w-4 text-gray-400 group-hover:text-purple-600 transition-colors" />
+                      <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
                     </div>
                   </div>
 
@@ -168,13 +168,13 @@ export function OrdersContent() {
                       {firstItems.map((item) => (
                         <div
                           key={item.id}
-                          className="relative h-9 w-9 rounded-full border-2 border-white bg-gradient-to-br from-purple-100 to-purple-50 flex items-center justify-center overflow-hidden"
+                          className="relative h-9 w-9 rounded-full border-2 border-white bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center overflow-hidden"
                         >
-                          <Coffee className="h-4 w-4 text-purple-300" />
+                          <Coffee className="h-4 w-4 text-primary/50" />
                         </div>
                       ))}
                     </div>
-                    <span className="text-sm text-gray-500">
+                    <span className="text-sm text-muted-foreground">
                       {itemCount} {itemCount > 1 ? 'articles' : 'article'}
                     </span>
                     {order.trackingNumber && (
@@ -220,15 +220,15 @@ function OrdersSkeleton() {
         <div key={i} className="rounded-lg border p-5">
           <div className="flex justify-between mb-3">
             <div>
-              <div className="h-5 w-32 bg-gray-200 rounded" />
-              <div className="h-4 w-48 bg-gray-100 rounded mt-2" />
+              <div className="h-5 w-32 bg-muted rounded" />
+              <div className="h-4 w-48 bg-muted rounded mt-2" />
             </div>
-            <div className="h-6 w-20 bg-gray-200 rounded" />
+            <div className="h-6 w-20 bg-muted rounded" />
           </div>
           <div className="flex gap-2">
-            <div className="h-9 w-9 rounded-full bg-gray-200" />
-            <div className="h-9 w-9 rounded-full bg-gray-200" />
-            <div className="h-4 w-16 bg-gray-100 rounded self-center ml-1" />
+            <div className="h-9 w-9 rounded-full bg-muted" />
+            <div className="h-9 w-9 rounded-full bg-muted" />
+            <div className="h-4 w-16 bg-muted rounded self-center ml-1" />
           </div>
         </div>
       ))}

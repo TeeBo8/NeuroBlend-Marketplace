@@ -34,35 +34,35 @@ export default function ContactPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 text-white">
+      <section className="bg-gradient-to-br from-primary via-primary/90 to-indigo-800 text-primary-foreground">
         <div className="container mx-auto px-4 py-16 md:py-20">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
               Contactez-nous
             </h1>
-            <p className="text-xl text-purple-100">
+            <p className="text-xl text-primary-foreground/80">
               Une question, une idée, un partenariat ? Nous sommes à votre écoute.
             </p>
           </div>
         </div>
       </section>
 
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-16">
             {contactInfo.map((info) => (
               <Card key={info.title}>
                 <CardContent className="p-6 text-center">
-                  <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-4">
-                    <info.icon className="w-6 h-6 text-purple-600" />
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                    <info.icon className="w-6 h-6 text-primary" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-1">
+                  <h3 className="font-semibold text-foreground mb-1">
                     {info.title}
                   </h3>
-                  <p className="text-purple-600 font-medium text-sm mb-1">
+                  <p className="text-primary font-medium text-sm mb-1">
                     {info.description}
                   </p>
-                  <p className="text-xs text-gray-500">{info.detail}</p>
+                  <p className="text-xs text-muted-foreground">{info.detail}</p>
                 </CardContent>
               </Card>
             ))}
@@ -70,7 +70,7 @@ export default function ContactPage() {
 
           {/* Contact Form */}
           <div className="max-w-2xl mx-auto">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            <h2 className="text-2xl font-bold text-foreground mb-6">
               Envoyez-nous un message
             </h2>
             <ContactForm />

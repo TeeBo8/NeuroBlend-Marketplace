@@ -39,13 +39,13 @@ export default function AboutPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 text-white">
+      <section className="bg-gradient-to-br from-primary via-primary/90 to-indigo-800 text-primary-foreground">
         <div className="container mx-auto px-4 py-20 md:py-28">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
               Le café qui comprend votre esprit
             </h1>
-            <p className="text-xl text-purple-100 leading-relaxed">
+            <p className="text-xl text-primary-foreground/80 leading-relaxed">
               {APP_NAME} est né d&apos;une conviction simple : les personnes
               neuroatypiques méritent un café pensé pour elles. Pas un café
               &laquo;&nbsp;adapté&nbsp;&raquo;, mais un café qui célèbre leur
@@ -56,13 +56,13 @@ export default function AboutPage() {
       </section>
 
       {/* Story */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">
+            <h2 className="text-3xl font-bold text-foreground mb-6">
               Notre histoire
             </h2>
-            <div className="space-y-4 text-gray-600 leading-relaxed">
+            <div className="space-y-4 text-muted-foreground leading-relaxed">
               <p>
                 Tout a commencé avec une question : pourquoi le monde du café
                 ignore-t-il 15 à 20% de la population ? Les personnes HPI,
@@ -87,25 +87,25 @@ export default function AboutPage() {
       </section>
 
       {/* Values */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-muted/50">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
+          <h2 className="text-3xl font-bold text-center text-foreground mb-12">
             Nos valeurs
           </h2>
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {values.map((value) => (
               <div
                 key={value.title}
-                className="flex gap-4 p-6 bg-white rounded-xl border border-gray-200"
+                className="flex gap-4 p-6 bg-card rounded-xl border"
               >
-                <div className="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center flex-shrink-0">
-                  <value.icon className="w-6 h-6 text-purple-600" />
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <value.icon className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                  <h3 className="text-lg font-semibold text-foreground mb-1">
                     {value.title}
                   </h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
+                  <p className="text-muted-foreground text-sm leading-relaxed">
                     {value.description}
                   </p>
                 </div>
@@ -116,10 +116,10 @@ export default function AboutPage() {
       </section>
 
       {/* Mission */}
-      <section className="py-20 bg-purple-600 text-white">
+      <section className="py-20 bg-primary text-primary-foreground">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">Notre mission</h2>
-          <p className="text-xl text-purple-100 max-w-2xl mx-auto">
+          <p className="text-xl text-primary-foreground/80 max-w-2xl mx-auto">
             Créer le premier espace où neurodiversité et café artisanal se
             rencontrent. Un grain à la fois.
           </p>

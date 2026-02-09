@@ -15,13 +15,13 @@ export function VendorsContent() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 text-white">
+      <section className="bg-gradient-to-br from-primary via-primary/90 to-indigo-800 text-primary-foreground">
         <div className="container mx-auto px-4 py-16 md:py-20">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
               Nos torréfacteurs
             </h1>
-            <p className="text-xl text-purple-100">
+            <p className="text-xl text-primary-foreground/80">
               Des artisans passionnés qui créent des capsules d&apos;exception
               pour les esprits neuroatypiques.
             </p>
@@ -29,32 +29,32 @@ export function VendorsContent() {
         </div>
       </section>
 
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
               {Array.from({ length: 6 }, (_, i) => (
                 <div
                   key={i}
-                  className="h-64 bg-gray-200 rounded-xl animate-pulse"
+                  className="h-64 bg-muted rounded-xl animate-pulse"
                 />
               ))}
             </div>
           ) : vendors.length === 0 ? (
             <div className="text-center py-16 max-w-md mx-auto">
-              <div className="w-20 h-20 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-6">
-                <Store className="w-10 h-10 text-purple-400" />
+              <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
+                <Store className="w-10 h-10 text-primary/60" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-3">
+              <h2 className="text-2xl font-bold text-foreground mb-3">
                 Bientôt disponible
               </h2>
-              <p className="text-gray-600 mb-6">
+              <p className="text-muted-foreground mb-6">
                 Nos torréfacteurs partenaires préparent leurs créations.
                 Revenez bientôt pour découvrir leurs profils et leurs capsules
                 d&apos;exception.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Button asChild className="bg-purple-600 hover:bg-purple-700">
+                <Button asChild className="bg-primary hover:bg-primary/90">
                   <Link href="/products">Voir les produits</Link>
                 </Button>
                 <Button asChild variant="outline">
@@ -71,7 +71,7 @@ export function VendorsContent() {
                 >
                   <CardContent className="p-6">
                     <div className="flex items-start gap-4 mb-4">
-                      <div className="w-14 h-14 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
+                      <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                         {vendor.logo ? (
                           <Image
                             src={vendor.logo}
@@ -81,11 +81,11 @@ export function VendorsContent() {
                             className="w-14 h-14 rounded-full object-cover"
                           />
                         ) : (
-                          <Coffee className="w-7 h-7 text-purple-600" />
+                          <Coffee className="w-7 h-7 text-primary" />
                         )}
                       </div>
                       <div className="min-w-0">
-                        <h3 className="font-semibold text-gray-900 truncate">
+                        <h3 className="font-semibold text-foreground truncate">
                           {vendor.businessName}
                         </h3>
                         {vendor.website && (
@@ -93,7 +93,7 @@ export function VendorsContent() {
                             href={vendor.website}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-xs text-purple-600 hover:text-purple-500 flex items-center gap-1 mt-0.5"
+                            className="text-xs text-primary hover:text-primary flex items-center gap-1 mt-0.5"
                           >
                             <ExternalLink className="w-3 h-3" />
                             Site web
@@ -102,7 +102,7 @@ export function VendorsContent() {
                       </div>
                     </div>
                     {vendor.description && (
-                      <p className="text-sm text-gray-600 line-clamp-3">
+                      <p className="text-sm text-muted-foreground line-clamp-3">
                         {vendor.description}
                       </p>
                     )}
@@ -115,17 +115,17 @@ export function VendorsContent() {
       </section>
 
       {/* CTA Vendeur */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-muted/50">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-3">
+          <h2 className="text-2xl font-bold text-foreground mb-3">
             Vous êtes torréfacteur ?
           </h2>
-          <p className="text-gray-600 mb-6 max-w-xl mx-auto">
+          <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
             Rejoignez notre communauté de torréfacteurs artisanaux et vendez vos
             créations à des esprits extraordinaires. Inscription gratuite,
             commission de 15% uniquement.
           </p>
-          <Button asChild className="bg-purple-600 hover:bg-purple-700">
+          <Button asChild className="bg-primary hover:bg-primary/90">
             <Link href="/vendor/register">Devenir torréfacteur</Link>
           </Button>
         </div>

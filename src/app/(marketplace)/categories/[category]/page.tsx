@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 function CategoryLoading() {
   return (
     <>
-      <div className="h-48 bg-gray-200 animate-pulse" />
+      <div className="h-48 bg-muted animate-pulse" />
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {Array.from({ length: 8 }, (_, i) => (

@@ -79,7 +79,7 @@ export default function LoginPage() {
               <Label htmlFor="password">Mot de passe</Label>
               <Link
                 href="/forgot-password"
-                className="text-sm text-purple-600 hover:text-purple-500"
+                className="text-sm text-primary hover:text-primary"
               >
                 Mot de passe oublié ?
               </Link>
@@ -108,11 +108,11 @@ export default function LoginPage() {
         </form>
       </CardContent>
       <CardFooter className="justify-center">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           Pas encore de compte ?{' '}
           <Link
             href="/register"
-            className="font-medium text-purple-600 hover:text-purple-500"
+            className="font-medium text-primary hover:text-primary"
           >
             Créer un compte
           </Link>

@@ -87,14 +87,14 @@ export function RegisterContent() {
         <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mb-6">
           <CheckCircle2 className="w-10 h-10 text-green-600" />
         </div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <h1 className="text-2xl font-bold text-foreground mb-2">
           Vous êtes déjà vendeur !
         </h1>
-        <p className="text-gray-500 mb-8 max-w-md">
+        <p className="text-muted-foreground mb-8 max-w-md">
           Votre boutique &quot;{existingVendor.businessName}&quot; est{' '}
           {existingVendor.approved ? 'active' : 'en attente de validation'}.
         </p>
-        <Button asChild className="bg-purple-600 hover:bg-purple-700">
+        <Button asChild className="bg-primary hover:bg-primary/90">
           <Link href="/vendor/dashboard">
             Accéder à mon espace vendeur
             <ArrowRight className="ml-2 h-4 w-4" />
@@ -107,7 +107,7 @@ export function RegisterContent() {
   if (vendorLoading) {
     return (
       <div className="flex items-center justify-center py-32">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-purple-600 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
       </div>
     );
   }
@@ -116,13 +116,13 @@ export function RegisterContent() {
     <div className="space-y-8">
       {/* Hero */}
       <div className="text-center">
-        <div className="w-16 h-16 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-4">
-          <Store className="w-8 h-8 text-purple-600" />
+        <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+          <Store className="w-8 h-8 text-primary" />
         </div>
-        <h1 className="text-3xl font-bold text-gray-900">
+        <h1 className="text-3xl font-bold text-foreground">
           Devenir vendeur NeuroBlend
         </h1>
-        <p className="text-gray-500 mt-2 max-w-lg mx-auto">
+        <p className="text-muted-foreground mt-2 max-w-lg mx-auto">
           Rejoignez notre marketplace et vendez vos capsules de café artisanales à une communauté de passionnés.
         </p>
       </div>
@@ -134,11 +134,11 @@ export function RegisterContent() {
           return (
             <Card key={benefit.title} className="text-center">
               <CardContent className="pt-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-purple-50 mx-auto mb-3">
-                  <Icon className="h-6 w-6 text-purple-600" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/5 mx-auto mb-3">
+                  <Icon className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-1">{benefit.title}</h3>
-                <p className="text-sm text-gray-500">{benefit.description}</p>
+                <h3 className="font-semibold text-foreground mb-1">{benefit.title}</h3>
+                <p className="text-sm text-muted-foreground">{benefit.description}</p>
               </CardContent>
             </Card>
           );
@@ -192,9 +192,9 @@ export function RegisterContent() {
               />
             </div>
 
-            <div className="rounded-lg bg-purple-50 p-4 text-sm text-purple-800">
+            <div className="rounded-lg bg-primary/5 p-4 text-sm text-primary">
               <p className="font-medium mb-1">Comment ça marche ?</p>
-              <ol className="list-decimal list-inside space-y-1 text-purple-700">
+              <ol className="list-decimal list-inside space-y-1 text-primary">
                 <li>Créez votre profil vendeur</li>
                 <li>Votre compte est validé par notre équipe</li>
                 <li>Configurez vos paiements via Stripe</li>
@@ -204,7 +204,7 @@ export function RegisterContent() {
 
             <Button
               type="submit"
-              className="w-full bg-purple-600 hover:bg-purple-700"
+              className="w-full bg-primary hover:bg-primary/90"
               disabled={registerVendor.isPending || !businessName.trim()}
             >
               {registerVendor.isPending ? (

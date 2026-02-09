@@ -49,10 +49,10 @@ export function DashboardContent() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-foreground">
           Bonjour, {user?.name || session?.user?.name || 'Utilisateur'} !
         </h1>
-        <p className="text-gray-500 mt-1">
+        <p className="text-muted-foreground mt-1">
           Bienvenue dans votre espace client NeuroBlend.
         </p>
       </div>
@@ -62,12 +62,12 @@ export function DashboardContent() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-purple-100">
-                <Package className="h-6 w-6 text-purple-600" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                <Package className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">Commandes</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-sm text-muted-foreground">Commandes</p>
+                <p className="text-2xl font-bold text-foreground">
                   {totalOrders}
                 </p>
               </div>
@@ -78,12 +78,12 @@ export function DashboardContent() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-teal-100">
-                <ShoppingBag className="h-6 w-6 text-teal-600" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-chart-2/20">
+                <ShoppingBag className="h-6 w-6 text-chart-2" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">Total dépensé</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-sm text-muted-foreground">Total dépensé</p>
+                <p className="text-2xl font-bold text-foreground">
                   {formatPrice(totalSpent)}
                 </p>
               </div>
@@ -98,8 +98,8 @@ export function DashboardContent() {
                 <Calendar className="h-6 w-6 text-orange-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">Membre depuis</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-sm text-muted-foreground">Membre depuis</p>
+                <p className="text-2xl font-bold text-foreground">
                   {user?.createdAt
                     ? formatDate(user.createdAt, {
                         month: 'short',
@@ -121,7 +121,7 @@ export function DashboardContent() {
             <Button variant="ghost" size="sm" asChild>
               <Link
                 href="/account/orders"
-                className="text-purple-600 hover:text-purple-700"
+                className="text-primary hover:text-primary"
               >
                 Tout voir
                 <ArrowRight className="ml-1 h-4 w-4" />
@@ -132,13 +132,13 @@ export function DashboardContent() {
         <CardContent>
           {orders.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                <Coffee className="h-8 w-8 text-gray-300" />
+              <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                <Coffee className="h-8 w-8 text-muted-foreground" />
               </div>
-              <p className="text-gray-500 mb-4">
+              <p className="text-muted-foreground mb-4">
                 Vous n&apos;avez pas encore de commandes.
               </p>
-              <Button asChild className="bg-purple-600 hover:bg-purple-700">
+              <Button asChild className="bg-primary hover:bg-primary/90">
                 <Link href="/products">Découvrir nos produits</Link>
               </Button>
             </div>
@@ -151,17 +151,17 @@ export function DashboardContent() {
                   <Link
                     key={order.id}
                     href={`/account/orders/${order.id}`}
-                    className="flex items-center justify-between p-4 rounded-lg border hover:bg-gray-50 transition-colors group"
+                    className="flex items-center justify-between p-4 rounded-lg border hover:bg-accent transition-colors group"
                   >
                     <div className="flex items-center gap-4 min-w-0">
-                      <div className="hidden sm:flex h-10 w-10 items-center justify-center rounded-full bg-purple-50">
-                        <Package className="h-5 w-5 text-purple-400" />
+                      <div className="hidden sm:flex h-10 w-10 items-center justify-center rounded-full bg-primary/5">
+                        <Package className="h-5 w-5 text-primary/60" />
                       </div>
                       <div className="min-w-0">
-                        <p className="font-medium text-gray-900 truncate">
+                        <p className="font-medium text-foreground truncate">
                           {order.orderNumber}
                         </p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-muted-foreground">
                           {formatDate(order.createdAt)} &middot;{' '}
                           {order.items.length}{' '}
                           {order.items.length > 1 ? 'articles' : 'article'}
@@ -175,10 +175,10 @@ export function DashboardContent() {
                       >
                         {statusInfo?.label || status}
                       </Badge>
-                      <span className="font-semibold text-gray-900">
+                      <span className="font-semibold text-foreground">
                         {formatPrice(Number(order.total))}
                       </span>
-                      <ArrowRight className="h-4 w-4 text-gray-400 group-hover:text-purple-600 transition-colors" />
+                      <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
                     </div>
                   </Link>
                 );
@@ -192,28 +192,28 @@ export function DashboardContent() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Link
           href="/products"
-          className="flex items-center gap-4 p-5 rounded-lg border hover:border-purple-200 hover:bg-purple-50/50 transition-colors group"
+          className="flex items-center gap-4 p-5 rounded-lg border hover:border-primary/30 hover:bg-primary/5 transition-colors group"
         >
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-100 group-hover:bg-purple-200 transition-colors">
-            <Coffee className="h-5 w-5 text-purple-600" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+            <Coffee className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <p className="font-medium text-gray-900">Parcourir les produits</p>
-            <p className="text-sm text-gray-500">
+            <p className="font-medium text-foreground">Parcourir les produits</p>
+            <p className="text-sm text-muted-foreground">
               Découvrez nos capsules neuro-optimisées
             </p>
           </div>
         </Link>
         <Link
           href="/account/settings"
-          className="flex items-center gap-4 p-5 rounded-lg border hover:border-purple-200 hover:bg-purple-50/50 transition-colors group"
+          className="flex items-center gap-4 p-5 rounded-lg border hover:border-primary/30 hover:bg-primary/5 transition-colors group"
         >
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-teal-100 group-hover:bg-teal-200 transition-colors">
-            <Settings className="h-5 w-5 text-teal-600" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-chart-2/20 group-hover:bg-chart-2/30 transition-colors">
+            <Settings className="h-5 w-5 text-chart-2" />
           </div>
           <div>
-            <p className="font-medium text-gray-900">Paramètres du compte</p>
-            <p className="text-sm text-gray-500">
+            <p className="font-medium text-foreground">Paramètres du compte</p>
+            <p className="text-sm text-muted-foreground">
               Modifiez vos informations personnelles
             </p>
           </div>
@@ -227,18 +227,18 @@ function DashboardSkeleton() {
   return (
     <div className="space-y-8 animate-pulse">
       <div>
-        <div className="h-8 w-64 bg-gray-200 rounded" />
-        <div className="h-5 w-80 bg-gray-100 rounded mt-2" />
+        <div className="h-8 w-64 bg-muted rounded" />
+        <div className="h-5 w-80 bg-muted rounded mt-2" />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[...Array(3)].map((_, i) => (
           <Card key={i}>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="h-12 w-12 rounded-full bg-gray-200" />
+                <div className="h-12 w-12 rounded-full bg-muted" />
                 <div>
-                  <div className="h-4 w-20 bg-gray-200 rounded" />
-                  <div className="h-7 w-16 bg-gray-200 rounded mt-1" />
+                  <div className="h-4 w-20 bg-muted rounded" />
+                  <div className="h-7 w-16 bg-muted rounded mt-1" />
                 </div>
               </div>
             </CardContent>
@@ -249,7 +249,7 @@ function DashboardSkeleton() {
         <CardContent className="pt-6">
           <div className="space-y-4">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-16 bg-gray-100 rounded-lg" />
+              <div key={i} className="h-16 bg-muted rounded-lg" />
             ))}
           </div>
         </CardContent>

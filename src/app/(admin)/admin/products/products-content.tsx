@@ -69,8 +69,8 @@ export function AdminProductsContent() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Tous les produits</h1>
-        <p className="text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-foreground">Tous les produits</h1>
+        <p className="text-muted-foreground mt-1">
           {products.length} produit{products.length > 1 ? 's' : ''}
         </p>
       </div>
@@ -78,7 +78,7 @@ export function AdminProductsContent() {
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1 sm:max-w-xs">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Rechercher un produit..."
             className="pl-9"
@@ -122,10 +122,10 @@ export function AdminProductsContent() {
         <CardContent>
           {products.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                <Package className="h-8 w-8 text-gray-300" />
+              <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                <Package className="h-8 w-8 text-muted-foreground" />
               </div>
-              <p className="text-gray-500">Aucun produit trouvé.</p>
+              <p className="text-muted-foreground">Aucun produit trouvé.</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -144,20 +144,20 @@ export function AdminProductsContent() {
                         className="h-12 w-12 rounded-lg object-cover"
                       />
                     ) : (
-                      <div className="h-12 w-12 rounded-lg bg-gray-100 flex items-center justify-center">
-                        <Package className="h-6 w-6 text-gray-300" />
+                      <div className="h-12 w-12 rounded-lg bg-muted flex items-center justify-center">
+                        <Package className="h-6 w-6 text-muted-foreground" />
                       </div>
                     )}
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <p className="font-medium text-gray-900 truncate">
+                        <p className="font-medium text-foreground truncate">
                           {product.name}
                         </p>
                         {product.featured && (
                           <Star className="h-4 w-4 text-amber-500 fill-amber-500 shrink-0" />
                         )}
                       </div>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-muted-foreground">
                         {product.vendor?.businessName || 'Vendeur inconnu'} &middot;{' '}
                         {formatPrice(Number(product.price))} &middot;{' '}
                         Stock : {product.stock ?? 0}
@@ -191,7 +191,7 @@ export function AdminProductsContent() {
                     <Button
                       size="sm"
                       variant="outline"
-                      className={!product.active ? 'text-red-600 border-red-200 hover:bg-red-50' : ''}
+                      className={!product.active ? 'text-destructive border-destructive/20 hover:bg-destructive/10' : ''}
                       onClick={() => toggleActive.mutate({ productId: product.id })}
                       disabled={toggleActive.isPending}
                       title={product.active ? 'Désactiver' : 'Activer'}
@@ -217,19 +217,19 @@ function ProductsSkeleton() {
   return (
     <div className="space-y-6 animate-pulse">
       <div>
-        <div className="h-8 w-64 bg-gray-200 rounded" />
-        <div className="h-5 w-40 bg-gray-100 rounded mt-2" />
+        <div className="h-8 w-64 bg-muted rounded" />
+        <div className="h-5 w-40 bg-muted/50 rounded mt-2" />
       </div>
       <div className="flex gap-3">
-        <div className="h-10 w-48 bg-gray-200 rounded" />
-        <div className="h-10 w-48 bg-gray-200 rounded" />
-        <div className="h-10 w-40 bg-gray-200 rounded" />
+        <div className="h-10 w-48 bg-muted rounded" />
+        <div className="h-10 w-48 bg-muted rounded" />
+        <div className="h-10 w-40 bg-muted rounded" />
       </div>
       <Card>
         <CardContent className="pt-6">
           <div className="space-y-4">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="h-20 bg-gray-100 rounded-lg" />
+              <div key={i} className="h-20 bg-muted rounded-lg" />
             ))}
           </div>
         </CardContent>

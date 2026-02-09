@@ -113,7 +113,7 @@ export default function RegisterPage() {
               minLength={8}
               disabled={isLoading}
             />
-            <p className="text-xs text-gray-500">Minimum 8 caractères</p>
+            <p className="text-xs text-muted-foreground">Minimum 8 caractères</p>
           </div>
           <div className="space-y-2">
             <Label htmlFor="confirmPassword">Confirmer le mot de passe</Label>
@@ -141,11 +141,11 @@ export default function RegisterPage() {
         </form>
       </CardContent>
       <CardFooter className="justify-center">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           Déjà un compte ?{' '}
           <Link
             href="/login"
-            className="font-medium text-purple-600 hover:text-purple-500"
+            className="font-medium text-primary hover:text-primary"
           >
             Se connecter
           </Link>

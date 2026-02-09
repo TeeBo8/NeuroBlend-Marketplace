@@ -343,7 +343,7 @@ src/
 - [x] Créer le composant `ThemeToggle` (Sun/Moon) dans `src/components/theme-toggle.tsx`
 - [x] Intégrer le toggle dans le Header (avant le panier)
 - [x] Adapter les composants principaux aux couleurs sémantiques : Header, Footer, Mobile Nav, Homepage (Hero, Categories, How it Works, CTA)
-- [ ] Migrer les couleurs hardcodées (`purple-*`, `gray-*`) dans le reste du projet (pages admin, vendor, account, product-card, etc.)
+- [x] Migrer les couleurs hardcodées (`purple-*`, `gray-*`) dans le reste du projet (pages admin, vendor, account, product-card, etc.)
 
 #### 2.2 — Section preuve sociale (nouvelle)
 

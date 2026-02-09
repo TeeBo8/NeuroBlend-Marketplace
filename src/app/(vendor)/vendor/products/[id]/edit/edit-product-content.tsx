@@ -68,7 +68,7 @@ export function EditProductContent({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-32">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-purple-600 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
       </div>
     );
   }
@@ -76,13 +76,13 @@ export function EditProductContent({
   if (error || !product) {
     return (
       <div className="flex flex-col items-center justify-center text-center py-16">
-        <div className="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center mb-6">
-          <AlertTriangle className="w-10 h-10 text-red-400" />
+        <div className="w-20 h-20 rounded-full bg-destructive/10 flex items-center justify-center mb-6">
+          <AlertTriangle className="w-10 h-10 text-destructive/60" />
         </div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <h1 className="text-2xl font-bold text-foreground mb-2">
           Produit introuvable
         </h1>
-        <p className="text-gray-500 mb-8">
+        <p className="text-muted-foreground mb-8">
           Ce produit n&apos;existe pas ou vous n&apos;avez pas les droits pour le modifier.
         </p>
         <Button asChild variant="outline">
@@ -122,7 +122,7 @@ export function EditProductContent({
 
         <Dialog open={showDelete} onOpenChange={setShowDelete}>
           <DialogTrigger asChild>
-            <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700 hover:bg-red-50">
+            <Button variant="outline" size="sm" className="text-destructive hover:text-destructive hover:bg-destructive/10">
               <Trash2 className="mr-2 h-4 w-4" />
               Supprimer
             </Button>
@@ -156,10 +156,10 @@ export function EditProductContent({
       </div>
 
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-foreground">
           Modifier : {product.name}
         </h1>
-        <p className="text-gray-500 mt-1">
+        <p className="text-muted-foreground mt-1">
           Modifiez les informations de votre produit.
         </p>
       </div>

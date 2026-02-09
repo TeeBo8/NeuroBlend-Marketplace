@@ -55,16 +55,16 @@ export function VendorDashboardContent() {
   if (!vendor) {
     return (
       <div className="flex flex-col items-center justify-center text-center py-16">
-        <div className="w-20 h-20 rounded-full bg-purple-100 flex items-center justify-center mb-6">
-          <AlertTriangle className="w-10 h-10 text-purple-400" />
+        <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-6">
+          <AlertTriangle className="w-10 h-10 text-primary/60" />
         </div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <h1 className="text-2xl font-bold text-foreground mb-2">
           Profil vendeur introuvable
         </h1>
-        <p className="text-gray-500 mb-8">
+        <p className="text-muted-foreground mb-8">
           Vous n&apos;avez pas encore de profil vendeur.
         </p>
-        <Button asChild className="bg-purple-600 hover:bg-purple-700">
+        <Button asChild className="bg-primary hover:bg-primary/90">
           <Link href="/vendor/register">Créer mon profil vendeur</Link>
         </Button>
       </div>
@@ -85,10 +85,10 @@ export function VendorDashboardContent() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-foreground">
           Bonjour, {session?.user?.name || 'Vendeur'} !
         </h1>
-        <p className="text-gray-500 mt-1">
+        <p className="text-muted-foreground mt-1">
           Bienvenue dans votre espace vendeur &mdash; {vendor.businessName}
         </p>
       </div>
@@ -127,12 +127,12 @@ export function VendorDashboardContent() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-purple-100">
-                <Package className="h-6 w-6 text-purple-600" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                <Package className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">Produits</p>
-                <p className="text-2xl font-bold text-gray-900">{totalProducts}</p>
+                <p className="text-sm text-muted-foreground">Produits</p>
+                <p className="text-2xl font-bold text-foreground">{totalProducts}</p>
               </div>
             </div>
           </CardContent>
@@ -141,12 +141,12 @@ export function VendorDashboardContent() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-teal-100">
-                <ShoppingCart className="h-6 w-6 text-teal-600" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-chart-2/20">
+                <ShoppingCart className="h-6 w-6 text-chart-2" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">Commandes</p>
-                <p className="text-2xl font-bold text-gray-900">{totalOrders}</p>
+                <p className="text-sm text-muted-foreground">Commandes</p>
+                <p className="text-2xl font-bold text-foreground">{totalOrders}</p>
               </div>
             </div>
           </CardContent>
@@ -159,8 +159,8 @@ export function VendorDashboardContent() {
                 <TrendingUp className="h-6 w-6 text-green-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">Revenus</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-sm text-muted-foreground">Revenus</p>
+                <p className="text-2xl font-bold text-foreground">
                   {formatPrice(totalRevenue)}
                 </p>
               </div>
@@ -175,8 +175,8 @@ export function VendorDashboardContent() {
                 <Clock className="h-6 w-6 text-orange-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">À traiter</p>
-                <p className="text-2xl font-bold text-gray-900">{pendingOrders}</p>
+                <p className="text-sm text-muted-foreground">À traiter</p>
+                <p className="text-2xl font-bold text-foreground">{pendingOrders}</p>
               </div>
             </div>
           </CardContent>
@@ -189,7 +189,7 @@ export function VendorDashboardContent() {
           <CardTitle className="text-lg">Commandes récentes</CardTitle>
           {orders.length > 0 && (
             <Button variant="ghost" size="sm" asChild>
-              <Link href="/vendor/orders" className="text-purple-600 hover:text-purple-700">
+              <Link href="/vendor/orders" className="text-primary hover:text-primary">
                 Tout voir
                 <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
@@ -199,11 +199,11 @@ export function VendorDashboardContent() {
         <CardContent>
           {orders.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                <ShoppingCart className="h-8 w-8 text-gray-300" />
+              <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                <ShoppingCart className="h-8 w-8 text-muted-foreground" />
               </div>
-              <p className="text-gray-500 mb-2">Aucune commande pour le moment.</p>
-              <p className="text-sm text-gray-400">
+              <p className="text-muted-foreground mb-2">Aucune commande pour le moment.</p>
+              <p className="text-sm text-muted-foreground">
                 Les commandes apparaîtront ici une fois que vos produits seront en vente.
               </p>
             </div>
@@ -216,17 +216,17 @@ export function VendorDashboardContent() {
                   <Link
                     key={order.id}
                     href={`/vendor/orders?highlight=${order.id}`}
-                    className="flex items-center justify-between p-4 rounded-lg border hover:bg-gray-50 transition-colors group"
+                    className="flex items-center justify-between p-4 rounded-lg border hover:bg-accent transition-colors group"
                   >
                     <div className="flex items-center gap-4 min-w-0">
-                      <div className="hidden sm:flex h-10 w-10 items-center justify-center rounded-full bg-purple-50">
-                        <ShoppingCart className="h-5 w-5 text-purple-400" />
+                      <div className="hidden sm:flex h-10 w-10 items-center justify-center rounded-full bg-primary/5">
+                        <ShoppingCart className="h-5 w-5 text-primary/60" />
                       </div>
                       <div className="min-w-0">
-                        <p className="font-medium text-gray-900 truncate">
+                        <p className="font-medium text-foreground truncate">
                           {order.orderNumber}
                         </p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-muted-foreground">
                           {formatDate(order.createdAt)} &middot;{' '}
                           {order.user?.name || order.user?.email || 'Client'}
                         </p>
@@ -236,10 +236,10 @@ export function VendorDashboardContent() {
                       <Badge variant="secondary" className={statusColorMap[status] || ''}>
                         {statusInfo?.label || status}
                       </Badge>
-                      <span className="font-semibold text-gray-900">
+                      <span className="font-semibold text-foreground">
                         {formatPrice(Number(order.total))}
                       </span>
-                      <ArrowRight className="h-4 w-4 text-gray-400 group-hover:text-purple-600 transition-colors" />
+                      <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
                     </div>
                   </Link>
                 );
@@ -254,39 +254,39 @@ export function VendorDashboardContent() {
         {vendor.approved && (
           <Link
             href="/vendor/products/new"
-            className="flex items-center gap-4 p-5 rounded-lg border hover:border-purple-200 hover:bg-purple-50/50 transition-colors group"
+            className="flex items-center gap-4 p-5 rounded-lg border hover:border-primary/30 hover:bg-primary/5 transition-colors group"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-100 group-hover:bg-purple-200 transition-colors">
-              <Plus className="h-5 w-5 text-purple-600" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+              <Plus className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <p className="font-medium text-gray-900">Ajouter un produit</p>
-              <p className="text-sm text-gray-500">Créez une nouvelle fiche produit</p>
+              <p className="font-medium text-foreground">Ajouter un produit</p>
+              <p className="text-sm text-muted-foreground">Créez une nouvelle fiche produit</p>
             </div>
           </Link>
         )}
         <Link
           href="/vendor/products"
-          className="flex items-center gap-4 p-5 rounded-lg border hover:border-purple-200 hover:bg-purple-50/50 transition-colors group"
+          className="flex items-center gap-4 p-5 rounded-lg border hover:border-primary/30 hover:bg-primary/5 transition-colors group"
         >
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-teal-100 group-hover:bg-teal-200 transition-colors">
-            <Coffee className="h-5 w-5 text-teal-600" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-chart-2/20 group-hover:bg-chart-2/30 transition-colors">
+            <Coffee className="h-5 w-5 text-chart-2" />
           </div>
           <div>
-            <p className="font-medium text-gray-900">Gérer mes produits</p>
-            <p className="text-sm text-gray-500">Voir et modifier vos produits</p>
+            <p className="font-medium text-foreground">Gérer mes produits</p>
+            <p className="text-sm text-muted-foreground">Voir et modifier vos produits</p>
           </div>
         </Link>
         <Link
           href="/vendor/payouts"
-          className="flex items-center gap-4 p-5 rounded-lg border hover:border-purple-200 hover:bg-purple-50/50 transition-colors group"
+          className="flex items-center gap-4 p-5 rounded-lg border hover:border-primary/30 hover:bg-primary/5 transition-colors group"
         >
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 group-hover:bg-green-200 transition-colors">
             <CreditCard className="h-5 w-5 text-green-600" />
           </div>
           <div>
-            <p className="font-medium text-gray-900">Paiements</p>
-            <p className="text-sm text-gray-500">
+            <p className="font-medium text-foreground">Paiements</p>
+            <p className="text-sm text-muted-foreground">
               {stripeStatus?.onboardingComplete ? 'Gérer Stripe Connect' : 'Configurer les paiements'}
             </p>
           </div>
@@ -312,18 +312,18 @@ function DashboardSkeleton() {
   return (
     <div className="space-y-8 animate-pulse">
       <div>
-        <div className="h-8 w-64 bg-gray-200 rounded" />
-        <div className="h-5 w-80 bg-gray-100 rounded mt-2" />
+        <div className="h-8 w-64 bg-muted rounded" />
+        <div className="h-5 w-80 bg-muted/50 rounded mt-2" />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[...Array(4)].map((_, i) => (
           <Card key={i}>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="h-12 w-12 rounded-full bg-gray-200" />
+                <div className="h-12 w-12 rounded-full bg-muted" />
                 <div>
-                  <div className="h-4 w-20 bg-gray-200 rounded" />
-                  <div className="h-7 w-16 bg-gray-200 rounded mt-1" />
+                  <div className="h-4 w-20 bg-muted rounded" />
+                  <div className="h-7 w-16 bg-muted rounded mt-1" />
                 </div>
               </div>
             </CardContent>
@@ -334,7 +334,7 @@ function DashboardSkeleton() {
         <CardContent className="pt-6">
           <div className="space-y-4">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-16 bg-gray-100 rounded-lg" />
+              <div key={i} className="h-16 bg-muted rounded-lg" />
             ))}
           </div>
         </CardContent>

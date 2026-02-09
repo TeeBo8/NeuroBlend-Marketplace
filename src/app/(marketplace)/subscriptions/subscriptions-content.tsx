@@ -93,14 +93,14 @@ export function SubscriptionsContent() {
 
       {/* Hero */}
       <div className="text-center mb-12">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-100 text-purple-700 text-sm font-medium mb-4">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
           <Repeat className="w-4 h-4" />
           Abonnements mensuels
         </div>
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+        <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
           Votre café, chaque mois
         </h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
           Recevez une sélection de capsules adaptées à votre profil neuroatypique.
           Sans engagement, annulable à tout moment.
         </p>
@@ -109,19 +109,19 @@ export function SubscriptionsContent() {
       {/* Current subscription */}
       {mySubscription && mySubscription.status === 'active' && (
         <div className="max-w-md mx-auto mb-12">
-          <Card className="border-purple-200 bg-purple-50">
+          <Card className="border-primary/30 bg-primary/5">
             <CardContent className="p-6 text-center">
-              <Badge className="bg-purple-600 text-white mb-3">
+              <Badge className="bg-primary text-primary-foreground mb-3">
                 Abonnement actif
               </Badge>
-              <p className="text-gray-700 mb-4">
+              <p className="text-foreground mb-4">
                 Vous êtes abonné(e). Gérez votre abonnement ou changez de formule
                 depuis le portail Stripe.
               </p>
               <Button
                 onClick={() => manageSubscription.mutate()}
                 disabled={manageSubscription.isPending}
-                className="bg-purple-600 hover:bg-purple-700"
+                className="bg-primary hover:bg-primary/90"
               >
                 {manageSubscription.isPending ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -147,11 +147,11 @@ export function SubscriptionsContent() {
               className={cn(
                 'relative overflow-hidden transition-shadow hover:shadow-lg',
                 plan.highlight &&
-                  'border-2 border-purple-500 shadow-md'
+                  'border-2 border-primary shadow-md'
               )}
             >
               {plan.highlight && (
-                <div className="absolute top-0 left-0 right-0 bg-purple-600 text-white text-center text-xs font-semibold py-1.5">
+                <div className="absolute top-0 left-0 right-0 bg-primary text-primary-foreground text-center text-xs font-semibold py-1.5">
                   Le plus populaire
                 </div>
               )}
@@ -162,25 +162,25 @@ export function SubscriptionsContent() {
                   className={cn(
                     'w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3',
                     plan.highlight
-                      ? 'bg-purple-100'
-                      : 'bg-gray-100'
+                      ? 'bg-primary/10'
+                      : 'bg-muted'
                   )}
                 >
                   <Icon
                     className={cn(
                       'w-7 h-7',
                       plan.highlight
-                        ? 'text-purple-600'
-                        : 'text-gray-600'
+                        ? 'text-primary'
+                        : 'text-muted-foreground'
                     )}
                   />
                 </div>
                 <CardTitle className="text-xl">{plan.name}</CardTitle>
                 <div className="mt-2">
-                  <span className="text-4xl font-bold text-gray-900">
+                  <span className="text-4xl font-bold text-foreground">
                     {plan.price.toFixed(2).replace('.', ',')}€
                   </span>
-                  <span className="text-gray-500">/mois</span>
+                  <span className="text-muted-foreground">/mois</span>
                 </div>
               </CardHeader>
               <CardContent className="pt-4">
@@ -188,7 +188,7 @@ export function SubscriptionsContent() {
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-start gap-2">
                       <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-sm text-gray-600">{feature}</span>
+                      <span className="text-sm text-muted-foreground">{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -210,7 +210,7 @@ export function SubscriptionsContent() {
                     className={cn(
                       'w-full',
                       plan.highlight
-                        ? 'bg-purple-600 hover:bg-purple-700'
+                        ? 'bg-primary hover:bg-primary/90'
                         : ''
                     )}
                     variant={plan.highlight ? 'default' : 'outline'}
@@ -235,7 +235,7 @@ export function SubscriptionsContent() {
 
       {/* FAQ */}
       <div className="max-w-2xl mx-auto mt-16">
-        <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">
+        <h2 className="text-2xl font-bold text-foreground text-center mb-8">
           Questions fréquentes
         </h2>
         <div className="space-y-4">
@@ -255,8 +255,8 @@ export function SubscriptionsContent() {
           ].map((faq) => (
             <Card key={faq.q}>
               <CardContent className="p-5">
-                <h3 className="font-semibold text-gray-900 mb-1">{faq.q}</h3>
-                <p className="text-sm text-gray-600">{faq.a}</p>
+                <h3 className="font-semibold text-foreground mb-1">{faq.q}</h3>
+                <p className="text-sm text-muted-foreground">{faq.a}</p>
               </CardContent>
             </Card>
           ))}

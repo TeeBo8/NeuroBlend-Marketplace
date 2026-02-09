@@ -13,11 +13,11 @@ export default function AuthLayout({
         {/* Auth Logo */}
         <div className="flex flex-col items-center gap-3">
           <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-600">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary">
               <Coffee className="h-7 w-7 text-white" />
             </div>
           </Link>
-          <Link href="/" className="text-2xl font-bold text-gray-900">
+          <Link href="/" className="text-2xl font-bold text-foreground">
             {APP_NAME}
           </Link>
         </div>

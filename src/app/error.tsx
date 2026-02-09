@@ -21,13 +21,13 @@ export default function GlobalError({
       <div className="text-center max-w-lg">
         {/* Error icon */}
         <div className="mx-auto mb-8 w-24 h-24 rounded-full bg-red-100 flex items-center justify-center">
-          <AlertTriangle className="w-12 h-12 text-red-500" />
+          <AlertTriangle className="w-12 h-12 text-destructive" />
         </div>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-3">
+        <h1 className="text-3xl font-bold text-foreground mb-3">
           Quelque chose s&apos;est mal passé
         </h1>
-        <p className="text-gray-500 mb-8 max-w-md mx-auto">
+        <p className="text-muted-foreground mb-8 max-w-md mx-auto">
           Une erreur inattendue est survenue. Pas de panique, votre café est
           toujours en sécurité ! Essayez de recharger la page.
         </p>
@@ -36,7 +36,7 @@ export default function GlobalError({
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button
             onClick={reset}
-            className="bg-purple-600 hover:bg-purple-700"
+            className="bg-primary hover:bg-primary/90"
           >
             <RefreshCw className="mr-2 h-4 w-4" />
             Réessayer
@@ -51,7 +51,7 @@ export default function GlobalError({
 
         {/* Error details for debugging */}
         {error.digest && (
-          <p className="mt-8 text-xs text-gray-400">
+          <p className="mt-8 text-xs text-muted-foreground">
             Code erreur : {error.digest}
           </p>
         )}

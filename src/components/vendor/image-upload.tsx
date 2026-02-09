@@ -15,7 +15,7 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
   if (value) {
     return (
       <div className="space-y-3">
-        <div className="relative w-40 h-40 rounded-lg overflow-hidden bg-gray-100 border">
+        <div className="relative w-40 h-40 rounded-lg overflow-hidden bg-muted border">
           <Image
             src={value}
             alt="Image produit"
@@ -51,11 +51,11 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
       }}
       appearance={{
         container:
-          'border-2 border-dashed border-gray-200 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer ut-uploading:border-purple-400',
-        label: 'text-gray-600 hover:text-purple-600',
-        allowedContent: 'text-gray-400 text-xs',
+          'border-2 border-dashed border rounded-lg bg-muted/50 hover:bg-accent transition-colors cursor-pointer ut-uploading:border-primary/60',
+        label: 'text-muted-foreground hover:text-primary',
+        allowedContent: 'text-muted-foreground text-xs',
         button:
-          'bg-purple-600 hover:bg-purple-700 text-white text-sm px-4 py-2 rounded-md ut-uploading:bg-purple-400',
+          'bg-primary hover:bg-primary/90 text-primary-foreground text-sm px-4 py-2 rounded-md ut-uploading:bg-primary/60',
       }}
       content={{
         label: 'Glissez une image ou cliquez pour parcourir',

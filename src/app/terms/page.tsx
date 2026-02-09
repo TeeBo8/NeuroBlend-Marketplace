@@ -10,19 +10,19 @@ export const metadata: Metadata = {
 export default function TermsPage() {
   return (
     <>
-      <section className="bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 text-white">
+      <section className="bg-gradient-to-br from-primary via-primary/90 to-indigo-800 text-primary-foreground">
         <div className="container mx-auto px-4 py-16 md:py-20">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Conditions générales de vente
           </h1>
-          <p className="text-purple-100">
+          <p className="text-primary-foreground/80">
             Dernière mise à jour : 7 février 2026
           </p>
         </div>
       </section>
 
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4 max-w-3xl prose prose-gray prose-headings:text-gray-900 prose-a:text-purple-600">
+      <section className="py-16 bg-background">
+        <div className="container mx-auto px-4 max-w-3xl prose prose-gray prose-headings:text-foreground prose-a:text-primary">
           <h2>1. Objet</h2>
           <p>
             Les présentes Conditions Générales de Vente (CGV) régissent les

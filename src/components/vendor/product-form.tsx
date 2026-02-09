@@ -111,7 +111,7 @@ export function ProductForm({
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="name">
-              Nom du produit <span className="text-red-500">*</span>
+              Nom du produit <span className="text-destructive">*</span>
             </Label>
             <Input
               id="name"
@@ -126,7 +126,7 @@ export function ProductForm({
           <div className="space-y-2">
             <Label htmlFor="shortDescription">
               Description courte{' '}
-              <span className="text-gray-400">(max 200 caractères)</span>
+              <span className="text-muted-foreground">(max 200 caractères)</span>
             </Label>
             <Input
               id="shortDescription"
@@ -159,7 +159,7 @@ export function ProductForm({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="price">
-                Prix (EUR) <span className="text-red-500">*</span>
+                Prix (EUR) <span className="text-destructive">*</span>
               </Label>
               <Input
                 id="price"
@@ -283,7 +283,7 @@ export function ProductForm({
           <div className="space-y-2">
             <Label htmlFor="flavorNotes">
               Notes gustatives{' '}
-              <span className="text-gray-400">(séparées par des virgules)</span>
+              <span className="text-muted-foreground">(séparées par des virgules)</span>
             </Label>
             <Input
               id="flavorNotes"
@@ -300,7 +300,7 @@ export function ProductForm({
                   .map((note, i) => (
                     <span
                       key={i}
-                      className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-purple-100 text-purple-700"
+                      className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-primary/10 text-primary"
                     >
                       {note}
                     </span>
@@ -323,7 +323,7 @@ export function ProductForm({
 
       {/* Submit */}
       <div className="flex justify-end gap-3">
-        <Button type="submit" className="bg-purple-600 hover:bg-purple-700" disabled={isPending || !name.trim() || !price}>
+        <Button type="submit" className="bg-primary hover:bg-primary/90" disabled={isPending || !name.trim() || !price}>
           {isPending ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />

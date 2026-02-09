@@ -73,8 +73,8 @@ export function PayoutsContent() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Paiements</h1>
-        <p className="text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-foreground">Paiements</h1>
+        <p className="text-muted-foreground mt-1">
           Gérez votre compte Stripe Connect pour recevoir vos paiements.
         </p>
       </div>
@@ -84,8 +84,8 @@ export function PayoutsContent() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-100">
-                <CreditCard className="h-5 w-5 text-purple-600" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                <CreditCard className="h-5 w-5 text-primary" />
               </div>
               <div>
                 <CardTitle className="text-lg">Stripe Connect</CardTitle>
@@ -118,11 +118,11 @@ export function PayoutsContent() {
             {/* Actions */}
             {!stripeStatus?.connected ? (
               <div className="space-y-3">
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-muted-foreground">
                   Connectez votre compte Stripe pour recevoir les paiements de vos ventes. La configuration prend quelques minutes.
                 </p>
                 <Button
-                  className="bg-purple-600 hover:bg-purple-700"
+                  className="bg-primary hover:bg-primary/90"
                   onClick={() => createAccount.mutate()}
                   disabled={createAccount.isPending}
                 >
@@ -151,7 +151,7 @@ export function PayoutsContent() {
                   </div>
                 </div>
                 <Button
-                  className="bg-purple-600 hover:bg-purple-700"
+                  className="bg-primary hover:bg-primary/90"
                   onClick={() => createAccount.mutate()}
                   disabled={createAccount.isPending}
                 >
@@ -197,14 +197,14 @@ export function PayoutsContent() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-start gap-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-teal-100 shrink-0">
-                <Banknote className="h-5 w-5 text-teal-600" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-chart-2/20 shrink-0">
+                <Banknote className="h-5 w-5 text-chart-2" />
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900 mb-1">Commission</h3>
-                <p className="text-sm text-gray-500">
+                <h3 className="font-semibold text-foreground mb-1">Commission</h3>
+                <p className="text-sm text-muted-foreground">
                   La commission NeuroBlend est de{' '}
-                  <span className="font-semibold text-gray-700">
+                  <span className="font-semibold text-foreground">
                     {vendor?.commissionRate || '15'}%
                   </span>{' '}
                   par vente. Le reste est viré directement sur votre compte Stripe.
@@ -217,12 +217,12 @@ export function PayoutsContent() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-start gap-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-100 shrink-0">
-                <Shield className="h-5 w-5 text-purple-600" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 shrink-0">
+                <Shield className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900 mb-1">Sécurité</h3>
-                <p className="text-sm text-gray-500">
+                <h3 className="font-semibold text-foreground mb-1">Sécurité</h3>
+                <p className="text-sm text-muted-foreground">
                   Tous les paiements sont sécurisés par Stripe. Vos informations bancaires ne passent jamais par NeuroBlend.
                 </p>
               </div>
@@ -246,11 +246,11 @@ function StatusItem({
       {completed ? (
         <CheckCircle2 className="h-5 w-5 text-green-500" />
       ) : (
-        <div className="h-5 w-5 rounded-full border-2 border-gray-300" />
+        <div className="h-5 w-5 rounded-full border-2 border" />
       )}
       <span
         className={
-          completed ? 'text-gray-900 font-medium' : 'text-gray-500'
+          completed ? 'text-foreground font-medium' : 'text-muted-foreground'
         }
       >
         {label}
@@ -268,7 +268,7 @@ function StripeStatusBadge({
 }) {
   if (!status?.connected) {
     return (
-      <Badge variant="secondary" className="bg-gray-100 text-gray-600">
+      <Badge variant="secondary" className="bg-muted text-muted-foreground">
         Non configuré
       </Badge>
     );
@@ -298,24 +298,24 @@ function PayoutsSkeleton() {
   return (
     <div className="space-y-6 animate-pulse">
       <div>
-        <div className="h-8 w-40 bg-gray-200 rounded" />
-        <div className="h-5 w-72 bg-gray-100 rounded mt-2" />
+        <div className="h-8 w-40 bg-muted rounded" />
+        <div className="h-5 w-72 bg-muted rounded mt-2" />
       </div>
       <Card>
         <CardContent className="pt-6">
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-gray-200" />
+              <div className="h-10 w-10 rounded-full bg-muted" />
               <div>
-                <div className="h-5 w-32 bg-gray-200 rounded" />
-                <div className="h-4 w-48 bg-gray-100 rounded mt-1" />
+                <div className="h-5 w-32 bg-muted rounded" />
+                <div className="h-4 w-48 bg-muted rounded mt-1" />
               </div>
             </div>
             <div className="space-y-3">
               {[...Array(3)].map((_, i) => (
                 <div key={i} className="flex items-center gap-3">
-                  <div className="h-5 w-5 rounded-full bg-gray-200" />
-                  <div className="h-5 w-40 bg-gray-100 rounded" />
+                  <div className="h-5 w-5 rounded-full bg-muted" />
+                  <div className="h-5 w-40 bg-muted rounded" />
                 </div>
               ))}
             </div>

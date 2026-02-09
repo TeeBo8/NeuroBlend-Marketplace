@@ -13,15 +13,15 @@ import { cn } from '@/lib/utils';
 
 const CATEGORY_THEMES = {
   HPI: {
-    gradient: 'from-purple-600 via-purple-700 to-indigo-800',
-    lightBg: 'bg-purple-100',
+    gradient: 'from-primary via-primary/90 to-indigo-800',
+    lightBg: 'bg-primary/10',
     icon: Sparkles,
-    iconColor: 'text-purple-300',
+    iconColor: 'text-primary/50',
     accentColor: 'text-purple-100',
   },
   ADHD: {
     gradient: 'from-teal-600 via-teal-700 to-cyan-800',
-    lightBg: 'bg-teal-100',
+    lightBg: 'bg-chart-2/20',
     icon: Zap,
     iconColor: 'text-teal-300',
     accentColor: 'text-teal-100',
@@ -112,10 +112,10 @@ export function CategoryContent({
             >
               <Coffee className={cn('w-10 h-10', theme.iconColor)} />
             </div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            <h2 className="text-xl font-semibold text-foreground mb-2">
               Aucun produit disponible
             </h2>
-            <p className="text-gray-500 max-w-md mb-6">
+            <p className="text-muted-foreground max-w-md mb-6">
               Nos torréfacteurs préparent de nouvelles créations pour la
               catégorie {categoryInfo?.label}. Revenez bientôt !
             </p>
@@ -125,7 +125,7 @@ export function CategoryContent({
           </div>
         ) : (
           <>
-            <p className="text-sm text-gray-500 mb-6">
+            <p className="text-sm text-muted-foreground mb-6">
               {products.length} produit{products.length > 1 ? 's' : ''} trouvé
               {products.length > 1 ? 's' : ''}
             </p>
@@ -156,9 +156,9 @@ export function CategoryContent({
       </section>
 
       {/* Other Categories */}
-      <section className="bg-gray-50">
+      <section className="bg-muted/50">
         <div className="container mx-auto px-4 py-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          <h2 className="text-2xl font-bold text-foreground mb-6">
             Autres catégories
           </h2>
           <div className="grid md:grid-cols-2 gap-4">
@@ -176,7 +176,7 @@ export function CategoryContent({
                     href={`/categories/${cat.value}`}
                     className="group"
                   >
-                    <div className="flex items-center gap-4 rounded-xl border border-gray-200 p-6 transition-all hover:border-purple-300 hover:shadow-md">
+                    <div className="flex items-center gap-4 rounded-xl border p-6 transition-all hover:border-primary/30 hover:shadow-md">
                       <div
                         className={cn(
                           'w-12 h-12 rounded-lg flex items-center justify-center',
@@ -188,10 +188,10 @@ export function CategoryContent({
                         />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900 group-hover:text-purple-600 transition-colors">
+                        <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
                           {cat.label}
                         </h3>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-muted-foreground">
                           {cat.description}
                         </p>
                       </div>

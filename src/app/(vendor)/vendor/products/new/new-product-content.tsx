@@ -41,8 +41,8 @@ export function NewProductContent() {
       </div>
 
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Nouveau produit</h1>
-        <p className="text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-foreground">Nouveau produit</h1>
+        <p className="text-muted-foreground mt-1">
           Créez une nouvelle fiche produit pour votre boutique.
         </p>
       </div>

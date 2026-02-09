@@ -76,8 +76,8 @@ export function AdminOrdersContent() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Toutes les commandes</h1>
-        <p className="text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-foreground">Toutes les commandes</h1>
+        <p className="text-muted-foreground mt-1">
           {orders.length} commande{orders.length > 1 ? 's' : ''}
         </p>
       </div>
@@ -110,10 +110,10 @@ export function AdminOrdersContent() {
         <CardContent>
           {orders.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                <ShoppingCart className="h-8 w-8 text-gray-300" />
+              <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                <ShoppingCart className="h-8 w-8 text-muted-foreground" />
               </div>
-              <p className="text-gray-500">Aucune commande trouvée.</p>
+              <p className="text-muted-foreground">Aucune commande trouvée.</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -128,14 +128,14 @@ export function AdminOrdersContent() {
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4 min-w-0">
-                        <div className="hidden sm:flex h-10 w-10 items-center justify-center rounded-full bg-purple-50">
-                          <ShoppingCart className="h-5 w-5 text-purple-400" />
+                        <div className="hidden sm:flex h-10 w-10 items-center justify-center rounded-full bg-primary/5">
+                          <ShoppingCart className="h-5 w-5 text-primary/60" />
                         </div>
                         <div className="min-w-0">
-                          <p className="font-medium text-gray-900 truncate">
+                          <p className="font-medium text-foreground truncate">
                             {order.orderNumber}
                           </p>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-muted-foreground">
                             {formatDate(order.createdAt)}
                           </p>
                         </div>
@@ -144,13 +144,13 @@ export function AdminOrdersContent() {
                         <Badge variant="secondary" className={statusColorMap[status] || ''}>
                           {statusInfo?.label || status}
                         </Badge>
-                        <span className="font-semibold text-gray-900">
+                        <span className="font-semibold text-foreground">
                           {formatPrice(Number(order.total))}
                         </span>
                       </div>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 pl-0 sm:pl-14">
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground pl-0 sm:pl-14">
                       <span>
                         Client : {order.user?.name || order.user?.email || 'Inconnu'}
                       </span>
@@ -172,7 +172,7 @@ export function AdminOrdersContent() {
                         <Button
                           size="sm"
                           variant="outline"
-                          className="text-red-600 border-red-200 hover:bg-red-50"
+                          className="text-destructive border-destructive/20 hover:bg-destructive/10"
                           onClick={() =>
                             setCancelDialog({
                               open: true,
@@ -208,7 +208,7 @@ export function AdminOrdersContent() {
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
-            <label className="text-sm font-medium text-gray-700 block mb-2">
+            <label className="text-sm font-medium text-foreground block mb-2">
               Raison (optionnel)
             </label>
             <Input
@@ -249,15 +249,15 @@ function OrdersSkeleton() {
   return (
     <div className="space-y-6 animate-pulse">
       <div>
-        <div className="h-8 w-64 bg-gray-200 rounded" />
-        <div className="h-5 w-40 bg-gray-100 rounded mt-2" />
+        <div className="h-8 w-64 bg-muted rounded" />
+        <div className="h-5 w-40 bg-muted/50 rounded mt-2" />
       </div>
-      <div className="h-10 w-48 bg-gray-200 rounded" />
+      <div className="h-10 w-48 bg-muted rounded" />
       <Card>
         <CardContent className="pt-6">
           <div className="space-y-4">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="h-24 bg-gray-100 rounded-lg" />
+              <div key={i} className="h-24 bg-muted rounded-lg" />
             ))}
           </div>
         </CardContent>

@@ -95,8 +95,8 @@ export function AdminVendorsContent() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Gestion des vendeurs</h1>
-        <p className="text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-foreground">Gestion des vendeurs</h1>
+        <p className="text-muted-foreground mt-1">
           {vendors.length} vendeur{vendors.length > 1 ? 's' : ''}
         </p>
       </div>
@@ -126,10 +126,10 @@ export function AdminVendorsContent() {
         <CardContent>
           {vendors.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                <Store className="h-8 w-8 text-gray-300" />
+              <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                <Store className="h-8 w-8 text-muted-foreground" />
               </div>
-              <p className="text-gray-500">Aucun vendeur trouvé.</p>
+              <p className="text-muted-foreground">Aucun vendeur trouvé.</p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -140,17 +140,17 @@ export function AdminVendorsContent() {
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-4 min-w-0">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-purple-100">
-                        <Store className="h-6 w-6 text-purple-600" />
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                        <Store className="h-6 w-6 text-primary" />
                       </div>
                       <div className="min-w-0">
-                        <p className="font-semibold text-gray-900 truncate">
+                        <p className="font-semibold text-foreground truncate">
                           {vendor.businessName}
                         </p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-muted-foreground">
                           {vendor.user?.name || 'Sans nom'} &middot; {vendor.user?.email}
                         </p>
-                        <p className="text-xs text-gray-400 mt-0.5">
+                        <p className="text-xs text-muted-foreground mt-0.5">
                           Inscrit le {formatDate(vendor.createdAt)}
                         </p>
                       </div>
@@ -171,9 +171,9 @@ export function AdminVendorsContent() {
                   </div>
 
                   {/* Details */}
-                  <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                     {vendor.description && (
-                      <p className="text-gray-600 line-clamp-2">{vendor.description}</p>
+                      <p className="text-muted-foreground line-clamp-2">{vendor.description}</p>
                     )}
                     {vendor.website && (
                       <span className="flex items-center gap-1">
@@ -213,7 +213,7 @@ export function AdminVendorsContent() {
                         <Button
                           size="sm"
                           variant="outline"
-                          className="text-red-600 border-red-200 hover:bg-red-50"
+                          className="text-destructive border-destructive/20 hover:bg-destructive/10"
                           onClick={() => setRejectDialog({ open: true, vendorId: vendor.id, businessName: vendor.businessName })}
                         >
                           <XCircle className="mr-1 h-4 w-4" />
@@ -289,7 +289,7 @@ export function AdminVendorsContent() {
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
-            <label className="text-sm font-medium text-gray-700 block mb-2">
+            <label className="text-sm font-medium text-foreground block mb-2">
               Taux de commission (%)
             </label>
             <Input
@@ -318,7 +318,7 @@ export function AdminVendorsContent() {
                 })
               }
               disabled={updateCommission.isPending}
-              className="bg-purple-600 hover:bg-purple-700"
+              className="bg-primary hover:bg-primary/90"
             >
               {updateCommission.isPending ? 'Mise à jour...' : 'Enregistrer'}
             </Button>
@@ -333,15 +333,15 @@ function VendorsSkeleton() {
   return (
     <div className="space-y-6 animate-pulse">
       <div>
-        <div className="h-8 w-64 bg-gray-200 rounded" />
-        <div className="h-5 w-40 bg-gray-100 rounded mt-2" />
+        <div className="h-8 w-64 bg-muted rounded" />
+        <div className="h-5 w-40 bg-muted/50 rounded mt-2" />
       </div>
-      <div className="h-10 w-48 bg-gray-200 rounded" />
+      <div className="h-10 w-48 bg-muted rounded" />
       <Card>
         <CardContent className="pt-6">
           <div className="space-y-4">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-36 bg-gray-100 rounded-lg" />
+              <div key={i} className="h-36 bg-muted rounded-lg" />
             ))}
           </div>
         </CardContent>

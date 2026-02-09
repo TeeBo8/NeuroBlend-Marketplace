@@ -13,7 +13,7 @@ export default function CheckoutSuccessPage() {
       fallback={
         <div className="container mx-auto px-4 py-16">
           <div className="flex items-center justify-center py-32">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-purple-600 border-t-transparent" />
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
           </div>
         </div>
       }

@@ -41,7 +41,7 @@ export default function AdminLayout({
     return (
       <div className="container mx-auto px-4 py-16">
         <div className="flex items-center justify-center py-32">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-purple-600 border-t-transparent" />
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
         </div>
       </div>
     );
@@ -51,16 +51,16 @@ export default function AdminLayout({
     return (
       <div className="container mx-auto px-4 py-16">
         <div className="flex flex-col items-center justify-center text-center max-w-md mx-auto">
-          <div className="w-24 h-24 rounded-full bg-purple-100 flex items-center justify-center mb-6">
-            <Lock className="w-12 h-12 text-purple-300" />
+          <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mb-6">
+            <Lock className="w-12 h-12 text-primary/50" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+          <h1 className="text-2xl font-bold text-foreground mb-2">
             Connexion requise
           </h1>
-          <p className="text-gray-500 mb-8">
+          <p className="text-muted-foreground mb-8">
             Connectez-vous pour accéder au panneau d&apos;administration.
           </p>
-          <Button asChild className="bg-purple-600 hover:bg-purple-700">
+          <Button asChild className="bg-primary hover:bg-primary/90">
             <Link href="/login">Se connecter</Link>
           </Button>
         </div>
@@ -76,13 +76,13 @@ export default function AdminLayout({
           <div className="w-24 h-24 rounded-full bg-red-100 flex items-center justify-center mb-6">
             <Shield className="w-12 h-12 text-red-300" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+          <h1 className="text-2xl font-bold text-foreground mb-2">
             Accès refusé
           </h1>
-          <p className="text-gray-500 mb-8">
+          <p className="text-muted-foreground mb-8">
             Vous devez être administrateur pour accéder à cette section.
           </p>
-          <Button asChild className="bg-purple-600 hover:bg-purple-700">
+          <Button asChild className="bg-primary hover:bg-primary/90">
             <Link href="/">Retour à l&apos;accueil</Link>
           </Button>
         </div>
@@ -125,7 +125,7 @@ export default function AdminLayout({
                 </AvatarFallback>
               </Avatar>
               <div className="min-w-0">
-                <p className="font-semibold text-gray-900 truncate">
+                <p className="font-semibold text-foreground truncate">
                   {user.name || 'Admin'}
                 </p>
                 <Badge variant="secondary" className="bg-red-100 text-red-700 text-xs">
@@ -148,8 +148,8 @@ export default function AdminLayout({
                     className={cn(
                       'flex items-center gap-2 md:gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors whitespace-nowrap',
                       active
-                        ? 'bg-purple-50 text-purple-700'
-                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                        ? 'bg-primary/5 text-primary'
+                        : 'text-muted-foreground hover:bg-accent hover:text-foreground'
                     )}
                   >
                     <Icon className="h-4 w-4 shrink-0" />
@@ -179,7 +179,7 @@ export default function AdminLayout({
             {/* Sign out */}
             <button
               onClick={handleSignOut}
-              className="hidden md:flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-600 hover:bg-red-50 hover:text-red-600 transition-colors w-full"
+              className="hidden md:flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors w-full"
             >
               <LogOut className="h-4 w-4 shrink-0" />
               <span>Se déconnecter</span>

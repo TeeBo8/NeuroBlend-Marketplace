@@ -42,10 +42,10 @@ export function AdminDashboardContent() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-foreground">
           Panneau d&apos;administration
         </h1>
-        <p className="text-gray-500 mt-1">
+        <p className="text-muted-foreground mt-1">
           Vue d&apos;ensemble de la plateforme NeuroBlend
         </p>
       </div>
@@ -77,8 +77,8 @@ export function AdminDashboardContent() {
                 <Users className="h-6 w-6 text-blue-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">Utilisateurs</p>
-                <p className="text-2xl font-bold text-gray-900">{stats?.users ?? 0}</p>
+                <p className="text-sm text-muted-foreground">Utilisateurs</p>
+                <p className="text-2xl font-bold text-foreground">{stats?.users ?? 0}</p>
               </div>
             </div>
           </CardContent>
@@ -87,12 +87,12 @@ export function AdminDashboardContent() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-purple-100">
-                <Store className="h-6 w-6 text-purple-600" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                <Store className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">Vendeurs actifs</p>
-                <p className="text-2xl font-bold text-gray-900">{stats?.vendors ?? 0}</p>
+                <p className="text-sm text-muted-foreground">Vendeurs actifs</p>
+                <p className="text-2xl font-bold text-foreground">{stats?.vendors ?? 0}</p>
               </div>
             </div>
           </CardContent>
@@ -101,12 +101,12 @@ export function AdminDashboardContent() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-teal-100">
-                <Package className="h-6 w-6 text-teal-600" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-chart-2/20">
+                <Package className="h-6 w-6 text-chart-2" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">Produits</p>
-                <p className="text-2xl font-bold text-gray-900">{stats?.products ?? 0}</p>
+                <p className="text-sm text-muted-foreground">Produits</p>
+                <p className="text-2xl font-bold text-foreground">{stats?.products ?? 0}</p>
               </div>
             </div>
           </CardContent>
@@ -119,8 +119,8 @@ export function AdminDashboardContent() {
                 <ShoppingCart className="h-6 w-6 text-orange-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">Commandes</p>
-                <p className="text-2xl font-bold text-gray-900">{stats?.orders ?? 0}</p>
+                <p className="text-sm text-muted-foreground">Commandes</p>
+                <p className="text-2xl font-bold text-foreground">{stats?.orders ?? 0}</p>
               </div>
             </div>
           </CardContent>
@@ -136,8 +136,8 @@ export function AdminDashboardContent() {
                 <TrendingUp className="h-6 w-6 text-green-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">GMV (Volume total)</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-sm text-muted-foreground">GMV (Volume total)</p>
+                <p className="text-2xl font-bold text-foreground">
                   {formatPrice(stats?.gmv ?? 0)}
                 </p>
               </div>
@@ -152,8 +152,8 @@ export function AdminDashboardContent() {
                 <DollarSign className="h-6 w-6 text-emerald-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">Commissions gagnées</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-sm text-muted-foreground">Commissions gagnées</p>
+                <p className="text-2xl font-bold text-foreground">
                   {formatPrice(stats?.commissionEarned ?? 0)}
                 </p>
               </div>
@@ -181,7 +181,7 @@ export function AdminDashboardContent() {
                     <Badge variant="secondary" className={statusColorMap[status] || ''}>
                       {statusInfo?.label || status}
                     </Badge>
-                    <span className="text-lg font-bold text-gray-900">{item.count}</span>
+                    <span className="text-lg font-bold text-foreground">{item.count}</span>
                   </div>
                 );
               })}
@@ -195,7 +195,7 @@ export function AdminDashboardContent() {
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-lg">Commandes récentes</CardTitle>
           <Button variant="ghost" size="sm" asChild>
-            <Link href="/admin/orders" className="text-purple-600 hover:text-purple-700">
+            <Link href="/admin/orders" className="text-primary hover:text-primary">
               Tout voir
               <ArrowRight className="ml-1 h-4 w-4" />
             </Link>
@@ -204,10 +204,10 @@ export function AdminDashboardContent() {
         <CardContent>
           {!recentOrders || recentOrders.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                <ShoppingCart className="h-8 w-8 text-gray-300" />
+              <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                <ShoppingCart className="h-8 w-8 text-muted-foreground" />
               </div>
-              <p className="text-gray-500">Aucune commande pour le moment.</p>
+              <p className="text-muted-foreground">Aucune commande pour le moment.</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -220,14 +220,14 @@ export function AdminDashboardContent() {
                     className="flex items-center justify-between p-4 rounded-lg border"
                   >
                     <div className="flex items-center gap-4 min-w-0">
-                      <div className="hidden sm:flex h-10 w-10 items-center justify-center rounded-full bg-purple-50">
-                        <ShoppingCart className="h-5 w-5 text-purple-400" />
+                      <div className="hidden sm:flex h-10 w-10 items-center justify-center rounded-full bg-primary/5">
+                        <ShoppingCart className="h-5 w-5 text-primary/60" />
                       </div>
                       <div className="min-w-0">
-                        <p className="font-medium text-gray-900 truncate">
+                        <p className="font-medium text-foreground truncate">
                           {order.orderNumber}
                         </p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-muted-foreground">
                           {formatDate(order.createdAt)} &middot;{' '}
                           {order.user?.name || order.user?.email || 'Client'} &middot;{' '}
                           {order.vendor?.businessName || 'Vendeur'}
@@ -238,7 +238,7 @@ export function AdminDashboardContent() {
                       <Badge variant="secondary" className={statusColorMap[status] || ''}>
                         {statusInfo?.label || status}
                       </Badge>
-                      <span className="font-semibold text-gray-900">
+                      <span className="font-semibold text-foreground">
                         {formatPrice(Number(order.total))}
                       </span>
                     </div>
@@ -255,7 +255,7 @@ export function AdminDashboardContent() {
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-lg">Top vendeurs</CardTitle>
           <Button variant="ghost" size="sm" asChild>
-            <Link href="/admin/vendors" className="text-purple-600 hover:text-purple-700">
+            <Link href="/admin/vendors" className="text-primary hover:text-primary">
               Tout voir
               <ArrowRight className="ml-1 h-4 w-4" />
             </Link>
@@ -264,10 +264,10 @@ export function AdminDashboardContent() {
         <CardContent>
           {!topVendors || topVendors.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                <Store className="h-8 w-8 text-gray-300" />
+              <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                <Store className="h-8 w-8 text-muted-foreground" />
               </div>
-              <p className="text-gray-500">Aucun vendeur avec des ventes pour le moment.</p>
+              <p className="text-muted-foreground">Aucun vendeur avec des ventes pour le moment.</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -277,19 +277,19 @@ export function AdminDashboardContent() {
                   className="flex items-center justify-between p-4 rounded-lg border"
                 >
                   <div className="flex items-center gap-4 min-w-0">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-100 text-purple-700 font-bold text-sm">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-sm">
                       #{idx + 1}
                     </div>
                     <div className="min-w-0">
-                      <p className="font-medium text-gray-900 truncate">
+                      <p className="font-medium text-foreground truncate">
                         {item.vendor?.businessName || 'Vendeur inconnu'}
                       </p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-muted-foreground">
                         {item.orderCount} commande{item.orderCount > 1 ? 's' : ''}
                       </p>
                     </div>
                   </div>
-                  <span className="font-semibold text-gray-900 shrink-0">
+                  <span className="font-semibold text-foreground shrink-0">
                     {formatPrice(item.totalRevenue)}
                   </span>
                 </div>
@@ -303,50 +303,50 @@ export function AdminDashboardContent() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Link
           href="/admin/users"
-          className="flex items-center gap-4 p-5 rounded-lg border hover:border-purple-200 hover:bg-purple-50/50 transition-colors group"
+          className="flex items-center gap-4 p-5 rounded-lg border hover:border-primary/30 hover:bg-primary/5 transition-colors group"
         >
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 group-hover:bg-blue-200 transition-colors">
             <Users className="h-5 w-5 text-blue-600" />
           </div>
           <div>
-            <p className="font-medium text-gray-900">Utilisateurs</p>
-            <p className="text-sm text-gray-500">Gérer les comptes</p>
+            <p className="font-medium text-foreground">Utilisateurs</p>
+            <p className="text-sm text-muted-foreground">Gérer les comptes</p>
           </div>
         </Link>
         <Link
           href="/admin/vendors"
-          className="flex items-center gap-4 p-5 rounded-lg border hover:border-purple-200 hover:bg-purple-50/50 transition-colors group"
+          className="flex items-center gap-4 p-5 rounded-lg border hover:border-primary/30 hover:bg-primary/5 transition-colors group"
         >
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-100 group-hover:bg-purple-200 transition-colors">
-            <Store className="h-5 w-5 text-purple-600" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+            <Store className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <p className="font-medium text-gray-900">Vendeurs</p>
-            <p className="text-sm text-gray-500">Approuver & gérer</p>
+            <p className="font-medium text-foreground">Vendeurs</p>
+            <p className="text-sm text-muted-foreground">Approuver & gérer</p>
           </div>
         </Link>
         <Link
           href="/admin/orders"
-          className="flex items-center gap-4 p-5 rounded-lg border hover:border-purple-200 hover:bg-purple-50/50 transition-colors group"
+          className="flex items-center gap-4 p-5 rounded-lg border hover:border-primary/30 hover:bg-primary/5 transition-colors group"
         >
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 group-hover:bg-orange-200 transition-colors">
             <ShoppingCart className="h-5 w-5 text-orange-600" />
           </div>
           <div>
-            <p className="font-medium text-gray-900">Commandes</p>
-            <p className="text-sm text-gray-500">Suivre les commandes</p>
+            <p className="font-medium text-foreground">Commandes</p>
+            <p className="text-sm text-muted-foreground">Suivre les commandes</p>
           </div>
         </Link>
         <Link
           href="/admin/products"
-          className="flex items-center gap-4 p-5 rounded-lg border hover:border-purple-200 hover:bg-purple-50/50 transition-colors group"
+          className="flex items-center gap-4 p-5 rounded-lg border hover:border-primary/30 hover:bg-primary/5 transition-colors group"
         >
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-teal-100 group-hover:bg-teal-200 transition-colors">
-            <Package className="h-5 w-5 text-teal-600" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-chart-2/20 group-hover:bg-chart-2/30 transition-colors">
+            <Package className="h-5 w-5 text-chart-2" />
           </div>
           <div>
-            <p className="font-medium text-gray-900">Produits</p>
-            <p className="text-sm text-gray-500">Gérer le catalogue</p>
+            <p className="font-medium text-foreground">Produits</p>
+            <p className="text-sm text-muted-foreground">Gérer le catalogue</p>
           </div>
         </Link>
       </div>
@@ -358,18 +358,18 @@ function DashboardSkeleton() {
   return (
     <div className="space-y-8 animate-pulse">
       <div>
-        <div className="h-8 w-72 bg-gray-200 rounded" />
-        <div className="h-5 w-96 bg-gray-100 rounded mt-2" />
+        <div className="h-8 w-72 bg-muted rounded" />
+        <div className="h-5 w-96 bg-muted/50 rounded mt-2" />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[...Array(4)].map((_, i) => (
           <Card key={i}>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="h-12 w-12 rounded-full bg-gray-200" />
+                <div className="h-12 w-12 rounded-full bg-muted" />
                 <div>
-                  <div className="h-4 w-20 bg-gray-200 rounded" />
-                  <div className="h-7 w-16 bg-gray-200 rounded mt-1" />
+                  <div className="h-4 w-20 bg-muted rounded" />
+                  <div className="h-7 w-16 bg-muted rounded mt-1" />
                 </div>
               </div>
             </CardContent>
@@ -381,10 +381,10 @@ function DashboardSkeleton() {
           <Card key={i}>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="h-12 w-12 rounded-full bg-gray-200" />
+                <div className="h-12 w-12 rounded-full bg-muted" />
                 <div>
-                  <div className="h-4 w-28 bg-gray-200 rounded" />
-                  <div className="h-7 w-24 bg-gray-200 rounded mt-1" />
+                  <div className="h-4 w-28 bg-muted rounded" />
+                  <div className="h-7 w-24 bg-muted rounded mt-1" />
                 </div>
               </div>
             </CardContent>
@@ -395,7 +395,7 @@ function DashboardSkeleton() {
         <CardContent className="pt-6">
           <div className="space-y-4">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-16 bg-gray-100 rounded-lg" />
+              <div key={i} className="h-16 bg-muted rounded-lg" />
             ))}
           </div>
         </CardContent>

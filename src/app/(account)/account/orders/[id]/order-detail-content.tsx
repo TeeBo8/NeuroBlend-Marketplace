@@ -61,7 +61,7 @@ export function OrderDetailContent({ orderId }: { orderId: string }) {
       <div className="space-y-6">
         <Link
           href="/account/orders"
-          className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-purple-600 transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Retour aux commandes
@@ -69,13 +69,13 @@ export function OrderDetailContent({ orderId }: { orderId: string }) {
         <Card>
           <CardContent className="pt-6">
             <div className="flex flex-col items-center justify-center py-16 text-center">
-              <div className="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center mb-4">
-                <XCircle className="h-10 w-10 text-red-300" />
+              <div className="w-20 h-20 rounded-full bg-destructive/10 flex items-center justify-center mb-4">
+                <XCircle className="h-10 w-10 text-destructive/50" />
               </div>
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">
+              <h2 className="text-lg font-semibold text-foreground mb-2">
                 Commande introuvable
               </h2>
-              <p className="text-gray-500 mb-6">
+              <p className="text-muted-foreground mb-6">
                 Cette commande n&apos;existe pas ou vous n&apos;y avez pas accès.
               </p>
               <Button asChild variant="outline">
@@ -98,7 +98,7 @@ export function OrderDetailContent({ orderId }: { orderId: string }) {
       {/* Back link */}
       <Link
         href="/account/orders"
-        className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-purple-600 transition-colors"
+        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         Retour aux commandes
@@ -108,7 +108,7 @@ export function OrderDetailContent({ orderId }: { orderId: string }) {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-foreground">
               {order.orderNumber}
             </h1>
             <Badge
@@ -118,12 +118,12 @@ export function OrderDetailContent({ orderId }: { orderId: string }) {
               {statusInfo?.label || status}
             </Badge>
           </div>
-          <p className="text-gray-500 mt-1">
+          <p className="text-muted-foreground mt-1">
             Passée le {formatDate(order.createdAt)} &middot;{' '}
             {order.vendor?.businessName || 'Vendeur'}
           </p>
         </div>
-        <p className="text-2xl font-bold text-gray-900">
+        <p className="text-2xl font-bold text-foreground">
           {formatPrice(Number(order.total))}
         </p>
       </div>
@@ -143,8 +143,8 @@ export function OrderDetailContent({ orderId }: { orderId: string }) {
                         className={cn(
                           'flex h-10 w-10 items-center justify-center rounded-full border-2 transition-colors',
                           isCompleted
-                            ? 'border-purple-600 bg-purple-600 text-white'
-                            : 'border-gray-200 bg-white text-gray-400'
+                            ? 'border-primary bg-primary text-primary-foreground'
+                            : 'border bg-card text-muted-foreground'
                         )}
                       >
                         <Icon className="h-5 w-5" />
@@ -152,7 +152,7 @@ export function OrderDetailContent({ orderId }: { orderId: string }) {
                       <span
                         className={cn(
                           'text-xs mt-2 font-medium text-center',
-                          isCompleted ? 'text-purple-600' : 'text-gray-400'
+                          isCompleted ? 'text-primary' : 'text-muted-foreground'
                         )}
                       >
                         {step.label}
@@ -162,7 +162,7 @@ export function OrderDetailContent({ orderId }: { orderId: string }) {
                       <div
                         className={cn(
                           'h-0.5 flex-1 mx-2 mt-[-1.25rem]',
-                          index < currentStep ? 'bg-purple-600' : 'bg-gray-200'
+                          index < currentStep ? 'bg-primary' : 'bg-muted'
                         )}
                       />
                     )}
@@ -204,7 +204,7 @@ export function OrderDetailContent({ orderId }: { orderId: string }) {
               <div className="divide-y">
                 {order.items.map((item) => (
                   <div key={item.id} className="flex gap-4 py-4 first:pt-0 last:pb-0">
-                    <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
+                    <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-muted">
                       {item.product?.imageUrl ? (
                         <Image
                           src={item.product.imageUrl}
@@ -214,20 +214,20 @@ export function OrderDetailContent({ orderId }: { orderId: string }) {
                           sizes="64px"
                         />
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-purple-100 to-purple-50">
-                          <Coffee className="h-6 w-6 text-purple-300" />
+                        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/10 to-primary/5">
+                          <Coffee className="h-6 w-6 text-primary/50" />
                         </div>
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-gray-900 truncate">
+                      <p className="font-medium text-foreground truncate">
                         {item.productName}
                       </p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-muted-foreground">
                         {formatPrice(Number(item.unitPrice))} x {item.quantity}
                       </p>
                     </div>
-                    <p className="font-semibold text-gray-900 shrink-0">
+                    <p className="font-semibold text-foreground shrink-0">
                       {formatPrice(Number(item.totalPrice))}
                     </p>
                   </div>
@@ -239,11 +239,11 @@ export function OrderDetailContent({ orderId }: { orderId: string }) {
               {/* Price Summary */}
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Sous-total</span>
+                  <span className="text-muted-foreground">Sous-total</span>
                   <span>{formatPrice(Number(order.subtotal))}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Livraison</span>
+                  <span className="text-muted-foreground">Livraison</span>
                   <span className="text-green-600">Gratuite</span>
                 </div>
                 <Separator />
@@ -263,13 +263,13 @@ export function OrderDetailContent({ orderId }: { orderId: string }) {
             <Card>
               <CardHeader>
                 <CardTitle className="text-base flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-gray-400" />
+                  <MapPin className="h-4 w-4 text-muted-foreground" />
                   Adresse de livraison
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-sm text-gray-600 space-y-0.5">
-                  <p className="font-medium text-gray-900">{order.shippingName}</p>
+                <div className="text-sm text-muted-foreground space-y-0.5">
+                  <p className="font-medium text-foreground">{order.shippingName}</p>
                   <p>{order.shippingAddress}</p>
                   <p>
                     {order.shippingPostalCode} {order.shippingCity}
@@ -285,12 +285,12 @@ export function OrderDetailContent({ orderId }: { orderId: string }) {
             <Card>
               <CardHeader>
                 <CardTitle className="text-base flex items-center gap-2">
-                  <Truck className="h-4 w-4 text-gray-400" />
+                  <Truck className="h-4 w-4 text-muted-foreground" />
                   Suivi de livraison
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm font-mono bg-gray-50 px-3 py-2 rounded-md text-gray-700">
+                <p className="text-sm font-mono bg-muted/50 px-3 py-2 rounded-md text-foreground">
                   {order.trackingNumber}
                 </p>
               </CardContent>
@@ -302,12 +302,12 @@ export function OrderDetailContent({ orderId }: { orderId: string }) {
             <Card>
               <CardHeader>
                 <CardTitle className="text-base flex items-center gap-2">
-                  <Store className="h-4 w-4 text-gray-400" />
+                  <Store className="h-4 w-4 text-muted-foreground" />
                   Vendeur
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="font-medium text-gray-900">
+                <p className="font-medium text-foreground">
                   {order.vendor.businessName}
                 </p>
               </CardContent>
@@ -322,21 +322,21 @@ export function OrderDetailContent({ orderId }: { orderId: string }) {
 function OrderDetailSkeleton() {
   return (
     <div className="space-y-6 animate-pulse">
-      <div className="h-5 w-40 bg-gray-200 rounded" />
+      <div className="h-5 w-40 bg-muted rounded" />
       <div className="flex justify-between">
         <div>
-          <div className="h-8 w-48 bg-gray-200 rounded" />
-          <div className="h-5 w-64 bg-gray-100 rounded mt-2" />
+          <div className="h-8 w-48 bg-muted rounded" />
+          <div className="h-5 w-64 bg-muted rounded mt-2" />
         </div>
-        <div className="h-8 w-24 bg-gray-200 rounded" />
+        <div className="h-8 w-24 bg-muted rounded" />
       </div>
       <Card>
         <CardContent className="pt-6">
           <div className="flex justify-between">
             {[...Array(4)].map((_, i) => (
               <div key={i} className="flex flex-col items-center">
-                <div className="h-10 w-10 rounded-full bg-gray-200" />
-                <div className="h-3 w-16 bg-gray-100 rounded mt-2" />
+                <div className="h-10 w-10 rounded-full bg-muted" />
+                <div className="h-3 w-16 bg-muted rounded mt-2" />
               </div>
             ))}
           </div>
@@ -348,10 +348,10 @@ function OrderDetailSkeleton() {
             <CardContent className="pt-6 space-y-4">
               {[...Array(3)].map((_, i) => (
                 <div key={i} className="flex gap-4">
-                  <div className="h-16 w-16 rounded-lg bg-gray-200" />
+                  <div className="h-16 w-16 rounded-lg bg-muted" />
                   <div className="flex-1">
-                    <div className="h-5 w-40 bg-gray-200 rounded" />
-                    <div className="h-4 w-24 bg-gray-100 rounded mt-1" />
+                    <div className="h-5 w-40 bg-muted rounded" />
+                    <div className="h-4 w-24 bg-muted rounded mt-1" />
                   </div>
                 </div>
               ))}
@@ -361,7 +361,7 @@ function OrderDetailSkeleton() {
         <div className="space-y-6">
           <Card>
             <CardContent className="pt-6">
-              <div className="h-20 bg-gray-100 rounded" />
+              <div className="h-20 bg-muted rounded" />
             </CardContent>
           </Card>
         </div>

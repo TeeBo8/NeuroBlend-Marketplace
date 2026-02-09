@@ -26,8 +26,8 @@ export function SettingsContent() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Paramètres</h1>
-        <p className="text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-foreground">Paramètres</h1>
+        <p className="text-muted-foreground mt-1">
           Gérez vos informations personnelles et préférences.
         </p>
       </div>
@@ -93,7 +93,7 @@ function SettingsForm({ user }: { user: UserData }) {
     <Card>
       <CardHeader>
         <CardTitle className="text-lg flex items-center gap-2">
-          <User className="h-5 w-5 text-gray-400" />
+          <User className="h-5 w-5 text-muted-foreground" />
           Informations personnelles
         </CardTitle>
         <CardDescription>
@@ -127,7 +127,7 @@ function SettingsForm({ user }: { user: UserData }) {
           <div className="flex justify-end pt-2">
             <Button
               type="submit"
-              className="bg-purple-600 hover:bg-purple-700"
+              className="bg-primary hover:bg-primary/90"
               disabled={updateProfile.isPending || !hasChanges}
             >
               {updateProfile.isPending ? (
@@ -156,16 +156,16 @@ function AccountInfo({ user }: { user: UserData }) {
     <Card>
       <CardHeader>
         <CardTitle className="text-lg flex items-center gap-2">
-          <Shield className="h-5 w-5 text-gray-400" />
+          <Shield className="h-5 w-5 text-muted-foreground" />
           Informations du compte
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex items-center gap-3 py-2">
-          <Mail className="h-4 w-4 text-gray-400" />
+          <Mail className="h-4 w-4 text-muted-foreground" />
           <div>
-            <p className="text-sm text-gray-500">Email</p>
-            <p className="font-medium text-gray-900">{user.email}</p>
+            <p className="text-sm text-muted-foreground">Email</p>
+            <p className="font-medium text-foreground">{user.email}</p>
           </div>
         </div>
 
@@ -173,10 +173,10 @@ function AccountInfo({ user }: { user: UserData }) {
 
         <div className="flex items-center justify-between py-2">
           <div className="flex items-center gap-3">
-            <Shield className="h-4 w-4 text-gray-400" />
+            <Shield className="h-4 w-4 text-muted-foreground" />
             <div>
-              <p className="text-sm text-gray-500">Rôle</p>
-              <p className="font-medium text-gray-900">
+              <p className="text-sm text-muted-foreground">Rôle</p>
+              <p className="font-medium text-foreground">
                 {roleInfo?.label || user.role}
               </p>
             </div>
@@ -187,10 +187,10 @@ function AccountInfo({ user }: { user: UserData }) {
         <Separator />
 
         <div className="flex items-center gap-3 py-2">
-          <Calendar className="h-4 w-4 text-gray-400" />
+          <Calendar className="h-4 w-4 text-muted-foreground" />
           <div>
-            <p className="text-sm text-gray-500">Membre depuis</p>
-            <p className="font-medium text-gray-900">
+            <p className="text-sm text-muted-foreground">Membre depuis</p>
+            <p className="font-medium text-foreground">
               {formatDate(user.createdAt)}
             </p>
           </div>
@@ -204,23 +204,23 @@ function SettingsSkeleton() {
   return (
     <div className="space-y-6 animate-pulse">
       <div>
-        <div className="h-8 w-40 bg-gray-200 rounded" />
-        <div className="h-5 w-72 bg-gray-100 rounded mt-2" />
+        <div className="h-8 w-40 bg-muted rounded" />
+        <div className="h-5 w-72 bg-muted rounded mt-2" />
       </div>
       <Card>
         <CardContent className="pt-6 space-y-4">
-          <div className="h-5 w-24 bg-gray-200 rounded" />
-          <div className="h-10 w-full bg-gray-100 rounded" />
-          <div className="h-5 w-32 bg-gray-200 rounded" />
-          <div className="h-10 w-full bg-gray-100 rounded" />
+          <div className="h-5 w-24 bg-muted rounded" />
+          <div className="h-10 w-full bg-muted rounded" />
+          <div className="h-5 w-32 bg-muted rounded" />
+          <div className="h-10 w-full bg-muted rounded" />
         </CardContent>
       </Card>
       <Card>
         <CardContent className="pt-6 space-y-4">
           {[...Array(3)].map((_, i) => (
             <div key={i}>
-              <div className="h-4 w-20 bg-gray-200 rounded" />
-              <div className="h-5 w-48 bg-gray-100 rounded mt-1" />
+              <div className="h-4 w-20 bg-muted rounded" />
+              <div className="h-5 w-48 bg-muted rounded mt-1" />
             </div>
           ))}
         </CardContent>

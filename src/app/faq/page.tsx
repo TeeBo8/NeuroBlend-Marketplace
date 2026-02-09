@@ -85,13 +85,13 @@ export default function FaqPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 text-white">
+      <section className="bg-gradient-to-br from-primary via-primary/90 to-indigo-800 text-primary-foreground">
         <div className="container mx-auto px-4 py-16 md:py-20">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
               Questions fréquentes
             </h1>
-            <p className="text-xl text-purple-100">
+            <p className="text-xl text-primary-foreground/80">
               Tout ce que vous devez savoir sur {APP_NAME}, nos produits et nos
               services.
             </p>
@@ -99,21 +99,21 @@ export default function FaqPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-background">
         <div className="container mx-auto px-4 max-w-3xl">
           {faqSections.map((section) => (
             <div key={section.title} className="mb-12 last:mb-0">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              <h2 className="text-2xl font-bold text-foreground mb-6">
                 {section.title}
               </h2>
               <div className="space-y-4">
                 {section.questions.map((faq) => (
                   <Card key={faq.q}>
                     <CardContent className="p-5">
-                      <h3 className="font-semibold text-gray-900 mb-2">
+                      <h3 className="font-semibold text-foreground mb-2">
                         {faq.q}
                       </h3>
-                      <p className="text-sm text-gray-600 leading-relaxed">
+                      <p className="text-sm text-muted-foreground leading-relaxed">
                         {faq.a}
                       </p>
                     </CardContent>
@@ -124,14 +124,14 @@ export default function FaqPage() {
           ))}
 
           {/* CTA */}
-          <div className="mt-16 text-center p-8 bg-purple-50 rounded-xl">
-            <h2 className="text-xl font-bold text-gray-900 mb-2">
+          <div className="mt-16 text-center p-8 bg-primary/5 rounded-xl">
+            <h2 className="text-xl font-bold text-foreground mb-2">
               Vous n&apos;avez pas trouvé votre réponse ?
             </h2>
-            <p className="text-gray-600 mb-4">
+            <p className="text-muted-foreground mb-4">
               Notre équipe est là pour vous aider.
             </p>
-            <Button asChild className="bg-purple-600 hover:bg-purple-700">
+            <Button asChild className="bg-primary hover:bg-primary/90">
               <Link href="/contact">Nous contacter</Link>
             </Button>
           </div>

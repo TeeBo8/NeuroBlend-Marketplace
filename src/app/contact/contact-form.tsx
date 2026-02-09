@@ -49,14 +49,14 @@ export function ContactForm() {
 
   if (isSent) {
     return (
-      <div className="text-center py-12 px-4 bg-purple-50 rounded-xl">
-        <div className="w-16 h-16 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-4">
-          <Send className="w-8 h-8 text-purple-600" />
+      <div className="text-center py-12 px-4 bg-primary/5 rounded-xl">
+        <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+          <Send className="w-8 h-8 text-primary" />
         </div>
-        <h3 className="text-xl font-semibold text-gray-900 mb-2">
+        <h3 className="text-xl font-semibold text-foreground mb-2">
           Message envoyé !
         </h3>
-        <p className="text-gray-600 mb-4">
+        <p className="text-muted-foreground mb-4">
           Merci pour votre message. Nous vous répondrons sous 24 à 48 heures.
         </p>
         <Button
@@ -115,7 +115,7 @@ export function ContactForm() {
           disabled={isLoading}
         />
       </div>
-      <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700" disabled={isLoading}>
+      <Button type="submit" className="w-full bg-primary hover:bg-primary/90" disabled={isLoading}>
         {isLoading ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />

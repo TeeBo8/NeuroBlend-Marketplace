@@ -43,8 +43,8 @@ export default function ForgotPasswordPage() {
     return (
       <Card>
         <CardHeader className="text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-purple-100">
-            <Mail className="h-7 w-7 text-purple-600" />
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
+            <Mail className="h-7 w-7 text-primary" />
           </div>
           <CardTitle className="text-2xl">Vérifiez votre email</CardTitle>
           <CardDescription>

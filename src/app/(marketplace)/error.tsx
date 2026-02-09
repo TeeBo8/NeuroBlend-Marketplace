@@ -19,20 +19,20 @@ export default function MarketplaceError({
   return (
     <div className="container mx-auto px-4 py-16">
       <div className="flex flex-col items-center justify-center text-center max-w-md mx-auto">
-        <div className="w-24 h-24 rounded-full bg-purple-100 flex items-center justify-center mb-6">
-          <Coffee className="w-12 h-12 text-purple-300" />
+        <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mb-6">
+          <Coffee className="w-12 h-12 text-primary/50" />
         </div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <h1 className="text-2xl font-bold text-foreground mb-2">
           Erreur de chargement
         </h1>
-        <p className="text-gray-500 mb-8">
+        <p className="text-muted-foreground mb-8">
           Impossible de charger cette page de la boutique. Le problème est
           probablement temporaire.
         </p>
         <div className="flex gap-3">
           <Button
             onClick={reset}
-            className="bg-purple-600 hover:bg-purple-700"
+            className="bg-primary hover:bg-primary/90"
           >
             <RefreshCw className="mr-2 h-4 w-4" />
             Réessayer

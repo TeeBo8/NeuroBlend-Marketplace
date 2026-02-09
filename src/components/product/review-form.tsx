@@ -46,7 +46,7 @@ function InteractiveStarRating({
         );
       })}
       {rating > 0 && (
-        <span className="ml-2 text-sm text-gray-500">{rating}/5</span>
+        <span className="ml-2 text-sm text-muted-foreground">{rating}/5</span>
       )}
     </div>
   );
@@ -92,7 +92,7 @@ export function ReviewForm({ productId }: { productId: string }) {
       <Card className="border-dashed">
         <CardContent className="flex flex-col items-center justify-center py-8 text-center">
           <Star className="w-10 h-10 text-gray-300 mb-3" />
-          <p className="text-gray-600 mb-3">
+          <p className="text-muted-foreground mb-3">
             Connectez-vous pour laisser un avis
           </p>
           <Button asChild variant="outline">
@@ -111,14 +111,14 @@ export function ReviewForm({ productId }: { productId: string }) {
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">
-              Votre note <span className="text-red-500">*</span>
+            <label className="text-sm font-medium text-foreground">
+              Votre note <span className="text-destructive">*</span>
             </label>
             <InteractiveStarRating rating={rating} onRate={setRating} />
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="review-title" className="text-sm font-medium text-gray-700">
+            <label htmlFor="review-title" className="text-sm font-medium text-foreground">
               Titre
             </label>
             <Input
@@ -131,7 +131,7 @@ export function ReviewForm({ productId }: { productId: string }) {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="review-comment" className="text-sm font-medium text-gray-700">
+            <label htmlFor="review-comment" className="text-sm font-medium text-foreground">
               Commentaire
             </label>
             <Textarea
@@ -146,7 +146,7 @@ export function ReviewForm({ productId }: { productId: string }) {
 
           <Button
             type="submit"
-            className="bg-purple-600 hover:bg-purple-700"
+            className="bg-primary hover:bg-primary/90"
             disabled={createReview.isPending || rating === 0}
           >
             {createReview.isPending ? (

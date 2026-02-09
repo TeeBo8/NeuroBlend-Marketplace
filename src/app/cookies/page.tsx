@@ -38,20 +38,20 @@ const cookieTypes = [
 export default function CookiesPage() {
   return (
     <>
-      <section className="bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 text-white">
+      <section className="bg-gradient-to-br from-primary via-primary/90 to-indigo-800 text-primary-foreground">
         <div className="container mx-auto px-4 py-16 md:py-20">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Politique Cookies
           </h1>
-          <p className="text-purple-100">
+          <p className="text-primary-foreground/80">
             Dernière mise à jour : 7 février 2026
           </p>
         </div>
       </section>
 
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-background">
         <div className="container mx-auto px-4 max-w-3xl">
-          <div className="prose prose-gray prose-headings:text-gray-900 prose-a:text-purple-600 mb-12">
+          <div className="prose prose-gray prose-headings:text-foreground prose-a:text-primary mb-12">
             <h2>Qu&apos;est-ce qu&apos;un cookie ?</h2>
             <p>
               Un cookie est un petit fichier texte déposé sur votre appareil
@@ -69,7 +69,7 @@ export default function CookiesPage() {
             </p>
           </div>
 
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          <h2 className="text-2xl font-bold text-foreground mb-6">
             Types de cookies utilisés
           </h2>
           <div className="space-y-4 mb-12">
@@ -77,23 +77,23 @@ export default function CookiesPage() {
               <Card key={cookie.name}>
                 <CardContent className="p-5">
                   <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-semibold text-gray-900">
+                    <h3 className="font-semibold text-foreground">
                       {cookie.name}
                     </h3>
                     <span
                       className={`text-xs px-2 py-0.5 rounded-full ${
                         cookie.required
-                          ? 'bg-purple-100 text-purple-700'
-                          : 'bg-gray-100 text-gray-600'
+                          ? 'bg-primary/10 text-primary'
+                          : 'bg-muted text-muted-foreground'
                       }`}
                     >
                       {cookie.required ? 'Obligatoire' : 'Optionnel'}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600 mb-3">
+                  <p className="text-sm text-muted-foreground mb-3">
                     {cookie.description}
                   </p>
-                  <div className="text-xs text-gray-500 space-y-1">
+                  <div className="text-xs text-muted-foreground space-y-1">
                     <p>
                       <strong>Exemples :</strong> {cookie.examples}
                     </p>
@@ -106,7 +106,7 @@ export default function CookiesPage() {
             ))}
           </div>
 
-          <div className="prose prose-gray prose-headings:text-gray-900 prose-a:text-purple-600">
+          <div className="prose prose-gray prose-headings:text-foreground prose-a:text-primary">
             <h2>Comment gérer vos cookies ?</h2>
             <p>
               Vous pouvez à tout moment modifier vos préférences de cookies

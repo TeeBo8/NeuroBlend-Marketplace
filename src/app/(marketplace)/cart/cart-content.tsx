@@ -16,7 +16,7 @@ function CartItemRow({ item }: { item: CartItem }) {
   return (
     <div className="flex gap-4 py-4">
       {/* Image */}
-      <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
+      <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-lg bg-muted">
         {item.imageUrl ? (
           <Image
             src={item.imageUrl}
@@ -26,8 +26,8 @@ function CartItemRow({ item }: { item: CartItem }) {
             sizes="96px"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-purple-100 to-purple-50">
-            <Coffee className="h-8 w-8 text-purple-300" />
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/10 to-primary/5">
+            <Coffee className="h-8 w-8 text-primary/50" />
           </div>
         )}
       </div>
@@ -37,11 +37,11 @@ function CartItemRow({ item }: { item: CartItem }) {
         <div>
           <Link
             href={`/products/${item.productId}`}
-            className="font-semibold text-gray-900 hover:text-purple-600 transition-colors"
+            className="font-semibold text-foreground hover:text-primary transition-colors"
           >
             {item.name}
           </Link>
-          <p className="text-sm text-gray-500 mt-0.5">
+          <p className="text-sm text-muted-foreground mt-0.5">
             par {item.vendorName}
           </p>
         </div>
@@ -72,13 +72,13 @@ function CartItemRow({ item }: { item: CartItem }) {
 
           {/* Price + Remove */}
           <div className="flex items-center gap-3">
-            <span className="font-semibold text-gray-900">
+            <span className="font-semibold text-foreground">
               {formatPrice(item.price * item.quantity)}
             </span>
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-gray-400 hover:text-red-500"
+              className="h-8 w-8 text-muted-foreground hover:text-destructive"
               onClick={() => {
                 removeItem(item.productId);
                 toast.success('Produit retiré du panier');
@@ -102,16 +102,16 @@ export function CartContent() {
     return (
       <div className="container mx-auto px-4 py-16">
         <div className="flex flex-col items-center justify-center text-center max-w-md mx-auto">
-          <div className="w-24 h-24 rounded-full bg-purple-100 flex items-center justify-center mb-6">
-            <ShoppingBag className="w-12 h-12 text-purple-300" />
+          <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mb-6">
+            <ShoppingBag className="w-12 h-12 text-primary/50" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+          <h1 className="text-2xl font-bold text-foreground mb-2">
             Votre panier est vide
           </h1>
-          <p className="text-gray-500 mb-8">
+          <p className="text-muted-foreground mb-8">
             Découvrez nos capsules de café conçues pour les esprits neuroatypiques.
           </p>
-          <Button asChild className="bg-purple-600 hover:bg-purple-700">
+          <Button asChild className="bg-primary hover:bg-primary/90">
             <Link href="/products">
               Découvrir nos produits
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -124,7 +124,7 @@ export function CartContent() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">
+      <h1 className="text-3xl font-bold text-foreground mb-8">
         Mon panier ({itemCount} {itemCount > 1 ? 'articles' : 'article'})
       </h1>
 
@@ -137,7 +137,7 @@ export function CartContent() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-gray-500 hover:text-red-500"
+                className="text-muted-foreground hover:text-destructive"
                 onClick={() => {
                   clearCart();
                   toast.success('Panier vidé');
@@ -172,19 +172,19 @@ export function CartContent() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">
+                <span className="text-muted-foreground">
                   Sous-total ({itemCount} {itemCount > 1 ? 'articles' : 'article'})
                 </span>
                 <span className="font-medium">{formatPrice(subtotal)}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Livraison</span>
+                <span className="text-muted-foreground">Livraison</span>
                 <span className="font-medium text-green-600">Gratuite</span>
               </div>
               <Separator />
               <div className="flex justify-between">
                 <span className="text-lg font-semibold">Total</span>
-                <span className="text-lg font-bold text-gray-900">
+                <span className="text-lg font-bold text-foreground">
                   {formatPrice(subtotal)}
                 </span>
               </div>
@@ -192,7 +192,7 @@ export function CartContent() {
             <CardFooter>
               <Button
                 asChild
-                className="w-full bg-purple-600 hover:bg-purple-700 text-lg py-6"
+                className="w-full bg-primary hover:bg-primary/90 text-lg py-6"
               >
                 <Link href="/checkout">
                   Passer la commande

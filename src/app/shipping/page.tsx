@@ -36,11 +36,11 @@ export default function ShippingPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 text-white">
+      <section className="bg-gradient-to-br from-primary via-primary/90 to-indigo-800 text-primary-foreground">
         <div className="container mx-auto px-4 py-16 md:py-20">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Livraison</h1>
-            <p className="text-xl text-purple-100">
+            <p className="text-xl text-primary-foreground/80">
               Recevez vos capsules rapidement et en toute sécurité, partout en
               France.
             </p>
@@ -48,43 +48,43 @@ export default function ShippingPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-background">
         <div className="container mx-auto px-4 max-w-4xl">
           {/* Options */}
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">
+          <h2 className="text-2xl font-bold text-foreground mb-8">
             Nos options de livraison
           </h2>
           <div className="grid md:grid-cols-3 gap-6 mb-16">
             {deliveryOptions.map((option) => (
               <Card key={option.title}>
                 <CardContent className="p-6">
-                  <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
-                    <option.icon className="w-6 h-6 text-purple-600" />
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                    <option.icon className="w-6 h-6 text-primary" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-1">
+                  <h3 className="font-semibold text-foreground mb-1">
                     {option.title}
                   </h3>
-                  <p className="text-sm text-gray-600 mb-2">{option.delay}</p>
-                  <p className="text-lg font-bold text-purple-600">
+                  <p className="text-sm text-muted-foreground mb-2">{option.delay}</p>
+                  <p className="text-lg font-bold text-primary">
                     {option.price}
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">{option.detail}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{option.detail}</p>
                 </CardContent>
               </Card>
             ))}
           </div>
 
           {/* Zones */}
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          <h2 className="text-2xl font-bold text-foreground mb-6">
             Zones de livraison
           </h2>
           <div className="space-y-4 mb-16">
             <Card>
               <CardContent className="p-5">
-                <h3 className="font-semibold text-gray-900 mb-1">
+                <h3 className="font-semibold text-foreground mb-1">
                   France métropolitaine
                 </h3>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-muted-foreground">
                   Toutes nos options de livraison sont disponibles sur
                   l&apos;ensemble du territoire métropolitain.
                 </p>
@@ -92,10 +92,10 @@ export default function ShippingPage() {
             </Card>
             <Card>
               <CardContent className="p-5">
-                <h3 className="font-semibold text-gray-900 mb-1">
+                <h3 className="font-semibold text-foreground mb-1">
                   DOM-TOM & International
                 </h3>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-muted-foreground">
                   La livraison vers les DOM-TOM et l&apos;international n&apos;est pas
                   encore disponible. Nous y travaillons activement.
                 </p>
@@ -104,29 +104,29 @@ export default function ShippingPage() {
           </div>
 
           {/* Returns */}
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          <h2 className="text-2xl font-bold text-foreground mb-6">
             Retours & Remboursements
           </h2>
           <Card>
             <CardContent className="p-6">
               <div className="flex gap-4">
-                <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
-                  <RotateCcw className="w-6 h-6 text-purple-600" />
+                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <RotateCcw className="w-6 h-6 text-primary" />
                 </div>
-                <div className="space-y-3 text-sm text-gray-600">
+                <div className="space-y-3 text-sm text-muted-foreground">
                   <p>
-                    <strong className="text-gray-900">Droit de rétractation :</strong>{' '}
+                    <strong className="text-foreground">Droit de rétractation :</strong>{' '}
                     Vous disposez de 14 jours après réception pour retourner un
                     produit non ouvert, conformément à la législation française.
                   </p>
                   <p>
-                    <strong className="text-gray-900">Produit endommagé :</strong>{' '}
+                    <strong className="text-foreground">Produit endommagé :</strong>{' '}
                     Si votre commande arrive endommagée, contactez-nous sous 48h
                     avec des photos. Nous vous renvoyons le produit ou vous
                     remboursons intégralement.
                   </p>
                   <p>
-                    <strong className="text-gray-900">Remboursement :</strong>{' '}
+                    <strong className="text-foreground">Remboursement :</strong>{' '}
                     Les remboursements sont effectués sous 7 jours ouvrés après
                     réception du retour, sur le moyen de paiement initial.
                   </p>

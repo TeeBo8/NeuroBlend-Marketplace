@@ -22,17 +22,17 @@ export default function AdminError({
         <div className="w-24 h-24 rounded-full bg-red-100 flex items-center justify-center mb-6">
           <AlertTriangle className="w-12 h-12 text-red-300" />
         </div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <h1 className="text-2xl font-bold text-foreground mb-2">
           Erreur admin
         </h1>
-        <p className="text-gray-500 mb-8">
+        <p className="text-muted-foreground mb-8">
           Impossible de charger le panneau d&apos;administration. Veuillez
           réessayer.
         </p>
         <div className="flex gap-3">
           <Button
             onClick={reset}
-            className="bg-purple-600 hover:bg-purple-700"
+            className="bg-primary hover:bg-primary/90"
           >
             <RefreshCw className="mr-2 h-4 w-4" />
             Réessayer

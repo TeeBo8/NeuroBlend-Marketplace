@@ -65,12 +65,12 @@ export function ProductsContent() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Mes produits</h1>
-          <p className="text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-foreground">Mes produits</h1>
+          <p className="text-muted-foreground mt-1">
             {products.length} produit{products.length !== 1 ? 's' : ''}
           </p>
         </div>
-        <Button asChild className="bg-purple-600 hover:bg-purple-700">
+        <Button asChild className="bg-primary hover:bg-primary/90">
           <Link href="/vendor/products/new">
             <Plus className="mr-2 h-4 w-4" />
             Nouveau produit
@@ -83,14 +83,14 @@ export function ProductsContent() {
         <Card>
           <CardContent className="py-16">
             <div className="flex flex-col items-center justify-center text-center">
-              <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                <Package className="h-8 w-8 text-gray-300" />
+              <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                <Package className="h-8 w-8 text-muted-foreground" />
               </div>
-              <p className="text-gray-500 mb-2">Aucun produit pour le moment.</p>
-              <p className="text-sm text-gray-400 mb-6">
+              <p className="text-muted-foreground mb-2">Aucun produit pour le moment.</p>
+              <p className="text-sm text-muted-foreground mb-6">
                 Créez votre premier produit pour commencer à vendre.
               </p>
-              <Button asChild className="bg-purple-600 hover:bg-purple-700">
+              <Button asChild className="bg-primary hover:bg-primary/90">
                 <Link href="/vendor/products/new">
                   <Plus className="mr-2 h-4 w-4" />
                   Créer mon premier produit
@@ -111,7 +111,7 @@ export function ProductsContent() {
                 <CardContent className="p-4">
                   <div className="flex items-center gap-4">
                     {/* Image */}
-                    <div className="relative h-16 w-16 rounded-lg overflow-hidden bg-gray-100 shrink-0">
+                    <div className="relative h-16 w-16 rounded-lg overflow-hidden bg-muted shrink-0">
                       {product.imageUrl ? (
                         <Image
                           src={product.imageUrl}
@@ -121,7 +121,7 @@ export function ProductsContent() {
                         />
                       ) : (
                         <div className="flex items-center justify-center h-full">
-                          <Coffee className="h-6 w-6 text-gray-300" />
+                          <Coffee className="h-6 w-6 text-muted-foreground" />
                         </div>
                       )}
                     </div>
@@ -129,11 +129,11 @@ export function ProductsContent() {
                     {/* Info */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <h3 className="font-semibold text-gray-900 truncate">
+                        <h3 className="font-semibold text-foreground truncate">
                           {product.name}
                         </h3>
                         {!product.active && (
-                          <Badge variant="secondary" className="bg-gray-100 text-gray-500 text-xs">
+                          <Badge variant="secondary" className="bg-muted text-muted-foreground text-xs">
                             Inactif
                           </Badge>
                         )}
@@ -144,11 +144,11 @@ export function ProductsContent() {
                             {categoryInfo.label}
                           </Badge>
                         )}
-                        <span className="text-sm text-gray-500">
+                        <span className="text-sm text-muted-foreground">
                           Stock : {product.stock}
                         </span>
                         {product.intensityLevel && (
-                          <span className="text-sm text-gray-500">
+                          <span className="text-sm text-muted-foreground">
                             Intensité : {product.intensityLevel}/10
                           </span>
                         )}
@@ -157,11 +157,11 @@ export function ProductsContent() {
 
                     {/* Price */}
                     <div className="text-right shrink-0">
-                      <p className="font-semibold text-gray-900">
+                      <p className="font-semibold text-foreground">
                         {formatPrice(Number(product.price))}
                       </p>
                       {product.compareAtPrice && (
-                        <p className="text-sm text-gray-400 line-through">
+                        <p className="text-sm text-muted-foreground line-through">
                           {formatPrice(Number(product.compareAtPrice))}
                         </p>
                       )}
@@ -183,7 +183,7 @@ export function ProductsContent() {
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
-                          className="text-red-600 focus:text-red-600"
+                          className="text-destructive focus:text-destructive"
                           onClick={() => setDeleteProductId(product.id)}
                         >
                           <Trash2 className="mr-2 h-4 w-4" />
@@ -240,22 +240,22 @@ function ProductsSkeleton() {
     <div className="space-y-6 animate-pulse">
       <div className="flex items-center justify-between">
         <div>
-          <div className="h-8 w-48 bg-gray-200 rounded" />
-          <div className="h-5 w-24 bg-gray-100 rounded mt-2" />
+          <div className="h-8 w-48 bg-muted rounded" />
+          <div className="h-5 w-24 bg-muted rounded mt-2" />
         </div>
-        <div className="h-10 w-40 bg-gray-200 rounded" />
+        <div className="h-10 w-40 bg-muted rounded" />
       </div>
       <div className="space-y-3">
         {[...Array(4)].map((_, i) => (
           <Card key={i}>
             <CardContent className="p-4">
               <div className="flex items-center gap-4">
-                <div className="h-16 w-16 rounded-lg bg-gray-200" />
+                <div className="h-16 w-16 rounded-lg bg-muted" />
                 <div className="flex-1">
-                  <div className="h-5 w-40 bg-gray-200 rounded" />
-                  <div className="h-4 w-32 bg-gray-100 rounded mt-2" />
+                  <div className="h-5 w-40 bg-muted rounded" />
+                  <div className="h-4 w-32 bg-muted rounded mt-2" />
                 </div>
-                <div className="h-5 w-16 bg-gray-200 rounded" />
+                <div className="h-5 w-16 bg-muted rounded" />
               </div>
             </CardContent>
           </Card>

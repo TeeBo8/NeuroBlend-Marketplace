@@ -88,8 +88,8 @@ export function VendorOrdersContent() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Commandes reçues</h1>
-        <p className="text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-foreground">Commandes reçues</h1>
+        <p className="text-muted-foreground mt-1">
           Gérez les commandes de vos clients.
         </p>
       </div>
@@ -103,8 +103,8 @@ export function VendorOrdersContent() {
             className={cn(
               'px-3 py-1.5 rounded-full text-sm font-medium transition-colors',
               filter === status.value
-                ? 'bg-purple-600 text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-muted text-muted-foreground hover:bg-accent'
             )}
           >
             {status.label}
@@ -117,10 +117,10 @@ export function VendorOrdersContent() {
         <Card>
           <CardContent className="py-16">
             <div className="flex flex-col items-center justify-center text-center">
-              <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                <ShoppingCart className="h-8 w-8 text-gray-300" />
+              <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                <ShoppingCart className="h-8 w-8 text-muted-foreground" />
               </div>
-              <p className="text-gray-500">
+              <p className="text-muted-foreground">
                 {filter === 'all'
                   ? 'Aucune commande pour le moment.'
                   : 'Aucune commande avec ce statut.'}
@@ -141,7 +141,7 @@ export function VendorOrdersContent() {
                   <div className="flex items-start justify-between mb-4">
                     <div>
                       <div className="flex items-center gap-3">
-                        <h3 className="font-semibold text-gray-900">
+                        <h3 className="font-semibold text-foreground">
                           {order.orderNumber}
                         </h3>
                         <Badge
@@ -151,16 +151,16 @@ export function VendorOrdersContent() {
                           {statusInfo?.label || status}
                         </Badge>
                       </div>
-                      <p className="text-sm text-gray-500 mt-1">
+                      <p className="text-sm text-muted-foreground mt-1">
                         {formatDate(order.createdAt)}
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold text-gray-900 text-lg">
+                      <p className="font-semibold text-foreground text-lg">
                         {formatPrice(Number(order.total))}
                       </p>
                       {order.commission && (
-                        <p className="text-xs text-gray-400">
+                        <p className="text-xs text-muted-foreground">
                           Commission : {formatPrice(Number(order.commission))}
                         </p>
                       )}
@@ -168,20 +168,20 @@ export function VendorOrdersContent() {
                   </div>
 
                   {/* Customer info */}
-                  <div className="flex items-center gap-4 mb-4 p-3 rounded-lg bg-gray-50">
-                    <User className="h-4 w-4 text-gray-400 shrink-0" />
+                  <div className="flex items-center gap-4 mb-4 p-3 rounded-lg bg-muted/50">
+                    <User className="h-4 w-4 text-muted-foreground shrink-0" />
                     <div className="text-sm">
-                      <span className="font-medium text-gray-700">
+                      <span className="font-medium text-foreground">
                         {order.user?.name || 'Client'}
                       </span>
                       {order.user?.email && (
-                        <span className="text-gray-500 ml-2">{order.user.email}</span>
+                        <span className="text-muted-foreground ml-2">{order.user.email}</span>
                       )}
                     </div>
                     {order.shippingCity && (
                       <>
-                        <MapPin className="h-4 w-4 text-gray-400 shrink-0 ml-auto" />
-                        <span className="text-sm text-gray-500">
+                        <MapPin className="h-4 w-4 text-muted-foreground shrink-0 ml-auto" />
+                        <span className="text-sm text-muted-foreground">
                           {order.shippingCity}, {order.shippingPostalCode}
                         </span>
                       </>
@@ -195,11 +195,11 @@ export function VendorOrdersContent() {
                         key={item.id}
                         className="flex items-center justify-between text-sm"
                       >
-                        <span className="text-gray-700">
+                        <span className="text-foreground">
                           {item.productName}{' '}
-                          <span className="text-gray-400">x{item.quantity}</span>
+                          <span className="text-muted-foreground">x{item.quantity}</span>
                         </span>
-                        <span className="text-gray-600">
+                        <span className="text-muted-foreground">
                           {formatPrice(Number(item.totalPrice))}
                         </span>
                       </div>
@@ -208,9 +208,9 @@ export function VendorOrdersContent() {
 
                   {/* Tracking */}
                   {order.trackingNumber && (
-                    <div className="flex items-center gap-2 text-sm p-2 rounded bg-purple-50 mb-4">
-                      <Truck className="h-4 w-4 text-purple-500" />
-                      <span className="text-purple-700">
+                    <div className="flex items-center gap-2 text-sm p-2 rounded bg-primary/5 mb-4">
+                      <Truck className="h-4 w-4 text-primary/70" />
+                      <span className="text-primary">
                         Suivi : {order.trackingNumber}
                       </span>
                     </div>
@@ -235,7 +235,7 @@ export function VendorOrdersContent() {
                       {(status === 'paid' || status === 'processing') && (
                         <Button
                           size="sm"
-                          className="bg-purple-600 hover:bg-purple-700"
+                          className="bg-primary hover:bg-primary/90"
                           onClick={() => {
                             setUpdateOrderId(order.id);
                             setNewStatus('shipped');
@@ -320,7 +320,7 @@ export function VendorOrdersContent() {
               Annuler
             </Button>
             <Button
-              className="bg-purple-600 hover:bg-purple-700"
+              className="bg-primary hover:bg-primary/90"
               disabled={updateStatus.isPending}
               onClick={() => {
                 if (updateOrderId && newStatus) {
@@ -348,19 +348,19 @@ function OrdersSkeleton() {
   return (
     <div className="space-y-6 animate-pulse">
       <div>
-        <div className="h-8 w-56 bg-gray-200 rounded" />
-        <div className="h-5 w-72 bg-gray-100 rounded mt-2" />
+        <div className="h-8 w-56 bg-muted rounded" />
+        <div className="h-5 w-72 bg-muted/50 rounded mt-2" />
       </div>
       <div className="flex gap-2">
         {[...Array(5)].map((_, i) => (
-          <div key={i} className="h-8 w-24 bg-gray-200 rounded-full" />
+          <div key={i} className="h-8 w-24 bg-muted rounded-full" />
         ))}
       </div>
       <div className="space-y-4">
         {[...Array(3)].map((_, i) => (
           <Card key={i}>
             <CardContent className="p-5">
-              <div className="h-32 bg-gray-100 rounded" />
+              <div className="h-32 bg-muted rounded" />
             </CardContent>
           </Card>
         ))}

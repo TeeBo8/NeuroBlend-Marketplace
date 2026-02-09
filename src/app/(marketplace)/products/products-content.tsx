@@ -70,7 +70,7 @@ export function ProductsContent() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 text-white">
+      <section className="bg-gradient-to-br from-primary via-primary/90 to-indigo-800 text-primary-foreground">
         <div className="container mx-auto px-4 py-16">
           <h1 className="text-3xl md:text-5xl font-bold mb-3">Nos Produits</h1>
           <p className="text-lg text-purple-100 max-w-2xl">
@@ -85,7 +85,7 @@ export function ProductsContent() {
         {/* Search Bar */}
         <form onSubmit={handleSearch} className="mb-6">
           <div className="relative max-w-lg">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               type="text"
               placeholder="Rechercher un produit..."
@@ -100,7 +100,7 @@ export function ProductsContent() {
                   setSearchInput('');
                   updateParam('q', null);
                 }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -114,7 +114,7 @@ export function ProductsContent() {
             variant={!category ? 'default' : 'outline'}
             size="sm"
             onClick={() => updateParam('category', null)}
-            className={cn(!category && 'bg-purple-600 hover:bg-purple-700')}
+            className={cn(!category && 'bg-primary hover:bg-primary/90')}
           >
             Tous
           </Button>
@@ -130,7 +130,7 @@ export function ProductsContent() {
                 )
               }
               className={cn(
-                category === cat.value && 'bg-purple-600 hover:bg-purple-700'
+                category === cat.value && 'bg-primary hover:bg-primary/90'
               )}
             >
               {cat.label}
@@ -142,7 +142,7 @@ export function ProductsContent() {
               variant="ghost"
               size="sm"
               onClick={clearFilters}
-              className="text-gray-500 hover:text-gray-700"
+              className="text-muted-foreground hover:text-foreground"
             >
               <X className="h-3 w-3 mr-1" />
               Effacer les filtres
@@ -152,7 +152,7 @@ export function ProductsContent() {
 
         {/* Active filter info */}
         {search && (
-          <p className="text-sm text-gray-500 mb-6">
+          <p className="text-sm text-muted-foreground mb-6">
             Résultats pour &quot;{search}&quot;
             {products.length > 0 && ` (${products.length} produit${products.length > 1 ? 's' : ''})`}
           </p>
@@ -167,23 +167,23 @@ export function ProductsContent() {
           </div>
         ) : products.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="w-20 h-20 rounded-full bg-purple-100 flex items-center justify-center mb-6">
+            <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-6">
               {search ? (
-                <Search className="w-10 h-10 text-purple-300" />
+                <Search className="w-10 h-10 text-primary/50" />
               ) : category ? (
-                <Coffee className="w-10 h-10 text-purple-300" />
+                <Coffee className="w-10 h-10 text-primary/50" />
               ) : (
-                <PackageOpen className="w-10 h-10 text-purple-300" />
+                <PackageOpen className="w-10 h-10 text-primary/50" />
               )}
             </div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            <h2 className="text-xl font-semibold text-foreground mb-2">
               {search
                 ? 'Aucun résultat'
                 : category
                   ? 'Aucun produit dans cette catégorie'
                   : 'Aucun produit disponible'}
             </h2>
-            <p className="text-gray-500 max-w-md mb-6">
+            <p className="text-muted-foreground max-w-md mb-6">
               {search
                 ? `Nous n'avons trouvé aucun produit correspondant à "${search}". Essayez d'autres mots-clés.`
                 : 'Nos torréfacteurs préparent de nouvelles créations. Revenez bientôt !'}

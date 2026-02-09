@@ -50,7 +50,7 @@ export function ProductCard({ product }: ProductCardProps) {
     <Link href={`/products/${product.id}`} className="group">
       <Card className="overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-1">
         {/* Image */}
-        <div className="relative aspect-square bg-gray-100 overflow-hidden">
+        <div className="relative aspect-square bg-muted overflow-hidden">
           {product.imageUrl ? (
             <Image
               src={product.imageUrl}
@@ -60,8 +60,8 @@ export function ProductCard({ product }: ProductCardProps) {
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-100 to-purple-50">
-              <Coffee className="w-12 h-12 text-purple-300" />
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-primary/5">
+              <Coffee className="w-12 h-12 text-primary/50" />
             </div>
           )}
           {discountPercent && (
@@ -70,7 +70,7 @@ export function ProductCard({ product }: ProductCardProps) {
             </Badge>
           )}
           {product.featured && (
-            <Badge className="absolute top-3 left-3 bg-purple-600 hover:bg-purple-600 text-white">
+            <Badge className="absolute top-3 left-3 bg-primary hover:bg-primary text-primary-foreground">
               Vedette
             </Badge>
           )}
@@ -83,7 +83,7 @@ export function ProductCard({ product }: ProductCardProps) {
             {categoryLabel && (
               <Badge
                 variant="outline"
-                className="text-xs border-purple-200 text-purple-700"
+                className="text-xs border-primary/30 text-primary"
               >
                 {categoryLabel}
               </Badge>
@@ -96,20 +96,20 @@ export function ProductCard({ product }: ProductCardProps) {
           </div>
 
           {/* Name */}
-          <h3 className="font-semibold text-gray-900 group-hover:text-purple-600 transition-colors line-clamp-1">
+          <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1">
             {product.name}
           </h3>
 
           {/* Vendor */}
           {product.vendor && (
-            <p className="text-sm text-gray-500 mt-0.5">
+            <p className="text-sm text-muted-foreground mt-0.5">
               par {product.vendor.businessName}
             </p>
           )}
 
           {/* Short Description */}
           {product.shortDescription && (
-            <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+            <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
               {product.shortDescription}
             </p>
           )}
@@ -117,17 +117,17 @@ export function ProductCard({ product }: ProductCardProps) {
           {/* Price */}
           <div className="flex items-center justify-between mt-3">
             <div className="flex items-center gap-2">
-              <span className="text-lg font-bold text-gray-900">
+              <span className="text-lg font-bold text-foreground">
                 {formatPrice(product.price)}
               </span>
               {hasDiscount && (
-                <span className="text-sm text-gray-400 line-through">
+                <span className="text-sm text-muted-foreground line-through">
                   {formatPrice(product.compareAtPrice!)}
                 </span>
               )}
             </div>
             {product.capsuleCount && (
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-muted-foreground">
                 {product.capsuleCount} capsules
               </span>
             )}
@@ -136,7 +136,7 @@ export function ProductCard({ product }: ProductCardProps) {
           {/* Intensity */}
           {product.intensityLevel && (
             <div className="flex items-center gap-2 mt-2">
-              <span className="text-xs text-gray-500">Intensité</span>
+              <span className="text-xs text-muted-foreground">Intensité</span>
               <div className="flex gap-0.5">
                 {Array.from({ length: 10 }, (_, i) => (
                   <div
@@ -144,8 +144,8 @@ export function ProductCard({ product }: ProductCardProps) {
                     className={cn(
                       'w-1.5 h-3 rounded-full',
                       i < product.intensityLevel!
-                        ? 'bg-purple-600'
-                        : 'bg-gray-200'
+                        ? 'bg-primary'
+                        : 'bg-muted'
                     )}
                   />
                 ))}
@@ -161,18 +161,18 @@ export function ProductCard({ product }: ProductCardProps) {
 export function ProductCardSkeleton() {
   return (
     <Card className="overflow-hidden">
-      <div className="aspect-square bg-gray-200 animate-pulse" />
+      <div className="aspect-square bg-muted animate-pulse" />
       <CardContent className="p-4 space-y-3">
         <div className="flex gap-2">
-          <div className="h-5 w-16 bg-gray-200 rounded-full animate-pulse" />
-          <div className="h-5 w-12 bg-gray-200 rounded-full animate-pulse" />
+          <div className="h-5 w-16 bg-muted rounded-full animate-pulse" />
+          <div className="h-5 w-12 bg-muted rounded-full animate-pulse" />
         </div>
-        <div className="h-5 w-3/4 bg-gray-200 rounded animate-pulse" />
-        <div className="h-4 w-1/2 bg-gray-200 rounded animate-pulse" />
-        <div className="h-4 w-full bg-gray-200 rounded animate-pulse" />
+        <div className="h-5 w-3/4 bg-muted rounded animate-pulse" />
+        <div className="h-4 w-1/2 bg-muted rounded animate-pulse" />
+        <div className="h-4 w-full bg-muted rounded animate-pulse" />
         <div className="flex justify-between items-center">
-          <div className="h-6 w-20 bg-gray-200 rounded animate-pulse" />
-          <div className="h-4 w-16 bg-gray-200 rounded animate-pulse" />
+          <div className="h-6 w-20 bg-muted rounded animate-pulse" />
+          <div className="h-4 w-16 bg-muted rounded animate-pulse" />
         </div>
       </CardContent>
     </Card>

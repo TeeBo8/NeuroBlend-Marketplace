@@ -52,18 +52,18 @@ export function ProductRecommendations({
 
   if (recommendation) {
     return (
-      <Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-white">
+      <Card className="border-primary/30 bg-gradient-to-br from-primary/5 to-background">
         <CardContent className="p-5">
           <div className="flex items-center gap-2 mb-3">
-            <Sparkles className="w-4 h-4 text-purple-600" />
-            <span className="text-sm font-semibold text-purple-700">
+            <Sparkles className="w-4 h-4 text-primary" />
+            <span className="text-sm font-semibold text-primary">
               Conseil NeuroBlend AI
             </span>
-            <Badge variant="outline" className="text-xs border-purple-200 text-purple-600">
+            <Badge variant="outline" className="text-xs border-primary/30 text-primary">
               Gemini
             </Badge>
           </div>
-          <p className="text-sm text-gray-700 leading-relaxed">
+          <p className="text-sm text-foreground leading-relaxed">
             {recommendation}
           </p>
         </CardContent>
@@ -77,7 +77,7 @@ export function ProductRecommendations({
       size="sm"
       onClick={getRecommendation}
       disabled={isLoading}
-      className="border-purple-200 text-purple-700 hover:bg-purple-50"
+      className="border-primary/30 text-primary hover:bg-primary/5"
     >
       {isLoading ? (
         <>

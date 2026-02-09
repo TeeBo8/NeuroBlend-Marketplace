@@ -37,9 +37,9 @@ const roleIconMap: Record<string, React.ElementType> = {
 };
 
 const roleBadgeMap: Record<string, string> = {
-  customer: 'bg-gray-100 text-gray-700',
-  vendor: 'bg-purple-100 text-purple-700',
-  admin: 'bg-red-100 text-red-700',
+  customer: 'bg-muted text-foreground',
+  vendor: 'bg-primary/10 text-primary',
+  admin: 'bg-destructive/10 text-destructive',
 };
 
 export function AdminUsersContent() {
@@ -89,8 +89,8 @@ export function AdminUsersContent() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Gestion des utilisateurs</h1>
-        <p className="text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-foreground">Gestion des utilisateurs</h1>
+        <p className="text-muted-foreground mt-1">
           {users.length} utilisateur{users.length > 1 ? 's' : ''}
         </p>
       </div>
@@ -121,10 +121,10 @@ export function AdminUsersContent() {
         <CardContent>
           {users.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                <Users className="h-8 w-8 text-gray-300" />
+              <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                <Users className="h-8 w-8 text-muted-foreground" />
               </div>
-              <p className="text-gray-500">Aucun utilisateur trouvé.</p>
+              <p className="text-muted-foreground">Aucun utilisateur trouvé.</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -138,14 +138,14 @@ export function AdminUsersContent() {
                     className="flex items-center justify-between p-4 rounded-lg border"
                   >
                     <div className="flex items-center gap-4 min-w-0">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
-                        <RoleIcon className="h-5 w-5 text-gray-500" />
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
+                        <RoleIcon className="h-5 w-5 text-muted-foreground" />
                       </div>
                       <div className="min-w-0">
-                        <p className="font-medium text-gray-900 truncate">
+                        <p className="font-medium text-foreground truncate">
                           {user.name || 'Sans nom'}
                         </p>
-                        <p className="text-sm text-gray-500 truncate">
+                        <p className="text-sm text-muted-foreground truncate">
                           {user.email} &middot; Inscrit le {formatDate(user.createdAt)}
                         </p>
                       </div>
@@ -204,7 +204,7 @@ export function AdminUsersContent() {
             <Button
               onClick={confirmRoleChange}
               disabled={updateRole.isPending}
-              className="bg-purple-600 hover:bg-purple-700"
+              className="bg-primary hover:bg-primary/90"
             >
               {updateRole.isPending ? 'Modification...' : 'Confirmer'}
             </Button>
@@ -219,15 +219,15 @@ function UsersSkeleton() {
   return (
     <div className="space-y-6 animate-pulse">
       <div>
-        <div className="h-8 w-64 bg-gray-200 rounded" />
-        <div className="h-5 w-40 bg-gray-100 rounded mt-2" />
+        <div className="h-8 w-64 bg-muted rounded" />
+        <div className="h-5 w-40 bg-muted/50 rounded mt-2" />
       </div>
-      <div className="h-10 w-48 bg-gray-200 rounded" />
+      <div className="h-10 w-48 bg-muted rounded" />
       <Card>
         <CardContent className="pt-6">
           <div className="space-y-4">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="h-16 bg-gray-100 rounded-lg" />
+              <div key={i} className="h-16 bg-muted rounded-lg" />
             ))}
           </div>
         </CardContent>
