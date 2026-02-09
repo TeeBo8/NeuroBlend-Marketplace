@@ -331,10 +331,19 @@ src/
 
 #### 2.1 — Refonte du Hero section
 
-- [ ] Titre plus émotionnel : "Votre cerveau mérite un café à sa hauteur"
-- [ ] Sous-titre avec bénéfice clair : "Des blends créés par des torréfacteurs artisanaux, adaptés aux profils HPI, ADHD et Hypersensibles"
-- [ ] Badges de confiance ("100% artisanal", "Livraison offerte", "Sans engagement")
-- [ ] CTA principal renforcé : "Trouver mon blend idéal"
+- [x] Titre plus émotionnel : "Votre cerveau mérite un café à sa hauteur"
+- [x] Sous-titre avec bénéfice clair : "Des blends créés par des torréfacteurs artisanaux, adaptés aux profils HPI, ADHD et Hypersensibles"
+- [x] Badges de confiance ("100% artisanal", "Livraison offerte", "Sans engagement")
+- [x] CTA principal renforcé : "Trouver mon blend idéal"
+
+#### 2.1b — Thème Caffeine + Dark Mode
+
+- [x] Appliquer le thème Caffeine (tweakcn) : variables CSS light + dark dans `globals.css`
+- [x] Configurer `ThemeProvider` (next-themes) dans `layout.tsx` avec `defaultTheme="system"`
+- [x] Créer le composant `ThemeToggle` (Sun/Moon) dans `src/components/theme-toggle.tsx`
+- [x] Intégrer le toggle dans le Header (avant le panier)
+- [x] Adapter les composants principaux aux couleurs sémantiques : Header, Footer, Mobile Nav, Homepage (Hero, Categories, How it Works, CTA)
+- [ ] Migrer les couleurs hardcodées (`purple-*`, `gray-*`) dans le reste du projet (pages admin, vendor, account, product-card, etc.)
 
 #### 2.2 — Section preuve sociale (nouvelle)
 

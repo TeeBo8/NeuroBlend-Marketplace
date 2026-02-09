@@ -7,6 +7,7 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { APP_NAME, APP_DESCRIPTION } from "@/lib/constants";
 import { Chatbot } from "@/components/ai/chatbot";
+import { ThemeProvider } from "next-themes";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -77,13 +78,15 @@ export default function RootLayout({
   return (
     <html lang="fr" suppressHydrationWarning>
       <body className={`${inter.variable} font-sans antialiased`}>
-        <TRPCProvider>
-          <Header />
-          <main className="min-h-[calc(100vh-4rem)]">{children}</main>
-          <Footer />
-          <Chatbot />
-          <Toaster richColors position="top-right" />
-        </TRPCProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <TRPCProvider>
+            <Header />
+            <main className="min-h-[calc(100vh-4rem)]">{children}</main>
+            <Footer />
+            <Chatbot />
+            <Toaster richColors position="top-right" />
+          </TRPCProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

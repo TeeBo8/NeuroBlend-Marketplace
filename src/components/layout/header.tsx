@@ -17,6 +17,7 @@ import { useSession, signOut } from '@/lib/auth-client';
 import { MobileNav } from './mobile-nav';
 import { cn } from '@/lib/utils';
 import { useCartStore } from '@/stores/cart-store';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 export function Header() {
   const pathname = usePathname();
@@ -31,15 +32,15 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-600">
-              <Coffee className="h-5 w-5 text-white" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
+              <Coffee className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-bold text-gray-900">{APP_NAME}</span>
+            <span className="text-xl font-bold text-foreground">{APP_NAME}</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -53,8 +54,8 @@ export function Header() {
                   className={cn(
                     'px-4 py-2 text-sm font-medium rounded-md transition-colors',
                     isActive
-                      ? 'text-purple-600 bg-purple-50'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                      ? 'text-primary bg-primary/10'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-accent'
                   )}
                 >
                   {link.label}
@@ -65,12 +66,15 @@ export function Header() {
 
           {/* Actions */}
           <div className="flex items-center gap-2">
+            {/* Theme Toggle */}
+            <ThemeToggle />
+
             {/* Cart Button */}
             <Button variant="ghost" size="icon" className="relative" asChild>
               <Link href="/cart" aria-label="Panier">
                 <ShoppingCart className="h-5 w-5" />
                 {itemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-purple-600 text-[11px] font-bold text-white">
+                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[11px] font-bold text-primary-foreground">
                     {itemCount > 99 ? '99+' : itemCount}
                   </span>
                 )}
@@ -85,8 +89,8 @@ export function Header() {
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="icon" className="hidden md:flex">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-purple-100">
-                          <span className="text-sm font-medium text-purple-600">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
+                          <span className="text-sm font-medium text-primary">
                             {session.user.name?.charAt(0).toUpperCase() || 'U'}
                           </span>
                         </div>
@@ -96,7 +100,7 @@ export function Header() {
                       <DropdownMenuLabel>
                         <div className="flex flex-col">
                           <span className="font-medium">{session.user.name}</span>
-                          <span className="text-xs text-gray-500">{session.user.email}</span>
+                          <span className="text-xs text-muted-foreground">{session.user.email}</span>
                         </div>
                       </DropdownMenuLabel>
                       <DropdownMenuSeparator />
