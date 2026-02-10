@@ -7,6 +7,8 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { APP_NAME, APP_DESCRIPTION } from "@/lib/constants";
 import { Chatbot } from "@/components/ai/chatbot";
+import { CookieBanner } from "@/components/cookie-banner";
+import { AnalyticsLoader } from "@/components/analytics-loader";
 import { ThemeProvider } from "next-themes";
 
 const inter = Inter({
@@ -84,6 +86,8 @@ export default function RootLayout({
             <main className="min-h-[calc(100vh-4rem)]">{children}</main>
             <Footer />
             <Chatbot />
+            <CookieBanner />
+            <AnalyticsLoader />
             <Toaster richColors position="top-right" />
           </TRPCProvider>
         </ThemeProvider>

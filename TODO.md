@@ -384,15 +384,15 @@ src/
 
 **Pourquoi** : Le bouton "Devenir torréfacteur" mène directement à la page d'inscription protégée. Un torréfacteur qui découvre le site doit d'abord comprendre la proposition de valeur AVANT de créer un compte.
 
-#### 3.1 — Page `/vendor/landing` (accessible SANS connexion)
+#### 3.1 — Page `/vendor/landing` (accessible SANS connexion) ✅
 
-- [ ] Hero : "Vendez votre café à 15-20% de la population française"
-- [ ] Proposition de valeur : 0€ d'inscription, 15% de commission, communauté ciblée
-- [ ] 3 étapes visuelles : Inscrivez-vous → Ajoutez vos produits → Vendez
-- [ ] FAQ vendeur (questions courantes des torréfacteurs)
-- [ ] Témoignages torréfacteurs (fictifs au début)
-- [ ] CTA : "Créer mon espace vendeur gratuitement" → redirige vers `/vendor/register`
-- [ ] Modifier le bouton "Devenir torréfacteur" de la homepage pour pointer vers cette page
+- [x] Hero : "Vendez votre café à 15-20% de la population française"
+- [x] Proposition de valeur : 0€ d'inscription, 15% de commission, communauté ciblée
+- [x] 3 étapes visuelles : Inscrivez-vous → Ajoutez vos produits → Vendez
+- [x] FAQ vendeur (questions courantes des torréfacteurs)
+- [x] Témoignages torréfacteurs (fictifs au début)
+- [x] CTA : "Créer mon espace vendeur gratuitement" → redirige vers `/vendor/register`
+- [x] Modifier le bouton "Devenir torréfacteur" de la homepage pour pointer vers cette page
 
 ---
 
@@ -400,9 +400,9 @@ src/
 
 #### 4.1 — Bannière cookies RGPD
 
-- [ ] Implémenter une bannière de consentement cookies conforme RGPD/CNIL
-- [ ] Stocker le consentement en cookie/localStorage
-- [ ] Conditionner le chargement des scripts analytics au consentement
+- [x] Implémenter une bannière de consentement cookies conforme RGPD/CNIL
+- [x] Stocker le consentement en cookie/localStorage
+- [x] Conditionner le chargement des scripts analytics au consentement
 
 #### 4.2 — Produits de démonstration (seed data)
 
@@ -450,10 +450,10 @@ src/
 |-------|---------|--------|
 | **1** | ~~Corriger 404, accessibilité, SEO de base~~ | ✅ Terminé |
 | **2** | ~~Refonte landing page~~ | ✅ Terminé |
-| **3** | Landing page vendeur | Acquisition torréfacteurs |
+| **3** | ~~Landing page vendeur~~ | ✅ Terminé |
 | **4** | Cookies RGPD, seed data, quiz | Fonctionnalités & UX |
 | **5** | Schema.org, analytics, performance | Croissance & SEO |
 
 ---
 
-*Dernière mise à jour: 9 février 2026 — Phase 2 terminée (commit a65e368)*
+*Dernière mise à jour: 9 février 2026 — Phase 3 terminée (commit 1ef390e)*
