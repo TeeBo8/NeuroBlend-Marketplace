@@ -406,11 +406,11 @@ src/
 
 #### 4.2 — Produits de démonstration (seed data)
 
-- [ ] Créer un script de seed (`src/server/db/seed.ts`)
-- [ ] 6-9 produits fictifs (2-3 par catégorie HPI/ADHD/Hypersensible)
-- [ ] Avec images, descriptions, notes de dégustation, prix, intensité
-- [ ] Créer un vendeur test associé
-- [ ] Marqués comme produits de démonstration
+- [x] Créer un script de seed (`src/server/db/seed.ts`)
+- [x] 6-9 produits fictifs (2-3 par catégorie HPI/ADHD/Hypersensible)
+- [x] Avec images, descriptions, notes de dégustation, prix, intensité
+- [x] Créer un vendeur test associé
+- [x] Marqués comme produits de démonstration
 
 #### 4.3 — Quiz interactif de recommandation
 
