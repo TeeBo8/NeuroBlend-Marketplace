@@ -3,9 +3,12 @@ import { Truck, RotateCcw, Clock, MapPin } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 
 export const metadata: Metadata = {
-  title: 'Livraison',
+  title: 'Livraison & Retours — Délais et tarifs',
   description:
-    'Informations sur la livraison NeuroBlend : délais, tarifs, zones de livraison et politique de retour.',
+    'Informations sur la livraison NeuroBlend : livraison offerte dès 25€, délais de 2 à 5 jours, France métropolitaine. Politique de retour 14 jours.',
+  alternates: {
+    canonical: '/shipping',
+  },
 };
 
 const deliveryOptions = [

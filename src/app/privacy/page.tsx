@@ -4,7 +4,10 @@ import { APP_NAME } from '@/lib/constants';
 export const metadata: Metadata = {
   title: 'Politique de confidentialité',
   description:
-    'Politique de confidentialité de NeuroBlend. Découvrez comment nous collectons, utilisons et protégeons vos données personnelles.',
+    'Politique de confidentialité de NeuroBlend. Découvrez comment nous collectons, utilisons et protégeons vos données personnelles conformément au RGPD.',
+  alternates: {
+    canonical: '/privacy',
+  },
 };
 
 export default function PrivacyPage() {

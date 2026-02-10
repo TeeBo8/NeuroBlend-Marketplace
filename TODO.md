@@ -425,11 +425,11 @@ src/
 
 ### PHASE 5 : Optimisations
 
-#### 5.1 — SEO avancé
+#### 5.1 — SEO avancé ✅
 
-- [ ] Schema.org markup (Product, Organization, FAQ, BreadcrumbList)
-- [ ] Pages catégories avec contenu SEO enrichi
-- [ ] Metadata unique et optimisée par page
+- [x] Schema.org markup (Product, Organization, FAQ, BreadcrumbList, WebSite, CollectionPage)
+- [x] Pages catégories avec contenu SEO enrichi (texte unique HPI/ADHD/Hypersensible)
+- [x] Metadata unique et optimisée par page (15 pages : titres, descriptions, OG, canonical, keywords)
 
 #### 5.2 — Analytics
 
@@ -456,4 +456,4 @@ src/
 
 ---
 
-*Dernière mise à jour: 9 février 2026 — Phase 3 terminée (commit 1ef390e)*
+*Dernière mise à jour: 10 février 2026 — Phase 5.1 SEO avancé terminée*

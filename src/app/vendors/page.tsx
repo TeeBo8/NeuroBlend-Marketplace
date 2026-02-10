@@ -3,9 +3,19 @@ import { Suspense } from 'react';
 import { VendorsContent } from './vendors-content';
 
 export const metadata: Metadata = {
-  title: 'Nos torréfacteurs',
+  title: 'Nos torréfacteurs artisanaux partenaires',
   description:
-    'Découvrez les torréfacteurs artisanaux partenaires de NeuroBlend. Des artisans passionnés qui créent des capsules d\u2019exception.',
+    'Découvrez les torréfacteurs artisanaux partenaires de NeuroBlend. Des artisans passionnés qui créent des capsules d\u2019exception pour les profils HPI, ADHD et hypersensibles.',
+  openGraph: {
+    title: 'Nos torréfacteurs | NeuroBlend',
+    description:
+      'Des artisans passionnés qui créent des blends uniques pour les esprits neuroatypiques.',
+    type: 'website',
+    locale: 'fr_FR',
+  },
+  alternates: {
+    canonical: '/vendors',
+  },
 };
 
 function VendorsLoading() {

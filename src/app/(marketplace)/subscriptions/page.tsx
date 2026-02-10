@@ -3,9 +3,26 @@ import { Suspense } from 'react';
 import { SubscriptionsContent } from './subscriptions-content';
 
 export const metadata: Metadata = {
-  title: 'Abonnements',
+  title: 'Abonnements capsules café — Dès 9,90€/mois sans engagement',
   description:
-    'Recevez chaque mois une sélection de capsules de café adaptées à votre profil neuroatypique.',
+    'Recevez chaque mois une sélection de capsules de café artisanales adaptées à votre profil neuroatypique. 3 formules dès 9,90€/mois, livraison offerte, sans engagement.',
+  keywords: [
+    'abonnement café',
+    'capsules par abonnement',
+    'box café mensuelle',
+    'sans engagement',
+    'café neuroatypique',
+  ],
+  openGraph: {
+    title: 'Abonnements | NeuroBlend',
+    description:
+      'Capsules artisanales livrées chaque mois, adaptées à votre profil. Dès 9,90€/mois.',
+    type: 'website',
+    locale: 'fr_FR',
+  },
+  alternates: {
+    canonical: '/subscriptions',
+  },
 };
 
 function SubscriptionsLoading() {

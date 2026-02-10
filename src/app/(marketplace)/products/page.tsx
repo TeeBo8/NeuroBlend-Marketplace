@@ -4,9 +4,27 @@ import { ProductsContent } from './products-content';
 import { ProductCardSkeleton } from '@/components/product/product-card';
 
 export const metadata: Metadata = {
-  title: 'Nos Produits',
+  title: 'Capsules de café artisanales pour esprits neuroatypiques',
   description:
-    'Découvrez notre sélection de capsules de café adaptées aux profils neuroatypiques : HPI, ADHD et hypersensibles.',
+    'Découvrez notre sélection de capsules de café artisanales adaptées aux profils neuroatypiques : HPI, ADHD et hypersensibles. Torréfaction artisanale, livraison offerte dès 25€.',
+  keywords: [
+    'capsules café',
+    'café neuroatypique',
+    'café HPI',
+    'café ADHD',
+    'café hypersensible',
+    'capsules artisanales',
+  ],
+  openGraph: {
+    title: 'Nos Produits | NeuroBlend',
+    description:
+      'Capsules de café artisanales conçues pour les profils HPI, ADHD et Hypersensibles.',
+    type: 'website',
+    locale: 'fr_FR',
+  },
+  alternates: {
+    canonical: '/products',
+  },
 };
 
 function ProductsLoading() {

@@ -14,11 +14,30 @@ import {
   ChevronDown,
   Check,
 } from "lucide-react";
+import { JsonLd } from "@/components/seo/json-ld";
+import { faqPageSchema, breadcrumbSchema } from "@/lib/schemas";
 
 export const metadata: Metadata = {
-  title: "Devenir torréfacteur partenaire",
+  title: "Devenir torréfacteur partenaire — 0€ d'inscription",
   description:
-    "Vendez vos capsules de café sur NeuroBlend. 0€ d'inscription, commission de 15%, communauté de passionnés neuroatypiques.",
+    "Vendez vos capsules de café artisanales sur NeuroBlend. 0€ d'inscription, commission de 15% seulement, accès à une communauté de passionnés neuroatypiques. Inscription gratuite.",
+  keywords: [
+    "vendre café en ligne",
+    "torréfacteur marketplace",
+    "devenir vendeur café",
+    "commission café",
+    "marketplace artisan café",
+  ],
+  openGraph: {
+    title: "Devenir vendeur | NeuroBlend",
+    description:
+      "0€ d'inscription, 15% de commission. Vendez vos capsules à une communauté passionnée.",
+    type: "website",
+    locale: "fr_FR",
+  },
+  alternates: {
+    canonical: "/vendor/landing",
+  },
 };
 
 const VALUE_PROPS = [
@@ -113,8 +132,21 @@ const FAQ_ITEMS = [
 ] as const;
 
 export default function VendorLandingPage() {
+  const vendorFaqs = FAQ_ITEMS.map((item) => ({
+    q: item.question,
+    a: item.answer,
+  }));
+
   return (
     <>
+      <JsonLd data={faqPageSchema(vendorFaqs)} />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: 'Accueil', url: '/' },
+          { name: 'Devenir vendeur', url: '/vendor/landing' },
+        ])}
+      />
+
       {/* Hero */}
       <section className="relative bg-primary text-primary-foreground overflow-hidden">
         <div className="absolute inset-0 opacity-10">

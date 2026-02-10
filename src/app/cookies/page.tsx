@@ -5,7 +5,10 @@ import { APP_NAME } from '@/lib/constants';
 export const metadata: Metadata = {
   title: 'Politique Cookies',
   description:
-    'Politique d\u2019utilisation des cookies sur NeuroBlend. Types de cookies utilisés, finalités et gestion de vos préférences.',
+    'Politique d\u2019utilisation des cookies sur NeuroBlend. Types de cookies utilisés, finalités et gestion de vos préférences conformément à la CNIL.',
+  alternates: {
+    canonical: '/cookies',
+  },
 };
 
 const cookieTypes = [

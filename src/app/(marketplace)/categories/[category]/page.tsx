@@ -4,6 +4,8 @@ import { Suspense } from 'react';
 import { PRODUCT_CATEGORIES } from '@/lib/constants';
 import { CategoryContent } from './category-content';
 import { ProductCardSkeleton } from '@/components/product/product-card';
+import { JsonLd } from '@/components/seo/json-ld';
+import { breadcrumbSchema, collectionPageSchema } from '@/lib/schemas';
 
 type Props = {
   params: Promise<{ category: string }>;
@@ -11,17 +13,77 @@ type Props = {
 
 const VALID_CATEGORIES = PRODUCT_CATEGORIES.map((c) => c.value);
 
+const CATEGORY_SEO: Record<
+  string,
+  { title: string; description: string; keywords: string[] }
+> = {
+  HPI: {
+    title: 'Capsules HPI (Haut Potentiel) — Café pour esprits analytiques',
+    description:
+      'Découvrez nos capsules de café artisanales conçues pour les profils HPI (Haut Potentiel Intellectuel). Des blends qui stimulent la pensée profonde et la créativité, sélectionnés par des torréfacteurs spécialisés.',
+    keywords: [
+      'café HPI',
+      'haut potentiel intellectuel',
+      'capsules café créativité',
+      'café concentration',
+      'neurodiversité',
+      'café artisanal',
+    ],
+  },
+  ADHD: {
+    title: 'Capsules ADHD — Café pour la concentration et le focus',
+    description:
+      'Nos capsules de café ADHD sont spécialement formulées pour favoriser la concentration et canaliser l\u2019énergie. Des torréfactions artisanales équilibrées, parfaites pour les esprits dynamiques.',
+    keywords: [
+      'café ADHD',
+      'café concentration',
+      'café focus',
+      'capsules TDAH',
+      'neurodiversité',
+      'café énergie',
+    ],
+  },
+  hypersensitive: {
+    title: 'Capsules Hypersensible — Café doux et équilibré',
+    description:
+      'Des capsules de café aux saveurs douces et équilibrées, pensées pour les personnes hypersensibles. Profils aromatiques subtils et torréfaction respectueuse de votre sensibilité sensorielle.',
+    keywords: [
+      'café hypersensible',
+      'café doux',
+      'capsules saveurs douces',
+      'café sensibilité',
+      'neurodiversité',
+      'café apaisant',
+    ],
+  },
+};
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { category } = await params;
-  const categoryInfo = PRODUCT_CATEGORIES.find((c) => c.value === category);
+  const seo = CATEGORY_SEO[category];
 
-  if (!categoryInfo) {
+  if (!seo) {
     return { title: 'Catégorie introuvable' };
   }
 
   return {
-    title: `${categoryInfo.label} - Capsules de café`,
-    description: categoryInfo.description,
+    title: seo.title,
+    description: seo.description,
+    keywords: seo.keywords,
+    openGraph: {
+      title: seo.title,
+      description: seo.description,
+      type: 'website',
+      locale: 'fr_FR',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: seo.title,
+      description: seo.description,
+    },
+    alternates: {
+      canonical: `/categories/${category}`,
+    },
   };
 }
 
@@ -47,9 +109,27 @@ export default async function CategoryPage({ params }: Props) {
     notFound();
   }
 
+  const categoryInfo = PRODUCT_CATEGORIES.find((c) => c.value === category);
+
   return (
-    <Suspense fallback={<CategoryLoading />}>
-      <CategoryContent category={category as 'HPI' | 'ADHD' | 'hypersensitive'} />
-    </Suspense>
+    <>
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: 'Accueil', url: '/' },
+          { name: 'Produits', url: '/products' },
+          { name: categoryInfo?.label ?? category, url: `/categories/${category}` },
+        ])}
+      />
+      <JsonLd
+        data={collectionPageSchema({
+          name: CATEGORY_SEO[category]?.title ?? category,
+          description: CATEGORY_SEO[category]?.description ?? '',
+          url: `/categories/${category}`,
+        })}
+      />
+      <Suspense fallback={<CategoryLoading />}>
+        <CategoryContent category={category as 'HPI' | 'ADHD' | 'hypersensitive'} />
+      </Suspense>
+    </>
   );
 }

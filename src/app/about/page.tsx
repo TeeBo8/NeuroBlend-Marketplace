@@ -3,9 +3,19 @@ import { Coffee, Heart, Brain, Users } from 'lucide-react';
 import { APP_NAME } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'À propos',
+  title: 'À propos — Notre histoire et nos valeurs',
   description:
-    'Découvrez NeuroBlend, la marketplace de capsules de café artisanales conçue pour les esprits neuroatypiques.',
+    'Découvrez NeuroBlend, la première marketplace de capsules de café artisanales dédiée aux esprits neuroatypiques. HPI, ADHD, hypersensibles : chaque cerveau mérite un café à sa hauteur.',
+  openGraph: {
+    title: 'À propos de NeuroBlend',
+    description:
+      'La première marketplace de café artisanal dédiée aux esprits neuroatypiques.',
+    type: 'website',
+    locale: 'fr_FR',
+  },
+  alternates: {
+    canonical: '/about',
+  },
 };
 
 const values = [

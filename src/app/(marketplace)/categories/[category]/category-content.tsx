@@ -11,6 +11,36 @@ import {
 import { PRODUCT_CATEGORIES } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 
+const CATEGORY_SEO_CONTENT: Record<
+  string,
+  { heading: string; paragraphs: string[] }
+> = {
+  HPI: {
+    heading: 'Le café pensé pour les Hauts Potentiels Intellectuels',
+    paragraphs: [
+      'Les personnes HPI (Haut Potentiel Intellectuel) ont un fonctionnement cognitif unique : pensée en arborescence, hyperactivité mentale et besoin constant de stimulation intellectuelle. Leur rapport à la caféine est tout aussi singulier — trop d\u2019intensité peut générer une sur-stimulation, tandis qu\u2019un café trop léger ne satisfait pas leur besoin de complexité sensorielle.',
+      'Nos torréfacteurs artisanaux ont développé des blends spécifiques qui allient des profils aromatiques complexes à un dosage en caféine maîtrisé. Notes fruitées, chocolatées ou épicées : chaque capsule est conçue pour accompagner vos sessions de deep work, vos moments de création et vos rituels de réflexion.',
+      'Découvrez une sélection de capsules compatibles qui respecte votre sensibilité tout en stimulant votre créativité. Torréfaction artisanale, grains de spécialité, profils gustatifs soigneusement calibrés.',
+    ],
+  },
+  ADHD: {
+    heading: 'Des capsules de café conçues pour le focus et la concentration',
+    paragraphs: [
+      'Le TDAH (Trouble du Déficit de l\u2019Attention avec ou sans Hyperactivité) concerne environ 5% de la population adulte en France. Les personnes ADHD ont souvent un rapport particulier à la caféine : elle peut aider à canaliser l\u2019énergie et favoriser le focus, à condition de choisir le bon dosage.',
+      'Nos blends ADHD sont créés par des torréfacteurs qui comprennent ce besoin d\u2019équilibre. Des cafés ni trop forts ni trop légers, avec une libération progressive de la caféine pour un effet durable sans les pics d\u2019énergie suivis de crashes. L\u2019intensité est calibrée pour soutenir la concentration sur la durée.',
+      'Chaque capsule est le fruit d\u2019un savoir-faire artisanal pensé pour les esprits dynamiques. Commandez vos capsules et découvrez comment le bon café peut transformer votre productivité au quotidien.',
+    ],
+  },
+  hypersensitive: {
+    heading: 'Le café qui respecte votre sensibilité sensorielle',
+    paragraphs: [
+      'L\u2019hypersensibilité sensorielle touche une part significative de la population neuroatypique. Pour ces personnes, un café trop amer, trop acide ou trop intense peut devenir une expérience désagréable. C\u2019est pourquoi nos torréfacteurs créent des blends spécialement pensés pour les palais sensibles.',
+      'Des notes florales, des saveurs de miel, des arômes de fruits doux — nos capsules Hypersensible privilégient la rondeur et l\u2019équilibre. La torréfaction est douce et contrôlée pour éliminer l\u2019amertume excessive tout en préservant la richesse aromatique du grain.',
+      'Offrez-vous un moment de douceur avec des capsules artisanales qui comprennent votre sensibilité. Chaque gorgée est un voyage gustatif pensé pour respecter vos sens et vous apporter du réconfort.',
+    ],
+  },
+};
+
 const CATEGORY_THEMES = {
   HPI: {
     gradient: 'from-primary via-primary/90 to-indigo-800',
@@ -154,6 +184,27 @@ export function CategoryContent({
           </>
         )}
       </section>
+
+      {/* SEO Content */}
+      {CATEGORY_SEO_CONTENT[category] && (
+        <section className="bg-background border-t">
+          <div className="container mx-auto px-4 py-16 max-w-3xl">
+            <h2 className="text-2xl font-bold text-foreground mb-6">
+              {CATEGORY_SEO_CONTENT[category].heading}
+            </h2>
+            <div className="space-y-4">
+              {CATEGORY_SEO_CONTENT[category].paragraphs.map((p, i) => (
+                <p
+                  key={i}
+                  className="text-muted-foreground leading-relaxed"
+                >
+                  {p}
+                </p>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Other Categories */}
       <section className="bg-muted/50">

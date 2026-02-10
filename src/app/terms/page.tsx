@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: 'Conditions générales de vente',
   description:
     'Conditions générales de vente de NeuroBlend. Informations sur les commandes, paiements, livraisons et responsabilités.',
+  alternates: {
+    canonical: '/terms',
+  },
 };
 
 export default function TermsPage() {

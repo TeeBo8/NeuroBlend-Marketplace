@@ -3,11 +3,23 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { APP_NAME } from '@/lib/constants';
+import { JsonLd } from '@/components/seo/json-ld';
+import { faqPageSchema, breadcrumbSchema } from '@/lib/schemas';
 
 export const metadata: Metadata = {
-  title: 'FAQ',
+  title: 'FAQ — Questions fréquentes sur le café neuroatypique',
   description:
-    'Questions fréquentes sur NeuroBlend : commandes, abonnements, livraison, profils neuroatypiques et plus.',
+    'Trouvez les réponses à vos questions sur NeuroBlend : commandes, livraison gratuite, abonnements sans engagement, profils HPI, ADHD et hypersensibles.',
+  openGraph: {
+    title: 'FAQ | NeuroBlend',
+    description:
+      'Commandes, abonnements, livraison, profils neuroatypiques : toutes les réponses à vos questions.',
+    type: 'website',
+    locale: 'fr_FR',
+  },
+  alternates: {
+    canonical: '/faq',
+  },
 };
 
 const faqSections = [
@@ -82,8 +94,20 @@ const faqSections = [
 ];
 
 export default function FaqPage() {
+  const allQuestions = faqSections.flatMap((s) =>
+    s.questions.map((faq) => ({ q: faq.q, a: faq.a }))
+  );
+
   return (
     <>
+      <JsonLd data={faqPageSchema(allQuestions)} />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: 'Accueil', url: '/' },
+          { name: 'FAQ', url: '/faq' },
+        ])}
+      />
+
       {/* Hero */}
       <section className="bg-gradient-to-br from-primary via-primary/90 to-indigo-800 text-primary-foreground">
         <div className="container mx-auto px-4 py-16 md:py-20">

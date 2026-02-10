@@ -4,9 +4,19 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ContactForm } from './contact-form';
 
 export const metadata: Metadata = {
-  title: 'Contact',
+  title: 'Contact — Écrivez-nous',
   description:
-    'Contactez l\u2019équipe NeuroBlend. Une question, une suggestion ou un partenariat ? Nous sommes à votre écoute.',
+    'Contactez l\u2019équipe NeuroBlend par email ou via notre formulaire. Questions, suggestions, partenariats : réponse sous 24-48h.',
+  openGraph: {
+    title: 'Contactez NeuroBlend',
+    description:
+      'Une question sur nos capsules ou nos abonnements ? Notre équipe vous répond sous 24-48h.',
+    type: 'website',
+    locale: 'fr_FR',
+  },
+  alternates: {
+    canonical: '/contact',
+  },
 };
 
 const contactInfo = [

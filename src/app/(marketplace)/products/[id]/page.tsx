@@ -4,6 +4,9 @@ import { notFound } from 'next/navigation';
 import { ProductDetail } from './product-detail';
 import { createCaller } from '@/server/api/root';
 import { createTRPCContext } from '@/server/api/trpc';
+import { JsonLd } from '@/components/seo/json-ld';
+import { productSchema, breadcrumbSchema } from '@/lib/schemas';
+import { PRODUCT_CATEGORIES } from '@/lib/constants';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -15,16 +18,39 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const ctx = await createTRPCContext();
     const caller = createCaller(ctx);
     const product = await caller.product.byId({ id });
+    const categoryInfo = PRODUCT_CATEGORIES.find(
+      (c) => c.value === product.category
+    );
+    const desc =
+      product.shortDescription || product.description?.slice(0, 160);
+
     return {
       title: product.name,
-      description:
-        product.shortDescription || product.description?.slice(0, 160),
+      description: desc,
       openGraph: {
+        title: `${product.name} | NeuroBlend`,
+        description: desc,
+        images: product.imageUrl ? [product.imageUrl] : [],
+        type: 'website',
+        locale: 'fr_FR',
+      },
+      twitter: {
+        card: 'summary_large_image',
         title: product.name,
-        description:
-          product.shortDescription || product.description?.slice(0, 160),
+        description: desc,
         images: product.imageUrl ? [product.imageUrl] : [],
       },
+      alternates: {
+        canonical: `/products/${id}`,
+      },
+      keywords: [
+        product.name,
+        'capsule café',
+        categoryInfo?.label ?? '',
+        'neuroatypique',
+        product.origin ?? '',
+        ...(product.flavorNotes ?? []),
+      ].filter(Boolean),
     };
   } catch {
     return { title: 'Produit introuvable' };
@@ -58,14 +84,47 @@ function ProductDetailLoading() {
 export default async function ProductDetailPage({ params }: Props) {
   const { id } = await params;
 
-  // Validate the id exists (basic check)
   if (!id) {
     notFound();
   }
 
+  // Fetch product data for JSON-LD (server side)
+  let jsonLdData: Record<string, unknown> | null = null;
+  let breadcrumbData: Record<string, unknown> | null = null;
+
+  try {
+    const ctx = await createTRPCContext();
+    const caller = createCaller(ctx);
+    const product = await caller.product.byId({ id });
+    const categoryInfo = PRODUCT_CATEGORIES.find(
+      (c) => c.value === product.category
+    );
+
+    jsonLdData = productSchema(product) as Record<string, unknown>;
+    breadcrumbData = breadcrumbSchema([
+      { name: 'Accueil', url: '/' },
+      { name: 'Produits', url: '/products' },
+      ...(categoryInfo
+        ? [
+            {
+              name: categoryInfo.label,
+              url: `/categories/${categoryInfo.value}`,
+            },
+          ]
+        : []),
+      { name: product.name, url: `/products/${id}` },
+    ]) as Record<string, unknown>;
+  } catch {
+    // Product not found — schemas will not be rendered
+  }
+
   return (
-    <Suspense fallback={<ProductDetailLoading />}>
-      <ProductDetail id={id} />
-    </Suspense>
+    <>
+      {jsonLdData && <JsonLd data={jsonLdData} />}
+      {breadcrumbData && <JsonLd data={breadcrumbData} />}
+      <Suspense fallback={<ProductDetailLoading />}>
+        <ProductDetail id={id} />
+      </Suspense>
+    </>
   );
 }

@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { APP_NAME, PRODUCT_CATEGORIES, SUBSCRIPTION_PLANS } from "@/lib/constants";
 import { Shield, Truck, RefreshCcw, Star, Quote, Users, Brain, Coffee, Heart, Lock, Lightbulb, Zap, Feather, Check, MapPin, type LucideIcon } from "lucide-react";
 import { AnimatedCounter } from "@/components/home/animated-counter";
+import { JsonLd } from "@/components/seo/json-ld";
+import { websiteSchema } from "@/lib/schemas";
 
 const TESTIMONIALS = [
   {
@@ -79,6 +81,8 @@ const ROASTERS = [
 export default function HomePage() {
   return (
     <>
+      <JsonLd data={websiteSchema()} />
+
       {/* Hero Section */}
       <section className="relative bg-primary text-primary-foreground overflow-hidden">
         {/* Subtle background pattern */}

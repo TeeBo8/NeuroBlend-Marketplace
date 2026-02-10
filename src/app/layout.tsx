@@ -10,6 +10,8 @@ import { Chatbot } from "@/components/ai/chatbot";
 import { CookieBanner } from "@/components/cookie-banner";
 import { AnalyticsLoader } from "@/components/analytics-loader";
 import { ThemeProvider } from "next-themes";
+import { JsonLd } from "@/components/seo/json-ld";
+import { organizationSchema } from "@/lib/schemas";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -79,6 +81,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" suppressHydrationWarning>
+      <head>
+        <JsonLd data={organizationSchema()} />
+      </head>
       <body className={`${inter.variable} font-sans antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <TRPCProvider>
