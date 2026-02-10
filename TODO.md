@@ -436,11 +436,11 @@ src/
 - [x] Intégrer un analytics privacy-friendly (Plausible ou PostHog)
 - [x] Event tracking : inscription, ajout panier, clic CTA, ouverture chat, complétion quiz
 
-#### 5.3 — Performance
+#### 5.3 — Performance ✅
 
-- [ ] Optimiser les images uploadées en WebP/AVIF
-- [ ] Preload des fonts critiques (Inter)
-- [ ] Audit Lighthouse et corrections
+- [x] Optimiser les images uploadées en WebP/AVIF
+- [x] Preload des fonts critiques (Inter)
+- [x] Audit Lighthouse et corrections
 
 ---
 
@@ -451,9 +451,9 @@ src/
 | **1** | ~~Corriger 404, accessibilité, SEO de base~~ | ✅ Terminé |
 | **2** | ~~Refonte landing page~~ | ✅ Terminé |
 | **3** | ~~Landing page vendeur~~ | ✅ Terminé |
-| **4** | Cookies RGPD, seed data, quiz | Fonctionnalités & UX |
-| **5** | Schema.org, analytics, performance | Croissance & SEO |
+| **4** | ~~Cookies RGPD, seed data, quiz~~ | ✅ Terminé |
+| **5** | ~~Schema.org, analytics, performance~~ | ✅ Terminé |
 
 ---
 
-*Dernière mise à jour: 10 février 2026 — Phase 5.1 SEO avancé terminée*
+*Dernière mise à jour: 10 février 2026 — Phase 5.3 Performance terminée — ROADMAP V2 COMPLÈTE !*

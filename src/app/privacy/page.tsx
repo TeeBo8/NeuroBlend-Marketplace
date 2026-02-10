@@ -31,7 +31,7 @@ export default function PrivacyPage() {
             Le responsable du traitement des données personnelles collectées sur
             le site {APP_NAME} est la société {APP_NAME}, accessible à
             l&apos;adresse{' '}
-            <a href="https://neuro-blend-marketplace.vercel.app">
+            <a href="https://neuro-blend-marketplace.vercel.app" rel="noopener noreferrer">
               neuro-blend-marketplace.vercel.app
             </a>
             .

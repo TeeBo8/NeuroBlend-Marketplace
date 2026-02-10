@@ -16,6 +16,7 @@ import { organizationSchema } from "@/lib/schemas";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -82,6 +83,9 @@ export default function RootLayout({
   return (
     <html lang="fr" suppressHydrationWarning>
       <head>
+        <link rel="dns-prefetch" href="https://utfs.io" />
+        <link rel="dns-prefetch" href="https://eu.i.posthog.com" />
+        <link rel="preconnect" href="https://utfs.io" crossOrigin="anonymous" />
         <JsonLd data={organizationSchema()} />
       </head>
       <body className={`${inter.variable} font-sans antialiased`}>
