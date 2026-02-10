@@ -414,12 +414,12 @@ src/
 
 #### 4.3 — Quiz interactif de recommandation
 
-- [ ] Mini-quiz en 3 questions :
+- [x] Mini-quiz en 3 questions :
   - "Comment fonctionne votre esprit ?" (analytique/créatif/intense)
   - "Qu'attendez-vous de votre café ?" (focus/calme/énergie)
   - "Quelle intensité préférez-vous ?" (doux/équilibré/corsé)
-- [ ] Résultat : recommandation de profil + produits adaptés
-- [ ] Intégrer sur la homepage ou comme page dédiée `/quiz`
+- [x] Résultat : recommandation de profil + produits adaptés
+- [x] Intégrer sur la homepage ou comme page dédiée `/quiz`
 
 ---
 

@@ -123,7 +123,7 @@ export default function HomePage() {
                 className="text-base px-8 py-6 font-semibold"
                 asChild
               >
-                <Link href="/products">Trouver mon blend idéal</Link>
+                <Link href="/quiz">Faire le quiz</Link>
               </Button>
               <Button
                 size="lg"
@@ -131,7 +131,7 @@ export default function HomePage() {
                 className="bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10 text-base px-8 py-6"
                 asChild
               >
-                <Link href="/vendor/landing">Devenir torréfacteur</Link>
+                <Link href="/products">Tous nos cafés</Link>
               </Button>
             </div>
           </div>
@@ -311,7 +311,7 @@ export default function HomePage() {
                 step: "1",
                 title: "Identifiez votre profil",
                 description:
-                  "Parcourez nos catégories HPI, ADHD ou Hypersensible pour trouver les capsules adaptées à vos besoins.",
+                  "Faites notre quiz en 3 questions pour découvrir votre profil café : HPI, ADHD ou Hypersensible.",
               },
               {
                 step: "2",
