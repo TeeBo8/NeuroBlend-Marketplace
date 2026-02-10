@@ -20,6 +20,12 @@ import {
 } from "@/components/product/product-card";
 import { api } from "@/trpc/client";
 import { cn } from "@/lib/utils";
+import {
+  trackQuizStart,
+  trackQuizAnswer,
+  trackQuizComplete,
+  trackQuizRestart,
+} from "@/lib/analytics";
 
 // ─── Types ───────────────────────────────────────────────
 
@@ -227,8 +233,26 @@ export function QuizContent() {
 
   const handleNext = () => {
     if (selectedAnswer === null) return;
-    setAnswers((prev) => [...prev.slice(0, step), selectedAnswer]);
+    // Track quiz start on the very first answer
+    if (step === 0 && answers.length === 0) trackQuizStart();
+    const answerLabel = QUESTIONS[step].answers[selectedAnswer].label;
+    trackQuizAnswer(step, answerLabel);
+    const newAnswers = [...answers.slice(0, step), selectedAnswer];
+    setAnswers(newAnswers);
     setSelectedAnswer(null);
+    // If this was the last question, track quiz completion
+    if (step === QUESTIONS.length - 1) {
+      const scores: Record<ProfileKey, number> = { HPI: 0, ADHD: 0, hypersensitive: 0 };
+      newAnswers.forEach((aIdx, qIdx) => {
+        const a = QUESTIONS[qIdx].answers[aIdx];
+        scores.HPI += a.scores.HPI;
+        scores.ADHD += a.scores.ADHD;
+        scores.hypersensitive += a.scores.hypersensitive;
+      });
+      const entries = Object.entries(scores) as [ProfileKey, number][];
+      entries.sort((a, b) => b[1] - a[1]);
+      trackQuizComplete(entries[0][0]);
+    }
     setStep((s) => s + 1);
   };
 
@@ -240,6 +264,7 @@ export function QuizContent() {
   };
 
   const handleRestart = () => {
+    trackQuizRestart();
     setStep(0);
     setAnswers([]);
     setSelectedAnswer(null);

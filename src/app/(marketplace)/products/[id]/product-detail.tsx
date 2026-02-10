@@ -22,6 +22,7 @@ import { cn, formatPrice, formatDate } from '@/lib/utils';
 import { PRODUCT_CATEGORIES, ROAST_LEVELS } from '@/lib/constants';
 import { useCartStore } from '@/stores/cart-store';
 import { toast } from 'sonner';
+import { trackAddToCart } from '@/lib/analytics';
 import { ReviewForm } from '@/components/product/review-form';
 import { ProductRecommendations } from '@/components/ai/product-recommendations';
 
@@ -311,6 +312,12 @@ export function ProductDetail({ id }: { id: string }) {
                   imageUrl: product.imageUrl ?? undefined,
                   vendorId: product.vendorId,
                   vendorName: product.vendor?.businessName ?? 'Vendeur',
+                });
+                trackAddToCart({
+                  id: product.id,
+                  name: product.name,
+                  price: parseFloat(product.price),
+                  category: product.category ?? undefined,
                 });
                 toast.success('Produit ajouté au panier', {
                   description: product.name,

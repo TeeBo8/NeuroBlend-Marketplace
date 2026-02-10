@@ -433,8 +433,8 @@ src/
 
 #### 5.2 — Analytics
 
-- [ ] Intégrer un analytics privacy-friendly (Plausible ou PostHog)
-- [ ] Event tracking : inscription, ajout panier, clic CTA, ouverture chat, complétion quiz
+- [x] Intégrer un analytics privacy-friendly (Plausible ou PostHog)
+- [x] Event tracking : inscription, ajout panier, clic CTA, ouverture chat, complétion quiz
 
 #### 5.3 — Performance
 

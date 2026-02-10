@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/card';
 import { signUp } from '@/lib/auth-client';
 import { toast } from 'sonner';
+import { trackSignup } from '@/lib/analytics';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -50,6 +51,7 @@ export default function RegisterPage() {
       }
 
       if (data) {
+        trackSignup();
         toast.success('Compte créé avec succès !');
         router.push('/');
         router.refresh();

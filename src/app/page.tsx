@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { APP_NAME, PRODUCT_CATEGORIES, SUBSCRIPTION_PLANS } from "@/lib/constants";
 import { Shield, Truck, RefreshCcw, Star, Quote, Users, Brain, Coffee, Heart, Lock, Lightbulb, Zap, Feather, Check, MapPin, type LucideIcon } from "lucide-react";
 import { AnimatedCounter } from "@/components/home/animated-counter";
+import { TrackedCta } from "@/components/home/tracked-cta";
 import { JsonLd } from "@/components/seo/json-ld";
 import { websiteSchema } from "@/lib/schemas";
 
@@ -121,22 +122,24 @@ export default function HomePage() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button
-                size="lg"
+              <TrackedCta
+                href="/quiz"
+                label="Faire le quiz"
+                location="hero"
                 variant="secondary"
                 className="text-base px-8 py-6 font-semibold"
-                asChild
               >
-                <Link href="/quiz">Faire le quiz</Link>
-              </Button>
-              <Button
-                size="lg"
+                Faire le quiz
+              </TrackedCta>
+              <TrackedCta
+                href="/products"
+                label="Tous nos cafés"
+                location="hero"
                 variant="outline"
                 className="bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10 text-base px-8 py-6"
-                asChild
               >
-                <Link href="/products">Tous nos cafés</Link>
-              </Button>
+                Tous nos cafés
+              </TrackedCta>
             </div>
           </div>
         </div>
@@ -446,9 +449,14 @@ export default function HomePage() {
             Rejoignez {APP_NAME} et vendez vos créations à une communauté
             passionnée. Commission de seulement 15% par vente.
           </p>
-          <Button size="lg" variant="secondary" asChild>
-            <Link href="/vendor/landing">Créer mon espace vendeur</Link>
-          </Button>
+          <TrackedCta
+            href="/vendor/landing"
+            label="Créer mon espace vendeur"
+            location="vendor-cta"
+            variant="secondary"
+          >
+            Créer mon espace vendeur
+          </TrackedCta>
         </div>
       </section>
 

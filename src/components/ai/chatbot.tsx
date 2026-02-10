@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { trackChatToggle, trackChatMessage } from '@/lib/analytics';
 
 function getMessageText(message: { parts?: Array<{ type: string; text?: string }> }) {
   if (!message.parts) return '';
@@ -55,6 +56,7 @@ export function Chatbot() {
     if (!input.trim() || isLoading) return;
     const text = input;
     setInput('');
+    trackChatMessage();
     await sendMessage({ text });
   };
 
@@ -63,7 +65,7 @@ export function Chatbot() {
       {/* Chat bubble */}
       {!isOpen && (
         <button
-          onClick={() => setIsOpen(true)}
+          onClick={() => { setIsOpen(true); trackChatToggle(true); }}
           aria-label="Ouvrir le chat"
           className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 hover:shadow-xl transition-all flex items-center justify-center group"
         >
@@ -84,7 +86,7 @@ export function Chatbot() {
               </div>
             </div>
             <button
-              onClick={() => setIsOpen(false)}
+              onClick={() => { setIsOpen(false); trackChatToggle(false); }}
               aria-label="Fermer le chat"
               className="p-1 hover:bg-purple-500 rounded-full transition-colors"
             >
