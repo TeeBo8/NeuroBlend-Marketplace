@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Sparkles, Zap, Heart, Coffee, ArrowLeft } from 'lucide-react';
 import { api } from '@/trpc/client';
 import { Button } from '@/components/ui/button';
@@ -48,6 +49,7 @@ const CATEGORY_THEMES = {
     icon: Sparkles,
     iconColor: 'text-primary/50',
     accentColor: 'text-purple-100',
+    heroImage: '/images/categories/hpi-hero.jpg',
   },
   ADHD: {
     gradient: 'from-teal-600 via-teal-700 to-cyan-800',
@@ -55,6 +57,7 @@ const CATEGORY_THEMES = {
     icon: Zap,
     iconColor: 'text-teal-300',
     accentColor: 'text-teal-100',
+    heroImage: '/images/categories/adhd-hero.jpg',
   },
   hypersensitive: {
     gradient: 'from-orange-500 via-orange-600 to-amber-700',
@@ -62,6 +65,7 @@ const CATEGORY_THEMES = {
     icon: Heart,
     iconColor: 'text-orange-300',
     accentColor: 'text-orange-100',
+    heroImage: '/images/categories/hypersensible-hero.jpg',
   },
 } as const;
 
@@ -91,9 +95,17 @@ export function CategoryContent({
     <>
       {/* Hero */}
       <section
-        className={cn('bg-gradient-to-br text-white', theme.gradient)}
+        className={cn('relative text-white overflow-hidden')}
       >
-        <div className="container mx-auto px-4 py-16">
+        <Image
+          src={theme.heroImage}
+          alt=""
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className={cn('absolute inset-0 bg-gradient-to-br opacity-85', theme.gradient)} />
+        <div className="relative container mx-auto px-4 py-16">
           <Link
             href="/products"
             className={cn(

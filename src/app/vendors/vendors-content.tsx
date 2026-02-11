@@ -15,8 +15,16 @@ export function VendorsContent() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-primary via-primary/90 to-indigo-800 text-primary-foreground">
-        <div className="container mx-auto px-4 py-16 md:py-20">
+      <section className="relative text-primary-foreground overflow-hidden">
+        <Image
+          src="/images/vendors/vendors-hero.jpg"
+          alt=""
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/90 to-indigo-800 opacity-85" />
+        <div className="relative container mx-auto px-4 py-16 md:py-20">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
               Nos torréfacteurs

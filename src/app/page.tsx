@@ -45,18 +45,21 @@ const PROFILE_COLORS: Record<string, string> = {
   Hypersensible: "bg-accent text-accent-foreground",
 };
 
-const CATEGORY_DETAILS: Record<string, { icon: LucideIcon; benefit: string }> = {
+const CATEGORY_DETAILS: Record<string, { icon: LucideIcon; benefit: string; image: string }> = {
   HPI: {
     icon: Lightbulb,
     benefit: "Stimule la pensée profonde et la créativité sans surexcitation",
+    image: "/images/categories/hpi-lifestyle.jpg",
   },
   ADHD: {
     icon: Zap,
     benefit: "Favorise la concentration et canalise l'énergie naturellement",
+    image: "/images/categories/adhd-lifestyle.jpg",
   },
   hypersensitive: {
     icon: Feather,
     benefit: "Des arômes doux qui respectent votre sensibilité sensorielle",
+    image: "/images/categories/hypersensible-lifestyle.jpg",
   },
 };
 
@@ -183,25 +186,32 @@ export default function HomePage() {
                   href={`/products?category=${category.value}`}
                   className="group"
                 >
-                  <div className="rounded-2xl border p-8 transition-all hover:border-primary/50 hover:shadow-lg bg-card">
-                    <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
-                      {Icon ? (
-                        <Icon className="h-8 w-8 text-primary" />
-                      ) : (
-                        <span className="text-2xl font-bold text-primary">
-                          {category.value.charAt(0)}
-                        </span>
+                  <div className="rounded-2xl border overflow-hidden transition-all hover:border-primary/50 hover:shadow-lg bg-card">
+                    {details?.image && (
+                      <div className="relative h-44 overflow-hidden">
+                        <Image
+                          src={details.image}
+                          alt={category.label}
+                          fill
+                          className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-card to-transparent" />
+                        <div className="absolute bottom-3 left-4 w-10 h-10 rounded-full bg-background/90 flex items-center justify-center shadow-sm">
+                          {Icon && <Icon className="h-5 w-5 text-primary" />}
+                        </div>
+                      </div>
+                    )}
+                    <div className="p-6">
+                      <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
+                        {category.label}
+                      </h3>
+                      <p className="text-muted-foreground">{category.description}</p>
+                      {details?.benefit && (
+                        <p className="text-sm text-primary/80 mt-3 font-medium">
+                          {details.benefit}
+                        </p>
                       )}
                     </div>
-                    <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
-                      {category.label}
-                    </h3>
-                    <p className="text-muted-foreground">{category.description}</p>
-                    {details?.benefit && (
-                      <p className="text-sm text-primary/80 mt-3 font-medium">
-                        {details.benefit}
-                      </p>
-                    )}
                   </div>
                 </Link>
               );
