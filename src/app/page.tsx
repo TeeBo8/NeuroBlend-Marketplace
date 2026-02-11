@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { APP_NAME, PRODUCT_CATEGORIES, SUBSCRIPTION_PLANS } from "@/lib/constants";
 import { Shield, Truck, RefreshCcw, Star, Quote, Users, Brain, Coffee, Heart, Lock, Lightbulb, Zap, Feather, Check, MapPin, type LucideIcon } from "lucide-react";
@@ -11,24 +12,28 @@ const TESTIMONIALS = [
   {
     name: "Léa",
     profile: "HPI" as const,
+    image: "/images/testimonials/lea.jpg",
     quote:
       "Depuis que j'ai trouvé mon blend HPI, mes sessions de deep work sont incomparables. Ce café comprend mon cerveau.",
   },
   {
     name: "Thomas",
     profile: "ADHD" as const,
+    image: "/images/testimonials/thomas.jpg",
     quote:
       "Le blend ADHD m'aide à canaliser mon énergie sans les tremblements du café classique. Un vrai game changer !",
   },
   {
     name: "Camille",
     profile: "Hypersensible" as const,
+    image: "/images/testimonials/camille.jpg",
     quote:
       "Enfin un café doux qui ne m'agresse pas. Les notes florales sont subtiles et apaisantes. Je me sens comprise.",
   },
   {
     name: "Maxime",
     profile: "HPI" as const,
+    image: "/images/testimonials/maxime.jpg",
     quote:
       "La qualité artisanale se sent dès la première gorgée. Mon rituel café du matin a complètement changé.",
   },
@@ -58,6 +63,7 @@ const CATEGORY_DETAILS: Record<string, { icon: LucideIcon; benefit: string }> = 
 const ROASTERS = [
   {
     name: "Antoine Dubois",
+    image: "/images/artisans/antoine.jpg",
     location: "Lyon",
     specialty: "Blend HPI",
     quote:
@@ -65,6 +71,7 @@ const ROASTERS = [
   },
   {
     name: "Marie Chen",
+    image: "/images/artisans/marie.jpg",
     location: "Bordeaux",
     specialty: "Blend ADHD",
     quote:
@@ -72,6 +79,7 @@ const ROASTERS = [
   },
   {
     name: "Julien Moreau",
+    image: "/images/artisans/julien.jpg",
     location: "Nantes",
     specialty: "Blend Hypersensible",
     quote:
@@ -86,10 +94,19 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <section className="relative bg-primary text-primary-foreground overflow-hidden">
-        {/* Subtle background pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-primary-foreground rounded-full blur-3xl" />
-          <div className="absolute bottom-10 right-20 w-96 h-96 bg-secondary rounded-full blur-3xl" />
+        {/* Video background with image fallback */}
+        <div className="absolute inset-0">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            poster="/images/hero/coffee-beans.jpg"
+            className="w-full h-full object-cover"
+          >
+            <source src="/images/hero/coffee-beans-hero.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-primary/75" />
         </div>
 
         <div className="relative container mx-auto px-4 py-24 md:py-36">
@@ -211,9 +228,13 @@ export default function HomePage() {
               >
                 <Quote className="h-8 w-8 text-primary/20 absolute top-4 right-4" />
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-sm font-bold text-primary">
-                    {testimonial.name.charAt(0)}
-                  </div>
+                  <Image
+                    src={testimonial.image}
+                    alt={testimonial.name}
+                    width={40}
+                    height={40}
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
                   <div>
                     <p className="font-semibold text-sm">{testimonial.name}</p>
                     <span
@@ -416,9 +437,13 @@ export default function HomePage() {
                 className="rounded-2xl border bg-card p-6 flex flex-col gap-4"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-lg font-bold text-primary">
-                    {roaster.name.charAt(0)}
-                  </div>
+                  <Image
+                    src={roaster.image}
+                    alt={roaster.name}
+                    width={48}
+                    height={48}
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
                   <div>
                     <p className="font-semibold">{roaster.name}</p>
                     <p className="text-sm text-muted-foreground flex items-center gap-1">

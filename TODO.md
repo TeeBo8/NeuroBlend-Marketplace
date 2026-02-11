@@ -444,6 +444,52 @@ src/
 
 ---
 
+### PHASE 6 : Habillage visuel & Sécurité
+
+**Pourquoi** : Le site est quasi 100% "text & icons" — aucune photo réelle. Ça donne une impression "template" plutôt que "vrai business". De plus, la protection admin est uniquement côté client (React), pas côté serveur.
+
+> Audit réalisé par un navigateur externe le 11 février 2026.
+
+#### 6.1 — Vidéo hero + image fallback ✅
+
+- [x] Vidéo background hero : grains de café en rotation (Mixkit, 720p, 3.7MB)
+- [x] Image poster fallback : grains de café dans un torréfacteur artisanal (Pexels)
+- [x] Overlay sombre semi-transparent pour lisibilité du texte
+
+#### 6.2 — Photos portraits témoignages ✅
+
+- [x] 4 portraits clients homepage (Léa, Thomas, Camille, Maxime) — Pexels
+- [x] 3 portraits vendeurs landing page (Sophie, Marc, Emma) — Pexels
+- [x] Remplacement des initiales par `<Image>` Next.js (40x40px, rounded)
+
+#### 6.3 — Photos artisans/torréfacteurs ✅
+
+- [x] 3 portraits artisans homepage (Antoine, Marie, Julien) — Pexels
+- [x] Remplacement des initiales par `<Image>` Next.js (48x48px, rounded)
+
+#### 6.4 — Images produits seed data ✅
+
+- [x] 9 images produits assignées aux produits de démonstration (Pexels)
+- [x] 3 images HPI, 3 images ADHD, 3 images Hypersensible
+- [x] Mise à jour `imageUrl` dans `seed.ts` — remplacement des `null`
+
+#### 6.5 — Sécurité admin côté serveur (Middleware Next.js) ✅
+
+- [x] Création `src/middleware.ts` avec vérification session Better Auth
+- [x] Routes `/admin/*` : redirige vers `/login` si non admin (302 server-side)
+- [x] Routes `/vendor/*` protégées : redirige vers `/vendor/register` si non vendeur
+- [x] Routes `/account/*` protégées : redirige vers `/login` si non connecté
+- [x] Build vérifié : middleware actif (`ƒ Proxy`)
+
+#### 6.6 — Visuels restants (TODO futur)
+
+- [ ] Illustrations profils HPI/ADHD/Hypersensible (cartes catégories homepage)
+- [ ] Images lifestyle sur les pages catégories
+- [ ] Logos vendeurs sur page `/vendors`
+- [ ] Vidéo hero alternative : cappuccino artisanal (déjà téléchargée, 4.8MB)
+
+---
+
 ### Résumé des phases
 
 | Phase | Contenu | Impact |
@@ -453,7 +499,8 @@ src/
 | **3** | ~~Landing page vendeur~~ | ✅ Terminé |
 | **4** | ~~Cookies RGPD, seed data, quiz~~ | ✅ Terminé |
 | **5** | ~~Schema.org, analytics, performance~~ | ✅ Terminé |
+| **6** | ~~Habillage visuel & sécurité middleware~~ | ✅ Terminé |
 
 ---
 
-*Dernière mise à jour: 10 février 2026 — Phase 5.3 Performance terminée — ROADMAP V2 COMPLÈTE !*
+*Dernière mise à jour: 11 février 2026 — Phase 6 Habillage visuel & Sécurité terminée*

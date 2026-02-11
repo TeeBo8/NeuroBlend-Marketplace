@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { APP_NAME, DEFAULT_COMMISSION_RATE } from "@/lib/constants";
 import {
@@ -85,18 +86,21 @@ const STEPS = [
 const VENDOR_TESTIMONIALS = [
   {
     name: "Sophie R.",
+    image: "/images/testimonials/sophie.jpg",
     location: "Toulouse",
     quote:
       "En 3 mois sur NeuroBlend, j'ai touché une clientèle que je n'aurais jamais atteinte seule. Les retours des clients neuroatypiques sont incroyablement précis et constructifs.",
   },
   {
     name: "Marc L.",
+    image: "/images/testimonials/marc.jpg",
     location: "Strasbourg",
     quote:
       "La plateforme est simple et les paiements arrivent rapidement. Je peux me concentrer sur ce que je fais de mieux : torréfier du café d'exception.",
   },
   {
     name: "Emma B.",
+    image: "/images/testimonials/emma.jpg",
     location: "Marseille",
     quote:
       "J'adore l'idée de créer des blends adaptés à chaque profil cognitif. C'est un vrai challenge créatif et mes ventes ont doublé depuis mon arrivée.",
@@ -280,9 +284,13 @@ export default function VendorLandingPage() {
               >
                 <Quote className="h-8 w-8 text-primary/20 absolute top-4 right-4" />
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-sm font-bold text-primary">
-                    {testimonial.name.charAt(0)}
-                  </div>
+                  <Image
+                    src={testimonial.image}
+                    alt={testimonial.name}
+                    width={40}
+                    height={40}
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
                   <div>
                     <p className="font-semibold text-sm">{testimonial.name}</p>
                     <p className="text-xs text-muted-foreground flex items-center gap-1">
