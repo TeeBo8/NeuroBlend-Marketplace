@@ -107,7 +107,7 @@ export default function HomePage() {
             poster="/images/hero/coffee-beans.jpg"
             className="w-full h-full object-cover"
           >
-            <source src="/images/hero/coffee-beans-hero.mp4" type="video/mp4" />
+            <source src="/images/hero/cappuccino-hero.mp4" type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-primary/75" />
         </div>
