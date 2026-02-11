@@ -481,11 +481,16 @@ src/
 - [x] Routes `/account/*` protégées : redirige vers `/login` si non connecté
 - [x] Build vérifié : middleware actif (`ƒ Proxy`)
 
-#### 6.6 — Visuels restants (TODO futur)
+#### 6.6 — Visuels catégories & vendeurs ✅
 
-- [ ] Illustrations profils HPI/ADHD/Hypersensible (cartes catégories homepage)
-- [ ] Images lifestyle sur les pages catégories
-- [ ] Logos vendeurs sur page `/vendors`
+- [x] Cartes catégories homepage : image header avec hover zoom (HPI/ADHD/Hypersensible)
+- [x] Pages catégories : image background derrière gradient hero (3 profils)
+- [x] Page vendeurs : image hero grains de café derrière gradient
+- [x] 7 nouvelles images Pexels (lifestyle + heroes + vendors)
+
+#### 6.7 — Visuels restants (TODO futur)
+
+- [ ] Logos vendeurs sur page `/vendors` (dépend des données vendeurs)
 - [ ] Vidéo hero alternative : cappuccino artisanal (déjà téléchargée, 4.8MB)
 
 ---
@@ -500,7 +505,8 @@ src/
 | **4** | ~~Cookies RGPD, seed data, quiz~~ | ✅ Terminé |
 | **5** | ~~Schema.org, analytics, performance~~ | ✅ Terminé |
 | **6** | ~~Habillage visuel & sécurité middleware~~ | ✅ Terminé |
+| **6.6** | ~~Images catégories & vendeurs~~ | ✅ Terminé |
 
 ---
 
-*Dernière mise à jour: 11 février 2026 — Phase 6 Habillage visuel & Sécurité terminée*
+*Dernière mise à jour: 11 février 2026 — Phase 6.6 Images catégories & vendeurs terminée*
