@@ -1,13 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Stripe from 'stripe';
+import type Stripe from 'stripe';
+import { getStripe } from '@/server/stripe';
 import { db } from '@/server/db';
 import { subscriptions } from '@/server/db/schema';
 import { eq } from 'drizzle-orm';
-
-const getStripe = () =>
-  new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: '2026-01-28.clover',
-  });
 
 export async function POST(req: NextRequest) {
   const stripe = getStripe();
