@@ -293,10 +293,7 @@ export function ProductDetail({ id }: { id: string }) {
 
             {/* AI Recommendation */}
             <div className="mb-6">
-              <ProductRecommendations
-                category={product.category}
-                currentProductName={product.name}
-              />
+              <ProductRecommendations productId={product.id} />
             </div>
 
             {/* Add to Cart */}

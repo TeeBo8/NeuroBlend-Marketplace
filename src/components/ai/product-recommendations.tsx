@@ -7,14 +7,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
 type ProductRecommendationsProps = {
-  category?: string | null;
-  currentProductName: string;
+  productId: string;
 };
 
-export function ProductRecommendations({
-  category,
-  currentProductName,
-}: ProductRecommendationsProps) {
+export function ProductRecommendations({ productId }: ProductRecommendationsProps) {
   const [recommendation, setRecommendation] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -24,10 +20,12 @@ export function ProductRecommendations({
       const response = await fetch('/api/recommendations', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          prompt: `Je regarde le produit "${currentProductName}" dans la catégorie ${category || 'générale'}. Donne-moi un court conseil personnalisé (2-3 phrases max) sur comment ce type de capsule peut m'aider selon mon profil neuroatypique, et suggère quel moment de la journée serait idéal pour la déguster.`,
-        }),
+        body: JSON.stringify({ productId }),
       });
+
+      if (!response.ok) {
+        throw new Error(`Recommandation refusée (${response.status})`);
+      }
 
       const reader = response.body?.getReader();
       if (!reader) return;
