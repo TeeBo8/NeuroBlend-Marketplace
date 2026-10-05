@@ -6,7 +6,7 @@ const PROTECTED_ADMIN_ROUTES = ["/admin"];
 const PROTECTED_VENDOR_ROUTES = ["/vendor/dashboard", "/vendor/products", "/vendor/orders", "/vendor/payouts"];
 const PROTECTED_ACCOUNT_ROUTES = ["/account"];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const isAdminRoute = PROTECTED_ADMIN_ROUTES.some((route) =>
