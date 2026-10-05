@@ -21,6 +21,12 @@ export const uploadRouter = {
         throw new UploadThingError('Non autorisé');
       }
 
+      // L'upload sert aux photos de produits : réservé aux vendeurs et aux admins.
+      const { role } = session.user as { role?: string };
+      if (role !== 'vendor' && role !== 'admin') {
+        throw new UploadThingError('Réservé aux vendeurs');
+      }
+
       return { userId: session.user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
