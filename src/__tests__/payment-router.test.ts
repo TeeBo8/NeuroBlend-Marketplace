@@ -169,7 +169,7 @@ describe("payment.createCheckoutSession", () => {
     }
   });
 
-  it("annule la commande en attente si Stripe refuse de créer la session", async () => {
+  it("ne laisse pas de commande en attente si Stripe refuse de créer la session", async () => {
     stripe.create.mockRejectedValue(new Error("Stripe indisponible"));
 
     await expect(
@@ -179,8 +179,7 @@ describe("payment.createCheckoutSession", () => {
       })
     ).rejects.toThrow("Stripe indisponible");
 
-    const [order] = await allOrders();
-    expect(order.status).toBe("cancelled");
+    expect(await allOrders()).toHaveLength(0);
   });
 
   it("refuse un visiteur non connecté", async () => {

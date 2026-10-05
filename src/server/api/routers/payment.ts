@@ -9,7 +9,7 @@ import { vendors, orders, orderItems } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
 import type Stripe from 'stripe';
 import { getStripe } from '@/server/stripe';
-import { cancelPendingOrder, fulfillOrder } from '@/server/orders/fulfillment';
+import { discardPendingOrder, fulfillOrder } from '@/server/orders/fulfillment';
 import {
   computeOrderTotals,
   fromCents,
@@ -309,7 +309,7 @@ export const paymentRouter = createTRPCRouter({
         };
       } catch (error) {
         // No payment page was created: do not leave a pending order behind.
-        await cancelPendingOrder(ctx.db, order.id);
+        await discardPendingOrder(ctx.db, order.id);
         throw error;
       }
     }),

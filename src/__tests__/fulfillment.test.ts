@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import type { Database } from "@/server/db";
 import { orders, orderItems, products } from "@/server/db/schema";
 import {
-  cancelPendingOrder,
+  discardPendingOrder,
   fulfillOrder,
   handleCheckoutSessionEvent,
   markOrderPaid,
@@ -106,22 +106,30 @@ describe("markOrderPaid", () => {
     expect(await stockOf()).toBe(8);
   });
 
-  it("ne réactive pas une commande annulée", async () => {
+  it("ne fait rien pour une commande abandonnée, déjà supprimée", async () => {
     const order = await createPendingOrder(2);
-    await cancelPendingOrder(db, order.id);
+    await discardPendingOrder(db, order.id);
 
     expect(await markOrderPaid(db, order.id, "pi_123")).toBe(false);
-    expect(await statusOf(order.id)).toBe("cancelled");
     expect(await stockOf()).toBe(10);
   });
 });
 
-describe("cancelPendingOrder", () => {
-  it("n'annule pas une commande déjà payée", async () => {
+describe("discardPendingOrder", () => {
+  it("supprime la commande en attente et ses lignes", async () => {
+    const order = await createPendingOrder(2);
+
+    await discardPendingOrder(db, order.id);
+
+    expect(await db.select().from(orders)).toHaveLength(0);
+    expect(await db.select().from(orderItems)).toHaveLength(0);
+  });
+
+  it("ne supprime jamais une commande déjà payée", async () => {
     const order = await createPendingOrder(2);
     await markOrderPaid(db, order.id, "pi_123");
 
-    await cancelPendingOrder(db, order.id);
+    await discardPendingOrder(db, order.id);
 
     expect(await statusOf(order.id)).toBe("paid");
   });
@@ -173,12 +181,12 @@ describe("handleCheckoutSessionEvent", () => {
     expect(await stockOf()).toBe(8);
   });
 
-  it("annule la commande quand la session de paiement expire", async () => {
+  it("supprime la commande quand la session de paiement expire", async () => {
     const order = await createPendingOrder(2);
 
     await handleCheckoutSessionEvent(db, "checkout.session.expired", session(order.id, "unpaid"));
 
-    expect(await statusOf(order.id)).toBe("cancelled");
+    expect(await db.select().from(orders)).toHaveLength(0);
     expect(await stockOf()).toBe(10);
   });
 

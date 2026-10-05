@@ -42,11 +42,14 @@ export async function markOrderPaid(
   return result.rows.length > 0;
 }
 
-/** Annule une commande restée en attente (session de paiement expirée). */
-export async function cancelPendingOrder(db: Database, orderId: string) {
+/**
+ * Supprime une commande restée en attente (paiement abandonné ou expiré).
+ * Elle n'a jamais été payée : la garder comme « annulée » remplirait
+ * l'historique du client de paniers abandonnés. Ses lignes partent avec elle.
+ */
+export async function discardPendingOrder(db: Database, orderId: string) {
   await db
-    .update(orders)
-    .set({ status: 'cancelled', updatedAt: new Date() })
+    .delete(orders)
     .where(and(eq(orders.id, orderId), eq(orders.status, 'pending')));
 }
 
@@ -119,7 +122,7 @@ export async function handleCheckoutSessionEvent(
 
     case 'checkout.session.expired':
     case 'checkout.session.async_payment_failed':
-      await cancelPendingOrder(db, orderId);
+      await discardPendingOrder(db, orderId);
       break;
   }
 }

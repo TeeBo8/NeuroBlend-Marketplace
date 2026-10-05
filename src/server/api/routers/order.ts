@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { eq, and, desc } from 'drizzle-orm';
+import { eq, and, desc, ne } from 'drizzle-orm';
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -117,7 +117,12 @@ export const orderRouter = createTRPCRouter({
         return { items: [], nextCursor: undefined };
       }
 
-      const conditions = [eq(orders.vendorId, vendor.id)];
+      // A pending order is not paid yet: the vendor must neither see it nor
+      // start preparing it.
+      const conditions = [
+        eq(orders.vendorId, vendor.id),
+        ne(orders.status, 'pending'),
+      ];
 
       if (input.status) {
         conditions.push(eq(orders.status, input.status));
