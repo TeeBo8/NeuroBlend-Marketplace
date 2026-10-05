@@ -9,6 +9,7 @@ import {
 import { vendors, users } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
 import { sendVendorApprovedEmail } from '@/lib/email';
+import { isAllowedImageUrl } from '@/lib/image-hosts';
 
 export const vendorRouter = createTRPCRouter({
   // Get vendor by ID (public)
@@ -122,7 +123,7 @@ export const vendorRouter = createTRPCRouter({
       z.object({
         businessName: z.string().min(2).optional(),
         description: z.string().optional(),
-        logo: z.string().url().optional(),
+        logo: z.string().refine(isAllowedImageUrl, { message: 'Image non autorisée' }).optional(),
         website: z.string().url().optional().or(z.literal('')),
       })
     )

@@ -8,6 +8,13 @@ import {
 } from '../trpc';
 import { products, vendors } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
+import { isAllowedImageUrl } from '@/lib/image-hosts';
+
+// Seules les images passées par l'upload sont acceptées : next/image refuse
+// tout autre hôte, et une URL libre ferait planter les pages qui l'affichent.
+const uploadedImageUrl = z.string().refine(isAllowedImageUrl, {
+  message: 'Image non autorisée',
+});
 
 const productInputSchema = z.object({
   name: z.string().min(3, 'Name must be at least 3 characters'),
@@ -17,8 +24,8 @@ const productInputSchema = z.object({
   compareAtPrice: z.number().positive().optional(),
   capsuleCount: z.number().int().positive().default(10),
   category: z.enum(['HPI', 'ADHD', 'hypersensitive']).optional(),
-  imageUrl: z.string().url().optional(),
-  images: z.array(z.string().url()).optional(),
+  imageUrl: uploadedImageUrl.optional(),
+  images: z.array(uploadedImageUrl).max(5).optional(),
   stock: z.number().int().min(0).default(0),
   intensityLevel: z.number().int().min(1).max(10).optional(),
   roastLevel: z.enum(['light', 'medium', 'dark']).optional(),

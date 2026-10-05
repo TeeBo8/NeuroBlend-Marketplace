@@ -1,12 +1,33 @@
 import { streamText, convertToModelMessages } from 'ai';
 import { google } from '@ai-sdk/google';
+import { parseChatMessages } from '@/lib/chat-input';
+import { createRateLimiter, getClientIp, tooManyRequests } from '@/lib/rate-limit';
+
+const checkRateLimit = createRateLimiter({ limit: 20, windowMs: 10 * 60 * 1000 });
 
 export async function POST(req: Request) {
-  const { messages: uiMessages } = await req.json();
+  const rateLimit = checkRateLimit(getClientIp(req));
+  if (!rateLimit.allowed) {
+    return tooManyRequests(rateLimit.retryAfterSeconds);
+  }
+
+  const uiMessages = parseChatMessages(await req.json().catch(() => null));
+  if (!uiMessages) {
+    return Response.json({ error: 'Requête invalide.' }, { status: 400 });
+  }
+
+  if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
+    return Response.json(
+      { error: "L'assistant n'est pas configuré." },
+      { status: 503 }
+    );
+  }
+
   const messages = await convertToModelMessages(uiMessages);
 
   const result = streamText({
     model: google('gemini-2.5-flash'),
+    maxOutputTokens: 800,
     system: `Tu es l'assistant NeuroBlend, un expert en café et en neuroatypie.
 
 Tu aides les clients de NeuroBlend, une marketplace de capsules de café spécialement conçues pour les personnes neuroatypiques (HPI, ADHD, hypersensibles).
