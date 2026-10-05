@@ -1,29 +1,35 @@
 import { NextResponse } from 'next/server';
+import { z } from 'zod';
 import { getResend } from '@/lib/email';
+import { createRateLimiter, getClientIp, tooManyRequests } from '@/lib/rate-limit';
 
 const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'onboarding@resend.dev';
 const FROM_EMAIL = 'NeuroBlend <onboarding@resend.dev>';
 
+const checkRateLimit = createRateLimiter({ limit: 5, windowMs: 60 * 60 * 1000 });
+
+const contactSchema = z.object({
+  name: z.string().trim().min(1).max(100),
+  email: z.email().max(200),
+  subject: z.string().trim().min(1).max(200),
+  message: z.string().trim().min(1).max(5000),
+});
+
 export async function POST(request: Request) {
+  const rateLimit = checkRateLimit(getClientIp(request));
+  if (!rateLimit.allowed) {
+    return tooManyRequests(rateLimit.retryAfterSeconds);
+  }
+
   try {
-    const body = await request.json();
-    const { name, email, subject, message } = body;
-
-    // Validation
-    if (!name || !email || !subject || !message) {
+    const parsed = contactSchema.safeParse(await request.json().catch(() => null));
+    if (!parsed.success) {
       return NextResponse.json(
-        { error: 'Tous les champs sont requis.' },
+        { error: 'Tous les champs sont requis, avec une adresse email valide.' },
         { status: 400 }
       );
     }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: 'Adresse email invalide.' },
-        { status: 400 }
-      );
-    }
+    const { name, email, subject, message } = parsed.data;
 
     await getResend().emails.send({
       from: FROM_EMAIL,
