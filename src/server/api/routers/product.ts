@@ -40,7 +40,7 @@ export const productRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const { category, search, limit, cursor, featured, vendorId } = input;
+      const { category, search, limit, featured, vendorId } = input;
 
       const conditions = [eq(products.active, true)];
 
@@ -75,7 +75,7 @@ export const productRouter = createTRPCRouter({
         },
       });
 
-      let nextCursor: typeof cursor | undefined = undefined;
+      let nextCursor: string | undefined = undefined;
       if (items.length > limit) {
         const nextItem = items.pop();
         nextCursor = nextItem!.id;

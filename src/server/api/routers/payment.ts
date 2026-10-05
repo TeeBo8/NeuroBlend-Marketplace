@@ -5,7 +5,7 @@ import {
   protectedProcedure,
   vendorProcedure,
 } from '../trpc';
-import { vendors, orders, orderItems, products, users } from '@/server/db/schema';
+import { vendors, orders, orderItems, users } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
 import Stripe from 'stripe';
 import { sendOrderConfirmationEmail } from '@/lib/email';
