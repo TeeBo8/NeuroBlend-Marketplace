@@ -12,7 +12,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "eslint --max-warnings 0",
     "db:seed": "npx tsx --env-file=.env.local src/server/db/seed.ts",
     "test": "vitest run",
     "test:watch": "vitest"

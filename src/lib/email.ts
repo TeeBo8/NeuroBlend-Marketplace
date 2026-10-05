@@ -1,12 +1,17 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+export const getResend = () => {
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error('RESEND_API_KEY is not configured');
+  }
+  return new Resend(process.env.RESEND_API_KEY);
+};
 
 const FROM_EMAIL = 'NeuroBlend <onboarding@resend.dev>';
 
 export async function sendWelcomeEmail(to: string, name: string) {
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM_EMAIL,
       to,
       subject: 'Bienvenue sur NeuroBlend !',
@@ -27,7 +32,7 @@ export async function sendOrderConfirmationEmail(
   }
 ) {
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM_EMAIL,
       to,
       subject: `Commande ${data.orderNumber} confirmée - NeuroBlend`,
@@ -43,7 +48,7 @@ export async function sendVendorApprovedEmail(
   businessName: string
 ) {
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM_EMAIL,
       to,
       subject: 'Votre boutique est approuvée ! - NeuroBlend',
