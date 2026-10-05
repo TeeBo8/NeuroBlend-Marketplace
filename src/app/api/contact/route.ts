@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
-import { Resend } from 'resend';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { getResend } from '@/lib/email';
 
 const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'onboarding@resend.dev';
 const FROM_EMAIL = 'NeuroBlend <onboarding@resend.dev>';
@@ -27,7 +25,7 @@ export async function POST(request: Request) {
       );
     }
 
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM_EMAIL,
       to: CONTACT_EMAIL,
       replyTo: email,
