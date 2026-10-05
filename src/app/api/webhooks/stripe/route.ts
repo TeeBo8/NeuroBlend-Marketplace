@@ -4,6 +4,7 @@ import { getStripe } from '@/server/stripe';
 import { db } from '@/server/db';
 import { subscriptions } from '@/server/db/schema';
 import { eq } from 'drizzle-orm';
+import { handleCheckoutSessionEvent } from '@/server/orders/fulfillment';
 
 export async function POST(req: NextRequest) {
   const stripe = getStripe();
@@ -29,6 +30,13 @@ export async function POST(req: NextRequest) {
 
   try {
     switch (event.type) {
+      case 'checkout.session.completed':
+      case 'checkout.session.async_payment_succeeded':
+      case 'checkout.session.async_payment_failed':
+      case 'checkout.session.expired':
+        await handleCheckoutSessionEvent(db, event.type, event.data.object);
+        break;
+
       case 'customer.subscription.created': {
         const subscription = event.data.object as Stripe.Subscription;
         const metadata = subscription.metadata;

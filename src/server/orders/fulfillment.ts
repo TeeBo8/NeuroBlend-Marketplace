@@ -82,3 +82,44 @@ export async function fulfillOrder(
     })),
   });
 }
+
+type CheckoutSessionLike = {
+  metadata: Record<string, string> | null;
+  payment_status: string;
+  payment_intent: string | { id: string } | null;
+};
+
+/**
+ * Traite les événements Stripe d'une session de paiement de commande.
+ * Les sessions d'abonnement n'ont pas d'orderId et sont ignorées ici.
+ */
+export async function handleCheckoutSessionEvent(
+  db: Database,
+  eventType: string,
+  session: CheckoutSessionLike
+) {
+  const orderId = session.metadata?.orderId;
+  if (!orderId) return;
+
+  switch (eventType) {
+    // "completed" arrive aussi pour les moyens de paiement différés, pas
+    // encore encaissés : seul payment_status fait foi.
+    case 'checkout.session.completed':
+    case 'checkout.session.async_payment_succeeded':
+      if (session.payment_status === 'paid') {
+        await fulfillOrder(
+          db,
+          orderId,
+          typeof session.payment_intent === 'string'
+            ? session.payment_intent
+            : (session.payment_intent?.id ?? null)
+        );
+      }
+      break;
+
+    case 'checkout.session.expired':
+    case 'checkout.session.async_payment_failed':
+      await cancelPendingOrder(db, orderId);
+      break;
+  }
+}

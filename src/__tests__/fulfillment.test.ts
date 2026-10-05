@@ -6,6 +6,7 @@ import { orders, orderItems, products } from "@/server/db/schema";
 import {
   cancelPendingOrder,
   fulfillOrder,
+  handleCheckoutSessionEvent,
   markOrderPaid,
 } from "@/server/orders/fulfillment";
 import { createTestDb, seedShop } from "./helpers/test-db";
@@ -140,5 +141,56 @@ describe("fulfillOrder", () => {
       total: "25.80 €",
       items: [{ name: "Café Test", quantity: 2, price: "25.80 €" }],
     });
+  });
+});
+
+describe("handleCheckoutSessionEvent", () => {
+  const session = (orderId: string, payment_status = "paid") => ({
+    metadata: { orderId },
+    payment_status,
+    payment_intent: "pi_123",
+  });
+
+  it("valide la commande quand Stripe confirme le paiement, même si le client a fermé l'onglet", async () => {
+    const order = await createPendingOrder(2);
+
+    await handleCheckoutSessionEvent(db, "checkout.session.completed", session(order.id));
+
+    expect(await statusOf(order.id)).toBe("paid");
+    expect(await stockOf()).toBe(8);
+    expect(sendOrderConfirmationEmail).toHaveBeenCalledTimes(1);
+  });
+
+  it("attend l'encaissement pour un moyen de paiement différé", async () => {
+    const order = await createPendingOrder(2);
+
+    await handleCheckoutSessionEvent(db, "checkout.session.completed", session(order.id, "unpaid"));
+    expect(await statusOf(order.id)).toBe("pending");
+    expect(await stockOf()).toBe(10);
+
+    await handleCheckoutSessionEvent(db, "checkout.session.async_payment_succeeded", session(order.id));
+    expect(await statusOf(order.id)).toBe("paid");
+    expect(await stockOf()).toBe(8);
+  });
+
+  it("annule la commande quand la session de paiement expire", async () => {
+    const order = await createPendingOrder(2);
+
+    await handleCheckoutSessionEvent(db, "checkout.session.expired", session(order.id, "unpaid"));
+
+    expect(await statusOf(order.id)).toBe("cancelled");
+    expect(await stockOf()).toBe(10);
+  });
+
+  it("ignore une session d'abonnement, sans orderId", async () => {
+    const order = await createPendingOrder(2);
+
+    await handleCheckoutSessionEvent(db, "checkout.session.completed", {
+      metadata: { planId: "decouverte" },
+      payment_status: "paid",
+      payment_intent: null,
+    });
+
+    expect(await statusOf(order.id)).toBe("pending");
   });
 });
