@@ -7,17 +7,8 @@ import {
 } from '../trpc';
 import { subscriptions } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
-import Stripe from 'stripe';
+import { getStripe } from '@/server/stripe';
 import { SUBSCRIPTION_PLANS } from '@/lib/constants';
-
-const getStripe = () => {
-  if (!process.env.STRIPE_SECRET_KEY) {
-    throw new Error('STRIPE_SECRET_KEY is not configured');
-  }
-  return new Stripe(process.env.STRIPE_SECRET_KEY, {
-    apiVersion: '2026-01-28.clover',
-  });
-};
 
 export const subscriptionRouter = createTRPCRouter({
   // Get available plans

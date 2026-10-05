@@ -1,36 +1,43 @@
 import { z } from 'zod';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import {
   createTRPCRouter,
   protectedProcedure,
   vendorProcedure,
 } from '../trpc';
-import { vendors, orders, orderItems, users } from '@/server/db/schema';
+import { vendors, orders, orderItems } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
-import Stripe from 'stripe';
-import { sendOrderConfirmationEmail } from '@/lib/email';
-
-const getStripe = () => {
-  if (!process.env.STRIPE_SECRET_KEY) {
-    throw new Error('STRIPE_SECRET_KEY is not configured');
-  }
-  return new Stripe(process.env.STRIPE_SECRET_KEY, {
-    apiVersion: '2026-01-28.clover',
-  });
-};
+import type Stripe from 'stripe';
+import { getStripe } from '@/server/stripe';
+import { discardPendingOrder, fulfillOrder } from '@/server/orders/fulfillment';
+import {
+  computeOrderTotals,
+  fromCents,
+  mergeCartItems,
+  toCents,
+} from '@/lib/order-totals';
 
 const cartItemSchema = z.object({
-  productId: z.string(),
-  quantity: z.number().int().positive(),
+  productId: z.string().min(1).max(100),
+  quantity: z.number().int().min(1).max(99),
 });
 
 const shippingAddressSchema = z.object({
-  name: z.string().min(2),
-  address: z.string().min(5),
-  city: z.string().min(2),
-  postalCode: z.string().min(2),
-  country: z.string().min(2),
+  name: z.string().trim().min(2).max(100),
+  address: z.string().trim().min(5).max(200),
+  city: z.string().trim().min(2).max(100),
+  postalCode: z.string().trim().min(2).max(20),
+  country: z.string().trim().min(2).max(60),
 });
+
+// Stripe only accepts absolute, publicly reachable image URLs.
+const toStripeImages = (imageUrl: string | null) => {
+  if (!imageUrl) return undefined;
+  const url = imageUrl.startsWith('/')
+    ? `${process.env.NEXT_PUBLIC_APP_URL}${imageUrl}`
+    : imageUrl;
+  return url.startsWith('https://') ? [url] : undefined;
+};
 
 export const paymentRouter = createTRPCRouter({
   // Create Stripe Connect account for vendor
@@ -159,58 +166,45 @@ export const paymentRouter = createTRPCRouter({
   createCheckoutSession: protectedProcedure
     .input(
       z.object({
-        items: z.array(cartItemSchema).min(1),
+        items: z.array(cartItemSchema).min(1).max(50),
         shippingAddress: shippingAddressSchema,
       })
     )
     .mutation(async ({ ctx, input }) => {
-      // Get products and validate
-      const productIds = input.items.map((item) => item.productId);
+      const items = mergeCartItems(input.items);
+
       const productsData = await ctx.db.query.products.findMany({
-        where: (products, { inArray }) => inArray(products.id, productIds),
+        where: (products, { inArray }) =>
+          inArray(
+            products.id,
+            items.map((item) => item.productId)
+          ),
         with: {
           vendor: true,
         },
       });
 
-      if (productsData.length !== productIds.length) {
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'One or more products not found',
-        });
-      }
-
-      // Group items by vendor
-      const itemsByVendor = new Map<
-        string,
-        {
-          vendor: typeof productsData[0]['vendor'];
-          items: Array<{
-            product: typeof productsData[0];
-            quantity: number;
-          }>;
-        }
-      >();
-
-      for (const item of input.items) {
+      // Prices, availability and stock are always read from the database:
+      // nothing the browser sends is trusted beyond product ids and quantities.
+      const lines = items.map((item) => {
         const product = productsData.find((p) => p.id === item.productId);
-        if (!product) continue;
-
-        const vendorId = product.vendorId;
-        if (!itemsByVendor.has(vendorId)) {
-          itemsByVendor.set(vendorId, {
-            vendor: product.vendor,
-            items: [],
+        if (!product || !product.active) {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'One or more products are no longer available',
           });
         }
-        itemsByVendor.get(vendorId)!.items.push({
-          product,
-          quantity: item.quantity,
-        });
-      }
+        if ((product.stock ?? 0) < item.quantity) {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: `Not enough stock for "${product.name}"`,
+          });
+        }
+        return { product, quantity: item.quantity };
+      });
 
       // For MVP, we only support single-vendor checkout
-      if (itemsByVendor.size > 1) {
+      if (new Set(lines.map((line) => line.product.vendorId)).size > 1) {
         throw new TRPCError({
           code: 'BAD_REQUEST',
           message:
@@ -218,91 +212,131 @@ export const paymentRouter = createTRPCRouter({
         });
       }
 
-      const [vendorData] = Array.from(itemsByVendor.values());
-      const vendor = vendorData.vendor;
+      const vendor = lines[0].product.vendor;
 
-      if (!vendor.stripeAccountId || !vendor.stripeOnboardingComplete) {
+      if (
+        !vendor.approved ||
+        !vendor.stripeAccountId ||
+        !vendor.stripeOnboardingComplete
+      ) {
         throw new TRPCError({
           code: 'BAD_REQUEST',
           message: 'Vendor payment setup incomplete',
         });
       }
 
-      // Calculate totals
-      let subtotal = 0;
-      const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
+      const totals = computeOrderTotals(
+        lines.map((line) => ({
+          unitPrice: line.product.price,
+          quantity: line.quantity,
+        })),
+        vendor.commissionRate
+      );
 
-      for (const { product, quantity } of vendorData.items) {
-        const price = parseFloat(product.price);
-        subtotal += price * quantity;
-
-        lineItems.push({
-          price_data: {
-            currency: 'eur',
-            product_data: {
-              name: product.name,
-              description: product.shortDescription || undefined,
-              images: product.imageUrl ? [product.imageUrl] : undefined,
-            },
-            unit_amount: Math.round(price * 100),
-          },
-          quantity,
-        });
-      }
-
-      const commissionRate = parseFloat(vendor.commissionRate || '15') / 100;
-      const commission = subtotal * commissionRate;
-
-      // Generate order number
       const orderNumber = `NB-${Date.now()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
 
-      // Create checkout session with Stripe Connect
-      const session = await getStripe().checkout.sessions.create({
-        mode: 'payment',
-        customer_email: ctx.session.user.email || undefined,
-        line_items: lineItems,
-        payment_intent_data: {
-          application_fee_amount: Math.round(commission * 100),
-          transfer_data: {
-            destination: vendor.stripeAccountId,
-          },
-          metadata: {
-            orderNumber,
-            userId: ctx.session.user.id,
-            vendorId: vendor.id,
-          },
-        },
-        success_url: `${process.env.NEXT_PUBLIC_APP_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/cart`,
-        metadata: {
+      // The order is stored as "pending" before the customer pays, with the
+      // prices and commission of that moment. Stripe only carries its id: the
+      // webhook (or the success page) then marks it as paid. A cart is never
+      // serialized into Stripe metadata, which is capped at 500 characters.
+      const [order] = await ctx.db
+        .insert(orders)
+        .values({
           orderNumber,
           userId: ctx.session.user.id,
           vendorId: vendor.id,
-          shippingAddress: JSON.stringify(input.shippingAddress),
-          items: JSON.stringify(
-            vendorData.items.map((i) => ({
-              productId: i.product.id,
-              productName: i.product.name,
-              quantity: i.quantity,
-              price: i.product.price,
-            }))
-          ),
-        },
-      });
+          subtotal: fromCents(totals.subtotalCents),
+          commission: fromCents(totals.commissionCents),
+          total: fromCents(totals.subtotalCents),
+          status: 'pending',
+          shippingName: input.shippingAddress.name,
+          shippingAddress: input.shippingAddress.address,
+          shippingCity: input.shippingAddress.city,
+          shippingPostalCode: input.shippingAddress.postalCode,
+          shippingCountry: input.shippingAddress.country,
+        })
+        .returning({ id: orders.id });
 
-      return {
-        sessionId: session.id,
-        url: session.url,
-      };
+      try {
+        await ctx.db.insert(orderItems).values(
+          lines.map((line, index) => ({
+            orderId: order.id,
+            productId: line.product.id,
+            productName: line.product.name,
+            quantity: line.quantity,
+            unitPrice: line.product.price,
+            totalPrice: fromCents(totals.lineTotalsCents[index]),
+          }))
+        );
+
+        const metadata = { orderId: order.id, orderNumber };
+
+        const session = await getStripe().checkout.sessions.create({
+          mode: 'payment',
+          customer_email: ctx.session.user.email || undefined,
+          line_items: lines.map(
+            (line): Stripe.Checkout.SessionCreateParams.LineItem => ({
+              price_data: {
+                currency: 'eur',
+                product_data: {
+                  name: line.product.name,
+                  description: line.product.shortDescription || undefined,
+                  images: toStripeImages(line.product.imageUrl),
+                },
+                unit_amount: toCents(line.product.price),
+              },
+              quantity: line.quantity,
+            })
+          ),
+          payment_intent_data: {
+            application_fee_amount: totals.commissionCents,
+            transfer_data: {
+              destination: vendor.stripeAccountId,
+            },
+            metadata,
+          },
+          // Shortest lifetime Stripe allows: an abandoned checkout releases
+          // its pending order after 30 minutes.
+          expires_at: Math.floor(Date.now() / 1000) + 30 * 60,
+          success_url: `${process.env.NEXT_PUBLIC_APP_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+          cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/cart`,
+          metadata,
+        });
+
+        return {
+          sessionId: session.id,
+          url: session.url,
+        };
+      } catch (error) {
+        // No payment page was created: do not leave a pending order behind.
+        await discardPendingOrder(ctx.db, order.id);
+        throw error;
+      }
     }),
 
-  // Verify checkout session and create order
+  // Called by the success page. The Stripe webhook does the same job: whoever
+  // arrives first marks the order as paid, the other call changes nothing.
   verifyCheckout: protectedProcedure
-    .input(z.object({ sessionId: z.string() }))
+    .input(z.object({ sessionId: z.string().min(1).max(200) }))
     .mutation(async ({ ctx, input }) => {
-      const session = await getStripe().checkout.sessions.retrieve(input.sessionId, {
-        expand: ['payment_intent'],
-      });
+      const session = await getStripe().checkout.sessions.retrieve(input.sessionId);
+
+      const orderId = session.metadata?.orderId;
+      const order = orderId
+        ? await ctx.db.query.orders.findFirst({
+            where: and(
+              eq(orders.id, orderId),
+              eq(orders.userId, ctx.session.user.id)
+            ),
+          })
+        : undefined;
+
+      if (!order) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Order not found',
+        });
+      }
 
       if (session.payment_status !== 'paid') {
         throw new TRPCError({
@@ -311,90 +345,16 @@ export const paymentRouter = createTRPCRouter({
         });
       }
 
-      const metadata = session.metadata!;
-      const shippingAddress = JSON.parse(metadata.shippingAddress);
-      const items = JSON.parse(metadata.items) as Array<{
-        productId: string;
-        productName: string;
-        quantity: number;
-        price: string;
-      }>;
+      await fulfillOrder(
+        ctx.db,
+        order.id,
+        typeof session.payment_intent === 'string'
+          ? session.payment_intent
+          : (session.payment_intent?.id ?? null)
+      );
 
-      // Check if order already exists
-      const existingOrder = await ctx.db.query.orders.findFirst({
-        where: eq(orders.orderNumber, metadata.orderNumber),
-      });
-
-      if (existingOrder) {
-        return existingOrder;
-      }
-
-      // Calculate totals
-      let subtotal = 0;
-      for (const item of items) {
-        subtotal += parseFloat(item.price) * item.quantity;
-      }
-
-      const vendor = await ctx.db.query.vendors.findFirst({
-        where: eq(vendors.id, metadata.vendorId),
-      });
-
-      const commissionRate = parseFloat(vendor?.commissionRate || '15') / 100;
-      const commission = subtotal * commissionRate;
-
-      // Create order
-      const [order] = await ctx.db
-        .insert(orders)
-        .values({
-          orderNumber: metadata.orderNumber,
-          userId: ctx.session.user.id,
-          vendorId: metadata.vendorId,
-          subtotal: subtotal.toFixed(2),
-          commission: commission.toFixed(2),
-          total: subtotal.toFixed(2),
-          status: 'paid',
-          stripePaymentIntentId:
-            typeof session.payment_intent === 'string'
-              ? session.payment_intent
-              : session.payment_intent?.id,
-          shippingName: shippingAddress.name,
-          shippingAddress: shippingAddress.address,
-          shippingCity: shippingAddress.city,
-          shippingPostalCode: shippingAddress.postalCode,
-          shippingCountry: shippingAddress.country,
-        })
-        .returning();
-
-      // Create order items
-      for (const item of items) {
-        await ctx.db.insert(orderItems).values({
-          orderId: order.id,
-          productId: item.productId,
-          productName: item.productName,
-          quantity: item.quantity,
-          unitPrice: item.price,
-          totalPrice: (parseFloat(item.price) * item.quantity).toFixed(2),
-        });
-      }
-
-      // Send order confirmation email
-      const user = await ctx.db.query.users.findFirst({
-        where: eq(users.id, ctx.session.user.id),
-        columns: { email: true, name: true },
-      });
-      if (user?.email) {
-        sendOrderConfirmationEmail(user.email, {
-          name: user.name || 'Client',
-          orderNumber: metadata.orderNumber,
-          total: `${subtotal.toFixed(2)} €`,
-          items: items.map((i) => ({
-            name: i.productName,
-            quantity: i.quantity,
-            price: `${(parseFloat(i.price) * i.quantity).toFixed(2)} €`,
-          })),
-        });
-      }
-
-      return order;
+      return (await ctx.db.query.orders.findFirst({
+        where: eq(orders.id, order.id),
+      }))!;
     }),
 });
