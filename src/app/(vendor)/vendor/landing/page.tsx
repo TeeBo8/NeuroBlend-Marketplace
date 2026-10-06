@@ -170,7 +170,7 @@ export default function VendorLandingPage() {
             <div className="flex flex-col sm:flex-row gap-4">
               <Button
                 size="lg"
-                className="text-base px-8 py-6 font-semibold"
+                className="h-auto w-full sm:w-auto whitespace-normal text-center text-base px-6 sm:px-8 py-4 font-semibold"
                 asChild
               >
                 <Link href="/vendor/register">
@@ -339,7 +339,7 @@ export default function VendorLandingPage() {
             Créez votre espace vendeur en quelques minutes et commencez à vendre
             vos capsules à une communauté passionnée.
           </p>
-          <Button size="lg" variant="secondary" className="text-base px-8 py-6 font-semibold" asChild>
+          <Button size="lg" variant="secondary" className="h-auto max-w-full whitespace-normal text-center text-base px-6 sm:px-8 py-4 font-semibold" asChild>
             <Link href="/vendor/register">
               Créer mon espace vendeur gratuitement
             </Link>
