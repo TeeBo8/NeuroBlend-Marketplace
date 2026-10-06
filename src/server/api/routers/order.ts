@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { eq, and, desc, ne } from 'drizzle-orm';
+import { eq, and, ne } from 'drizzle-orm';
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -8,6 +8,7 @@ import {
 } from '../trpc';
 import { orders, vendors } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
+import { fromCursor, newestFirst, toPage } from '../pagination';
 
 export const orderRouter = createTRPCRouter({
   // Get user's orders
@@ -22,7 +23,10 @@ export const orderRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const conditions = [eq(orders.userId, ctx.session.user.id)];
+      const conditions = [
+        eq(orders.userId, ctx.session.user.id),
+        fromCursor(orders, input.cursor),
+      ];
 
       if (input.status) {
         conditions.push(eq(orders.status, input.status));
@@ -31,7 +35,7 @@ export const orderRouter = createTRPCRouter({
       const items = await ctx.db.query.orders.findMany({
         where: and(...conditions),
         limit: input.limit + 1,
-        orderBy: [desc(orders.createdAt)],
+        orderBy: newestFirst(orders),
         with: {
           items: {
             with: {
@@ -53,13 +57,7 @@ export const orderRouter = createTRPCRouter({
         },
       });
 
-      let nextCursor: typeof input.cursor | undefined = undefined;
-      if (items.length > input.limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem!.id;
-      }
-
-      return { items, nextCursor };
+      return toPage(items, input.limit);
     }),
 
   // Get single order
@@ -122,6 +120,7 @@ export const orderRouter = createTRPCRouter({
       const conditions = [
         eq(orders.vendorId, vendor.id),
         ne(orders.status, 'pending'),
+        fromCursor(orders, input.cursor),
       ];
 
       if (input.status) {
@@ -131,7 +130,7 @@ export const orderRouter = createTRPCRouter({
       const items = await ctx.db.query.orders.findMany({
         where: and(...conditions),
         limit: input.limit + 1,
-        orderBy: [desc(orders.createdAt)],
+        orderBy: newestFirst(orders),
         with: {
           items: {
             with: {
@@ -154,13 +153,7 @@ export const orderRouter = createTRPCRouter({
         },
       });
 
-      let nextCursor: typeof input.cursor | undefined = undefined;
-      if (items.length > input.limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem!.id;
-      }
-
-      return { items, nextCursor };
+      return toPage(items, input.limit);
     }),
 
   // Vendor: Update order status
@@ -231,7 +224,7 @@ export const orderRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const conditions = [];
+      const conditions = [fromCursor(orders, input.cursor)];
 
       if (input.status) {
         conditions.push(eq(orders.status, input.status));
@@ -242,9 +235,9 @@ export const orderRouter = createTRPCRouter({
       }
 
       const items = await ctx.db.query.orders.findMany({
-        where: conditions.length > 0 ? and(...conditions) : undefined,
+        where: and(...conditions),
         limit: input.limit + 1,
-        orderBy: [desc(orders.createdAt)],
+        orderBy: newestFirst(orders),
         with: {
           items: true,
           user: {
@@ -263,13 +256,7 @@ export const orderRouter = createTRPCRouter({
         },
       });
 
-      let nextCursor: typeof input.cursor | undefined = undefined;
-      if (items.length > input.limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem!.id;
-      }
-
-      return { items, nextCursor };
+      return toPage(items, input.limit);
     }),
 
   // Admin: Cancel order

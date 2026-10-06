@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import {
   createTRPCRouter,
   publicProcedure,
@@ -10,6 +10,7 @@ import { vendors, users } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
 import { sendVendorApprovedEmail } from '@/lib/email';
 import { isAllowedImageUrl } from '@/lib/image-hosts';
+import { fromCursor, newestFirst, toPage } from '../pagination';
 
 export const vendorRouter = createTRPCRouter({
   // Get vendor by ID (public)
@@ -46,8 +47,12 @@ export const vendorRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       const items = await ctx.db.query.vendors.findMany({
-        where: eq(vendors.approved, true),
+        where: and(
+          eq(vendors.approved, true),
+          fromCursor(vendors, input.cursor)
+        ),
         limit: input.limit + 1,
+        orderBy: newestFirst(vendors),
         columns: {
           id: true,
           businessName: true,
@@ -57,13 +62,7 @@ export const vendorRouter = createTRPCRouter({
         },
       });
 
-      let nextCursor: typeof input.cursor | undefined = undefined;
-      if (items.length > input.limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem!.id;
-      }
-
-      return { items, nextCursor };
+      return toPage(items, input.limit);
     }),
 
   // Register as vendor (authenticated users only)
@@ -162,15 +161,16 @@ export const vendorRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const conditions = [];
+      const conditions = [fromCursor(vendors, input.cursor)];
 
       if (input.approved !== undefined) {
         conditions.push(eq(vendors.approved, input.approved));
       }
 
       const items = await ctx.db.query.vendors.findMany({
-        where: conditions.length > 0 ? conditions[0] : undefined,
+        where: and(...conditions),
         limit: input.limit + 1,
+        orderBy: newestFirst(vendors),
         with: {
           user: {
             columns: {
@@ -182,13 +182,7 @@ export const vendorRouter = createTRPCRouter({
         },
       });
 
-      let nextCursor: typeof input.cursor | undefined = undefined;
-      if (items.length > input.limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem!.id;
-      }
-
-      return { items, nextCursor };
+      return toPage(items, input.limit);
     }),
 
   // Admin: Get pending vendor applications

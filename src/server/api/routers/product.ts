@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { eq, and, desc, ilike } from 'drizzle-orm';
+import { eq, and, ilike } from 'drizzle-orm';
 import {
   createTRPCRouter,
   publicProcedure,
@@ -9,6 +9,7 @@ import {
 import { products, vendors } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
 import { isAllowedImageUrl } from '@/lib/image-hosts';
+import { fromCursor, newestFirst, toPage } from '../pagination';
 
 // Seules les images passées par l'upload sont acceptées : next/image refuse
 // tout autre hôte, et une URL libre ferait planter les pages qui l'affichent.
@@ -49,7 +50,10 @@ export const productRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const { category, search, limit, featured, vendorId } = input;
 
-      const conditions = [eq(products.active, true)];
+      const conditions = [
+        eq(products.active, true),
+        fromCursor(products, input.cursor),
+      ];
 
       if (category) {
         conditions.push(eq(products.category, category));
@@ -70,7 +74,7 @@ export const productRouter = createTRPCRouter({
       const items = await ctx.db.query.products.findMany({
         where: and(...conditions),
         limit: limit + 1,
-        orderBy: [desc(products.createdAt)],
+        orderBy: newestFirst(products),
         with: {
           vendor: {
             columns: {
@@ -82,16 +86,7 @@ export const productRouter = createTRPCRouter({
         },
       });
 
-      let nextCursor: string | undefined = undefined;
-      if (items.length > limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem!.id;
-      }
-
-      return {
-        items,
-        nextCursor,
-      };
+      return toPage(items, limit);
     }),
 
   // Get single product by ID or slug
@@ -350,7 +345,7 @@ export const productRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const conditions = [];
+      const conditions = [fromCursor(products, input.cursor)];
 
       if (input.category) {
         conditions.push(eq(products.category, input.category));
@@ -369,9 +364,9 @@ export const productRouter = createTRPCRouter({
       }
 
       const items = await ctx.db.query.products.findMany({
-        where: conditions.length > 0 ? and(...conditions) : undefined,
+        where: and(...conditions),
         limit: input.limit + 1,
-        orderBy: [desc(products.createdAt)],
+        orderBy: newestFirst(products),
         with: {
           vendor: {
             columns: {
@@ -382,13 +377,7 @@ export const productRouter = createTRPCRouter({
         },
       });
 
-      let nextCursor: typeof input.cursor | undefined = undefined;
-      if (items.length > input.limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem!.id;
-      }
-
-      return { items, nextCursor };
+      return toPage(items, input.limit);
     }),
 
   // Admin: Toggle product active status
@@ -436,17 +425,14 @@ export const productRouter = createTRPCRouter({
       }
 
       const items = await ctx.db.query.products.findMany({
-        where: eq(products.vendorId, vendor.id),
+        where: and(
+          eq(products.vendorId, vendor.id),
+          fromCursor(products, input.cursor)
+        ),
         limit: input.limit + 1,
-        orderBy: [desc(products.createdAt)],
+        orderBy: newestFirst(products),
       });
 
-      let nextCursor: typeof input.cursor | undefined = undefined;
-      if (items.length > input.limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem!.id;
-      }
-
-      return { items, nextCursor };
+      return toPage(items, input.limit);
     }),
 });

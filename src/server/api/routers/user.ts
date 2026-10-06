@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -7,6 +7,7 @@ import {
 } from '../trpc';
 import { users } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
+import { fromCursor, newestFirst, toPage } from '../pagination';
 
 export const userRouter = createTRPCRouter({
   // Get current user profile
@@ -70,15 +71,16 @@ export const userRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const conditions = [];
+      const conditions = [fromCursor(users, input.cursor)];
 
       if (input.role) {
         conditions.push(eq(users.role, input.role));
       }
 
       const items = await ctx.db.query.users.findMany({
-        where: conditions.length > 0 ? conditions[0] : undefined,
+        where: and(...conditions),
         limit: input.limit + 1,
+        orderBy: newestFirst(users),
         columns: {
           id: true,
           email: true,
@@ -89,13 +91,7 @@ export const userRouter = createTRPCRouter({
         },
       });
 
-      let nextCursor: typeof input.cursor | undefined = undefined;
-      if (items.length > input.limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem!.id;
-      }
-
-      return { items, nextCursor };
+      return toPage(items, input.limit);
     }),
 
   // Admin: Update user role

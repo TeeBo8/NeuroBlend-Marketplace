@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { eq, and, desc } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 import {
   createTRPCRouter,
   publicProcedure,
@@ -7,6 +7,7 @@ import {
 } from '../trpc';
 import { reviews, orderItems } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
+import { fromCursor, newestFirst, toPage } from '../pagination';
 
 export const reviewRouter = createTRPCRouter({
   // Create a review
@@ -78,9 +79,12 @@ export const reviewRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       const items = await ctx.db.query.reviews.findMany({
-        where: eq(reviews.productId, input.productId),
+        where: and(
+          eq(reviews.productId, input.productId),
+          fromCursor(reviews, input.cursor)
+        ),
         limit: input.limit + 1,
-        orderBy: [desc(reviews.createdAt)],
+        orderBy: newestFirst(reviews),
         with: {
           user: {
             columns: {
@@ -92,13 +96,7 @@ export const reviewRouter = createTRPCRouter({
         },
       });
 
-      let nextCursor: typeof input.cursor | undefined = undefined;
-      if (items.length > input.limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem!.id;
-      }
-
-      return { items, nextCursor };
+      return toPage(items, input.limit);
     }),
 
   // Get my reviews
@@ -111,9 +109,12 @@ export const reviewRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       const items = await ctx.db.query.reviews.findMany({
-        where: eq(reviews.userId, ctx.session.user.id),
+        where: and(
+          eq(reviews.userId, ctx.session.user.id),
+          fromCursor(reviews, input.cursor)
+        ),
         limit: input.limit + 1,
-        orderBy: [desc(reviews.createdAt)],
+        orderBy: newestFirst(reviews),
         with: {
           product: {
             columns: {
@@ -126,13 +127,7 @@ export const reviewRouter = createTRPCRouter({
         },
       });
 
-      let nextCursor: typeof input.cursor | undefined = undefined;
-      if (items.length > input.limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem!.id;
-      }
-
-      return { items, nextCursor };
+      return toPage(items, input.limit);
     }),
 
   // Delete my review
