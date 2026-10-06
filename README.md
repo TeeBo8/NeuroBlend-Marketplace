@@ -61,7 +61,7 @@ scripts/                    Commandes d'administration
 |---|---|
 | Une table ou une colonne | `src/server/db/schema.ts`, puis `pnpm db:generate` et `pnpm db:migrate` |
 | Les boutiques, produits et avis du décor | `src/server/demo/seed-data.ts` |
-| Les catégories, les formules d'abonnement, les liens du menu | `src/lib/constants.ts` |
+| Les catégories, les liens du menu | `src/lib/constants.ts` |
 | Les règles du paiement (stock, commission, session Stripe) | `src/server/api/routers/payment.ts` |
 | Ce qui se passe quand une commande est payée | `src/server/orders/fulfillment.ts` |
 | L'annulation et le remboursement | `src/server/orders/cancellation.ts` |
@@ -145,3 +145,4 @@ Le site se construit sans base de données ni clés d'API : chaque variable n'es
 - Le stock est vérifié à la création du paiement et retiré à l'encaissement : deux clients peuvent payer le dernier exemplaire dans la même demi-heure.
 - Aucun e-mail n'est envoyé au changement de statut d'une commande, à son annulation ni au refus d'une boutique.
 - La limite de débit des routes IA et du formulaire de contact est tenue en mémoire, donc par instance de serveur.
+- Les abonnements mensuels ont été retirés. La première version encaissait le paiement Stripe sans créer de commande ni reverser sa part au vendeur : plutôt que de garder une fonction à moitié faite, elle a été supprimée (migration `0003`). La refaire demanderait une commande générée à chaque échéance et un reversement par vendeur.

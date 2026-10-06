@@ -106,14 +106,7 @@ export default function TermsPage() {
             (capsules ouvertes).
           </p>
 
-          <h2>9. Abonnements</h2>
-          <p>
-            Les abonnements {APP_NAME} sont sans engagement. Vous pouvez les
-            annuler à tout moment depuis votre espace client. L&apos;annulation
-            prend effet à la fin de la période de facturation en cours.
-          </p>
-
-          <h2>10. Responsabilité</h2>
+          <h2>9. Responsabilité</h2>
           <p>
             En tant que place de marché, {APP_NAME} met en relation les
             acheteurs et les vendeurs. La responsabilité de la conformité des
@@ -121,21 +114,21 @@ export default function TermsPage() {
             produit signalé comme non conforme après vérification.
           </p>
 
-          <h2>11. Propriété intellectuelle</h2>
+          <h2>10. Propriété intellectuelle</h2>
           <p>
             L&apos;ensemble des éléments du site {APP_NAME} (textes, images, logo,
             design) sont protégés par le droit de la propriété intellectuelle.
             Toute reproduction est interdite sans autorisation.
           </p>
 
-          <h2>12. Droit applicable</h2>
+          <h2>11. Droit applicable</h2>
           <p>
             Les présentes CGV sont soumises au droit français. En cas de litige,
             les tribunaux compétents seront ceux du ressort du siège social de{' '}
             {APP_NAME}, sauf disposition légale impérative contraire.
           </p>
 
-          <h2>13. Contact</h2>
+          <h2>12. Contact</h2>
           <p>
             Pour toute question relative aux présentes CGV, contactez-nous à{' '}
             <a href="mailto:contact@neuroblend.example">contact@neuroblend.example</a> ou

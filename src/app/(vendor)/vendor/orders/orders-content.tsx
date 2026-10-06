@@ -163,12 +163,14 @@ export function VendorOrdersContent() {
                   {/* Customer info */}
                   <div className="flex items-center gap-4 mb-4 p-3 rounded-lg bg-muted/50">
                     <User className="h-4 w-4 text-muted-foreground shrink-0" />
-                    <div className="text-sm">
+                    <div className="min-w-0 text-sm">
                       <span className="font-medium text-foreground">
                         {order.user?.name || 'Client'}
                       </span>
                       {order.user?.email && (
-                        <span className="text-muted-foreground ml-2">{order.user.email}</span>
+                        <span className="ml-2 break-all text-muted-foreground">
+                          {order.user.email}
+                        </span>
                       )}
                     </div>
                     {order.shippingCity && (

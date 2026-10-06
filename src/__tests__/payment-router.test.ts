@@ -260,7 +260,7 @@ describe("payment.verifyCheckout", () => {
     expect(await stockOf()).toBe(10);
   });
 
-  it("refuse proprement une session qui n'est pas une commande (abonnement)", async () => {
+  it("refuse proprement une session qui n'est pas une commande", async () => {
     stripe.retrieve.mockResolvedValue({ payment_status: "paid", metadata: { planId: "x" } });
 
     await expect(asCustomer().verifyCheckout({ sessionId: "cs_sub_1" })).rejects.toThrow(

@@ -57,7 +57,7 @@ export default function PrivacyPage() {
           <p>Vos données sont utilisées pour :</p>
           <ul>
             <li>La création et la gestion de votre compte</li>
-            <li>Le traitement de vos commandes et abonnements</li>
+            <li>Le traitement de vos commandes</li>
             <li>La communication relative à vos commandes (emails transactionnels)</li>
             <li>L&apos;amélioration de nos services et de votre expérience utilisateur</li>
           </ul>

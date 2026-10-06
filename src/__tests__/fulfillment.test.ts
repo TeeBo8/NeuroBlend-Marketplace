@@ -190,7 +190,7 @@ describe("handleCheckoutSessionEvent", () => {
     expect(await stockOf()).toBe(10);
   });
 
-  it("ignore une session d'abonnement, sans orderId", async () => {
+  it("ignore une session sans orderId", async () => {
     const order = await createPendingOrder(2);
 
     await handleCheckoutSessionEvent(db, "checkout.session.completed", {

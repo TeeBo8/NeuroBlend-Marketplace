@@ -282,7 +282,6 @@ describe("actions désactivées en démo", () => {
       admin.vendor.updateCommission({ vendorId: "atelier-dubois", commissionRate: 0 }),
       admin.user.adminUpdateRole({ userId: "customer-b", role: "admin" }),
       as("a", "customer").vendor.register({ businessName: "Ma boutique" }),
-      as("a", "customer").subscription.createCheckout({ planId: "essentiel" }),
       vendor.payment.createConnectAccount(),
     ];
 

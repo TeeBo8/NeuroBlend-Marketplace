@@ -6,7 +6,6 @@ import {
   ROAST_LEVELS,
   ORDER_STATUSES,
   USER_ROLES,
-  SUBSCRIPTION_PLANS,
   NAV_LINKS,
   FOOTER_LINKS,
   DEFAULT_COMMISSION_RATE,
@@ -83,34 +82,6 @@ describe("User Roles", () => {
       expect(role.label).toBeTruthy();
       expect(role.description).toBeTruthy();
     });
-  });
-});
-
-describe("Subscription Plans", () => {
-  it("has exactly 3 plans", () => {
-    expect(SUBSCRIPTION_PLANS).toHaveLength(3);
-  });
-
-  it("plans are ordered by price ascending", () => {
-    const prices = SUBSCRIPTION_PLANS.map((p) => p.price);
-    expect(prices[0]).toBeLessThan(prices[1]);
-    expect(prices[1]).toBeLessThan(prices[2]);
-  });
-
-  it("each plan has required fields", () => {
-    SUBSCRIPTION_PLANS.forEach((plan) => {
-      expect(plan.id).toBeTruthy();
-      expect(plan.name).toBeTruthy();
-      expect(plan.price).toBeGreaterThan(0);
-      expect(plan.capsules).toBeGreaterThan(0);
-      expect(plan.features.length).toBeGreaterThan(0);
-    });
-  });
-
-  it("only essentiel plan is highlighted", () => {
-    const highlighted = SUBSCRIPTION_PLANS.filter((p) => p.highlight);
-    expect(highlighted).toHaveLength(1);
-    expect(highlighted[0].id).toBe("essentiel");
   });
 });
 

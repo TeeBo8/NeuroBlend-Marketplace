@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Contactez NeuroBlend',
     description:
-      'Une question sur nos capsules ou nos abonnements ? Notre équipe vous répond sous 24-48h.',
+      'Une question sur nos capsules ? Notre équipe vous répond sous 24-48h.',
     type: 'website',
     locale: 'fr_FR',
   },

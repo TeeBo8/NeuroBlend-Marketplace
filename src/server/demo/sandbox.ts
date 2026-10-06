@@ -154,7 +154,7 @@ export async function isIpOverLimit(headers: Headers, now = new Date()): Promise
  * Supprime les bacs à sable expirés et renvoie le nombre de comptes retirés.
  * Les commandes n'ont pas de suppression en cascade (on ne perd pas une
  * commande par accident) : on les retire d'abord, leurs lignes suivent. Les
- * sessions, avis et abonnements partent avec le compte.
+ * sessions et avis partent avec le compte.
  */
 export async function deleteExpiredSandboxes(now = new Date()): Promise<number> {
   const cutoff = new Date(now.getTime() - SANDBOX_TTL_HOURS * HOUR_MS);

@@ -94,7 +94,7 @@ type CheckoutSessionLike = {
 
 /**
  * Traite les événements Stripe d'une session de paiement de commande.
- * Les sessions d'abonnement n'ont pas d'orderId et sont ignorées ici.
+ * Une session sans orderId ne vient pas de ce site : elle est ignorée.
  */
 export async function handleCheckoutSessionEvent(
   db: Database,

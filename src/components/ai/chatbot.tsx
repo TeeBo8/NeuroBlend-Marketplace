@@ -35,7 +35,7 @@ export function Chatbot() {
       parts: [
         {
           type: 'text',
-          text: "Bonjour ! Je suis l'assistant NeuroBlend. Comment puis-je vous aider ? Je peux vous conseiller sur nos capsules, votre profil ou nos abonnements.",
+          text: "Bonjour ! Je suis l'assistant NeuroBlend. Comment puis-je vous aider ? Je peux vous conseiller sur nos capsules ou votre profil.",
         },
       ],
     },

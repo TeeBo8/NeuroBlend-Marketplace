@@ -11,11 +11,11 @@ import { DemoNotice } from '@/components/demo/demo-notice';
 export const metadata: Metadata = {
   title: 'FAQ — Questions fréquentes sur le café neuroatypique',
   description:
-    'Trouvez les réponses à vos questions sur NeuroBlend : commandes, livraison gratuite, abonnements sans engagement, profils HPI, ADHD et hypersensibles.',
+    'Trouvez les réponses à vos questions sur NeuroBlend : commandes, livraison gratuite, profils HPI, ADHD et hypersensibles.',
   openGraph: {
     title: 'FAQ | NeuroBlend',
     description:
-      'Commandes, abonnements, livraison, profils neuroatypiques : toutes les réponses à vos questions.',
+      'Commandes, livraison, profils neuroatypiques : toutes les réponses à vos questions.',
     type: 'website',
     locale: 'fr_FR',
   },
@@ -60,23 +60,6 @@ const faqSections = [
       {
         q: 'Puis-je retourner un produit ?',
         a: 'Vous disposez de 14 jours après réception pour retourner un produit non ouvert. Consultez notre page Livraison pour les détails.',
-      },
-    ],
-  },
-  {
-    title: 'Abonnements',
-    questions: [
-      {
-        q: 'Puis-je annuler à tout moment ?',
-        a: 'Oui, sans engagement. Vous pouvez annuler depuis votre espace abonnement à tout moment. L\u2019annulation prend effet à la fin de la période en cours.',
-      },
-      {
-        q: 'Quand vais-je recevoir mes capsules ?',
-        a: 'Votre première livraison part sous 7 jours après la souscription. Ensuite, chaque mois à la même date.',
-      },
-      {
-        q: 'Puis-je changer de formule ?',
-        a: 'Absolument. Vous pouvez passer d\u2019une formule à une autre depuis le portail de gestion de votre abonnement.',
       },
     ],
   },
