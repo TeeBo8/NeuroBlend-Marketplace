@@ -37,7 +37,7 @@ export function SuccessContent() {
     return (
       <div className="container mx-auto px-4 py-16">
         <div className="flex flex-col items-center justify-center text-center max-w-md mx-auto">
-          <div className="w-24 h-24 rounded-full bg-red-100 flex items-center justify-center mb-6">
+          <div className="w-24 h-24 rounded-full bg-red-500/15 flex items-center justify-center mb-6">
             <XCircle className="w-12 h-12 text-red-400" />
           </div>
           <h1 className="text-2xl font-bold text-foreground mb-2">
@@ -76,7 +76,7 @@ export function SuccessContent() {
     return (
       <div className="container mx-auto px-4 py-16">
         <div className="flex flex-col items-center justify-center text-center max-w-md mx-auto">
-          <div className="w-24 h-24 rounded-full bg-red-100 flex items-center justify-center mb-6">
+          <div className="w-24 h-24 rounded-full bg-red-500/15 flex items-center justify-center mb-6">
             <XCircle className="w-12 h-12 text-red-400" />
           </div>
           <h1 className="text-2xl font-bold text-foreground mb-2">
@@ -106,8 +106,8 @@ export function SuccessContent() {
       <div className="max-w-2xl mx-auto">
         {/* Success Header */}
         <div className="flex flex-col items-center text-center mb-10">
-          <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mb-6">
-            <CheckCircle2 className="w-10 h-10 text-green-600" />
+          <div className="w-20 h-20 rounded-full bg-green-500/15 flex items-center justify-center mb-6">
+            <CheckCircle2 className="w-10 h-10 text-green-700 dark:text-green-300" />
           </div>
           <h1 className="text-3xl font-bold text-foreground mb-2">
             Commande confirmée !
@@ -140,7 +140,7 @@ export function SuccessContent() {
                 <div>
                   <span className="text-muted-foreground">Statut</span>
                   <p className="mt-1">
-                    <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                    <span className="inline-flex items-center rounded-full bg-green-500/15 px-2.5 py-0.5 text-xs font-medium text-green-700 dark:text-green-300">
                       Payée
                     </span>
                   </p>

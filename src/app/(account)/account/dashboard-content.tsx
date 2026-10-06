@@ -16,15 +16,7 @@ import { api } from '@/trpc/client';
 import { useSession } from '@/lib/auth-client';
 import { formatPrice, formatDate } from '@/lib/utils';
 import { ORDER_STATUSES } from '@/lib/constants';
-
-const statusColorMap: Record<string, string> = {
-  pending: 'bg-yellow-100 text-yellow-800',
-  paid: 'bg-green-100 text-green-800',
-  processing: 'bg-blue-100 text-blue-800',
-  shipped: 'bg-purple-100 text-purple-800',
-  delivered: 'bg-green-100 text-green-800',
-  cancelled: 'bg-red-100 text-red-800',
-};
+import { ORDER_STATUS_BADGE } from '@/lib/order-status-badge';
 
 export function DashboardContent() {
   const { data: session } = useSession();
@@ -75,8 +67,8 @@ export function DashboardContent() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-chart-2/20">
-                <ShoppingBag className="h-6 w-6 text-chart-2" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                <ShoppingBag className="h-6 w-6 text-primary" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Total dépensé</p>
@@ -91,8 +83,8 @@ export function DashboardContent() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange-100">
-                <Calendar className="h-6 w-6 text-orange-600" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange-500/15">
+                <Calendar className="h-6 w-6 text-orange-700 dark:text-orange-300" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Membre depuis</p>
@@ -168,7 +160,7 @@ export function DashboardContent() {
                     <div className="flex items-center gap-3 shrink-0">
                       <Badge
                         variant="secondary"
-                        className={statusColorMap[status] || ''}
+                        className={ORDER_STATUS_BADGE[status] || ''}
                       >
                         {statusInfo?.label || status}
                       </Badge>
@@ -205,8 +197,8 @@ export function DashboardContent() {
           href="/account/settings"
           className="flex items-center gap-4 p-5 rounded-lg border hover:border-primary/30 hover:bg-primary/5 transition-colors group"
         >
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-chart-2/20 group-hover:bg-chart-2/30 transition-colors">
-            <Settings className="h-5 w-5 text-chart-2" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+            <Settings className="h-5 w-5 text-primary" />
           </div>
           <div>
             <p className="font-medium text-foreground">Paramètres du compte</p>

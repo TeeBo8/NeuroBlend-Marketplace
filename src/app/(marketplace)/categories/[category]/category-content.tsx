@@ -44,27 +44,15 @@ const CATEGORY_SEO_CONTENT: Record<
 
 const CATEGORY_THEMES = {
   HPI: {
-    gradient: 'from-primary via-primary/90 to-indigo-800',
-    lightBg: 'bg-primary/10',
     icon: Sparkles,
-    iconColor: 'text-primary/50',
-    accentColor: 'text-purple-100',
     heroImage: '/images/categories/hpi-hero.jpg',
   },
   ADHD: {
-    gradient: 'from-teal-600 via-teal-700 to-cyan-800',
-    lightBg: 'bg-chart-2/20',
     icon: Zap,
-    iconColor: 'text-teal-300',
-    accentColor: 'text-teal-100',
     heroImage: '/images/categories/adhd-hero.jpg',
   },
   hypersensitive: {
-    gradient: 'from-orange-500 via-orange-600 to-amber-700',
-    lightBg: 'bg-orange-100',
     icon: Heart,
-    iconColor: 'text-orange-300',
-    accentColor: 'text-orange-100',
     heroImage: '/images/categories/hypersensible-hero.jpg',
   },
 } as const;
@@ -104,15 +92,12 @@ export function CategoryContent({
           className="object-cover"
           priority
         />
-        <div className={cn('absolute inset-0 bg-gradient-to-br opacity-85', theme.gradient)} />
+        {/* Voile sombre neutre : la photo reste visible, le texte lisible. */}
+        <div className="absolute inset-0 bg-black/60" />
         <div className="relative container mx-auto px-4 py-16">
           <Link
             href="/products"
-            className={cn(
-              'inline-flex items-center gap-2 text-sm mb-6 transition-colors',
-              theme.accentColor,
-              'hover:text-white'
-            )}
+            className="inline-flex items-center gap-2 text-sm mb-6 text-white/80 transition-colors hover:text-white"
           >
             <ArrowLeft className="w-4 h-4" />
             Tous les produits
@@ -130,7 +115,7 @@ export function CategoryContent({
               {categoryInfo?.label}
             </h1>
           </div>
-          <p className={cn('text-lg max-w-2xl', theme.accentColor)}>
+          <p className="text-lg max-w-2xl text-white/80">
             {categoryInfo?.description}
           </p>
         </div>
@@ -146,13 +131,8 @@ export function CategoryContent({
           </div>
         ) : products.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div
-              className={cn(
-                'w-20 h-20 rounded-full flex items-center justify-center mb-6',
-                theme.lightBg
-              )}
-            >
-              <Coffee className={cn('w-10 h-10', theme.iconColor)} />
+            <div className="w-20 h-20 rounded-full flex items-center justify-center mb-6 bg-primary/10">
+              <Coffee className="w-10 h-10 text-primary/50" />
             </div>
             <h2 className="text-xl font-semibold text-foreground mb-2">
               Aucun produit disponible
@@ -243,11 +223,11 @@ export function CategoryContent({
                       <div
                         className={cn(
                           'w-12 h-12 rounded-lg flex items-center justify-center',
-                          catTheme.lightBg
+                          'bg-primary/10'
                         )}
                       >
                         <CatIcon
-                          className={cn('w-6 h-6', catTheme.iconColor)}
+                          className="w-6 h-6 text-primary"
                         />
                       </div>
                       <div>

@@ -14,7 +14,8 @@ export default function Image() {
     (
       <div
         style={{
-          background: 'linear-gradient(135deg, #6B46C1 0%, #553C9A 50%, #4338CA 100%)',
+          // Brun café du thème, en aplat.
+          background: '#4A3728',
           width: '100%',
           height: '100%',
           display: 'flex',
@@ -30,7 +31,7 @@ export default function Image() {
             width: 80,
             height: 80,
             borderRadius: 20,
-            backgroundColor: 'rgba(255,255,255,0.2)',
+            backgroundColor: 'rgba(255,229,196,0.18)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',

@@ -161,12 +161,12 @@ export function AdminVendorsContent() {
                     </div>
                     <div className="shrink-0">
                       {vendor.approved ? (
-                        <Badge variant="secondary" className="bg-green-100 text-green-700">
+                        <Badge variant="secondary" className="bg-green-500/15 text-green-700 dark:text-green-300">
                           <CheckCircle2 className="mr-1 h-3 w-3" />
                           Approuvé
                         </Badge>
                       ) : (
-                        <Badge variant="secondary" className="bg-yellow-100 text-yellow-700">
+                        <Badge variant="secondary" className="bg-yellow-500/15 text-yellow-700 dark:text-yellow-300">
                           <Clock className="mr-1 h-3 w-3" />
                           En attente
                         </Badge>
@@ -190,12 +190,12 @@ export function AdminVendorsContent() {
                       Commission : {vendor.commissionRate || '15.00'}%
                     </span>
                     {vendor.stripeOnboardingComplete && (
-                      <Badge variant="secondary" className="bg-blue-100 text-blue-700 text-xs">
+                      <Badge variant="secondary" className="bg-blue-500/15 text-blue-700 dark:text-blue-300 text-xs">
                         Stripe OK
                       </Badge>
                     )}
                     {vendor.isPremium && (
-                      <Badge variant="secondary" className="bg-amber-100 text-amber-700 text-xs">
+                      <Badge variant="secondary" className="bg-amber-500/15 text-amber-700 dark:text-amber-300 text-xs">
                         Premium
                       </Badge>
                     )}

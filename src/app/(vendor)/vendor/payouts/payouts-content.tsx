@@ -141,10 +141,10 @@ export function PayoutsContent() {
               </div>
             ) : !stripeStatus?.onboardingComplete ? (
               <div className="space-y-3">
-                <div className="rounded-lg bg-yellow-50 border border-yellow-200 p-3">
+                <div className="rounded-lg bg-yellow-500/10 border border-yellow-500/30 p-3">
                   <div className="flex items-start gap-2">
-                    <AlertCircle className="h-4 w-4 text-yellow-600 mt-0.5" />
-                    <p className="text-sm text-yellow-800">
+                    <AlertCircle className="h-4 w-4 text-yellow-700 dark:text-yellow-300 mt-0.5" />
+                    <p className="text-sm text-yellow-700 dark:text-yellow-300">
                       Votre configuration Stripe n&apos;est pas encore terminée.
                       Complétez-la pour pouvoir recevoir des paiements.
                     </p>
@@ -170,10 +170,10 @@ export function PayoutsContent() {
               </div>
             ) : (
               <div className="space-y-3">
-                <div className="rounded-lg bg-green-50 border border-green-200 p-3">
+                <div className="rounded-lg bg-green-500/10 border border-green-500/30 p-3">
                   <div className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-600 mt-0.5" />
-                    <p className="text-sm text-green-800">
+                    <CheckCircle2 className="h-4 w-4 text-green-700 dark:text-green-300 mt-0.5" />
+                    <p className="text-sm text-green-700 dark:text-green-300">
                       Votre compte Stripe est entièrement configuré. Vous pouvez recevoir des paiements.
                     </p>
                   </div>
@@ -197,8 +197,8 @@ export function PayoutsContent() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-start gap-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-chart-2/20 shrink-0">
-                <Banknote className="h-5 w-5 text-chart-2" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 shrink-0">
+                <Banknote className="h-5 w-5 text-primary" />
               </div>
               <div>
                 <h3 className="font-semibold text-foreground mb-1">Commission</h3>
@@ -275,20 +275,20 @@ function StripeStatusBadge({
   }
   if (!status.onboardingComplete) {
     return (
-      <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
+      <Badge variant="secondary" className="bg-yellow-500/15 text-yellow-700 dark:text-yellow-300">
         Configuration incomplète
       </Badge>
     );
   }
   if (status.payoutsEnabled) {
     return (
-      <Badge variant="secondary" className="bg-green-100 text-green-800">
+      <Badge variant="secondary" className="bg-green-500/15 text-green-700 dark:text-green-300">
         Actif
       </Badge>
     );
   }
   return (
-    <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+    <Badge variant="secondary" className="bg-blue-500/15 text-blue-700 dark:text-blue-300">
       En cours de vérification
     </Badge>
   );

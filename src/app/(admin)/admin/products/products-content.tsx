@@ -173,7 +173,7 @@ export function AdminProductsContent() {
                           </Badge>
                         )}
                         {!product.active && (
-                          <Badge variant="secondary" className="bg-red-100 text-red-700 text-xs">
+                          <Badge variant="secondary" className="bg-red-500/15 text-red-700 dark:text-red-300 text-xs">
                             Inactif
                           </Badge>
                         )}
@@ -185,7 +185,7 @@ export function AdminProductsContent() {
                     <Button
                       size="sm"
                       variant="outline"
-                      className={product.featured ? 'text-amber-600 border-amber-200 hover:bg-amber-50' : ''}
+                      className={product.featured ? 'text-amber-700 dark:text-amber-300 border-amber-500/30 hover:bg-amber-500/10' : ''}
                       onClick={() => toggleFeatured.mutate({ productId: product.id })}
                       disabled={toggleFeatured.isPending}
                       title={product.featured ? 'Retirer de la mise en avant' : 'Mettre en avant'}

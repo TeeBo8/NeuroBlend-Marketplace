@@ -82,13 +82,13 @@ export function Chatbot() {
               <Bot className="w-5 h-5" />
               <div>
                 <p className="font-semibold text-sm">Assistant NeuroBlend</p>
-                <p className="text-xs text-purple-100">Propulsé par Gemini</p>
+                <p className="text-xs text-primary-foreground/80">Propulsé par Gemini</p>
               </div>
             </div>
             <button
               onClick={() => { setIsOpen(false); trackChatToggle(false); }}
               aria-label="Fermer le chat"
-              className="p-1 hover:bg-purple-500 rounded-full transition-colors"
+              className="p-1 hover:bg-primary-foreground/20 rounded-full transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -132,7 +132,7 @@ export function Chatbot() {
                   <Bot className="w-4 h-4 text-primary" />
                 </div>
                 <div className="bg-muted rounded-2xl rounded-bl-md px-4 py-3">
-                  <Loader2 className="w-4 h-4 animate-spin text-purple-500" />
+                  <Loader2 className="w-4 h-4 animate-spin text-primary" />
                 </div>
               </div>
             )}

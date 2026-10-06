@@ -14,17 +14,9 @@ import { LoadMore } from '@/components/load-more';
 import { formatPrice, formatDate, cn } from '@/lib/utils';
 import { ORDER_STATUSES } from '@/lib/constants';
 import { useState } from 'react';
+import { ORDER_STATUS_BADGE } from '@/lib/order-status-badge';
 
 type OrderStatus = keyof typeof ORDER_STATUSES;
-
-const statusColorMap: Record<string, string> = {
-  pending: 'bg-yellow-100 text-yellow-800',
-  paid: 'bg-green-100 text-green-800',
-  processing: 'bg-blue-100 text-blue-800',
-  shipped: 'bg-purple-100 text-purple-800',
-  delivered: 'bg-green-100 text-green-800',
-  cancelled: 'bg-red-100 text-red-800',
-};
 
 const STATUS_FILTERS: { value: OrderStatus | 'all'; label: string }[] = [
   { value: 'all', label: 'Toutes' },
@@ -144,7 +136,7 @@ export function OrdersContent() {
                         </p>
                         <Badge
                           variant="secondary"
-                          className={cn('text-xs', statusColorMap[status])}
+                          className={cn('text-xs', ORDER_STATUS_BADGE[status])}
                         >
                           {statusInfo?.label || status}
                         </Badge>

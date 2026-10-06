@@ -20,15 +20,7 @@ import { api } from '@/trpc/client';
 import { useSession } from '@/lib/auth-client';
 import { formatPrice, formatDate } from '@/lib/utils';
 import { ORDER_STATUSES } from '@/lib/constants';
-
-const statusColorMap: Record<string, string> = {
-  pending: 'bg-yellow-100 text-yellow-800',
-  paid: 'bg-green-100 text-green-800',
-  processing: 'bg-blue-100 text-blue-800',
-  shipped: 'bg-purple-100 text-purple-800',
-  delivered: 'bg-green-100 text-green-800',
-  cancelled: 'bg-red-100 text-red-800',
-};
+import { ORDER_STATUS_BADGE } from '@/lib/order-status-badge';
 
 export function VendorDashboardContent() {
   const { data: session } = useSession();
@@ -87,11 +79,11 @@ export function VendorDashboardContent() {
 
       {/* Approval Warning */}
       {!vendor.approved && (
-        <div className="rounded-lg bg-yellow-50 border border-yellow-200 p-4 flex items-start gap-3">
-          <Clock className="h-5 w-5 text-yellow-600 mt-0.5 shrink-0" />
+        <div className="rounded-lg bg-yellow-500/10 border border-yellow-500/30 p-4 flex items-start gap-3">
+          <Clock className="h-5 w-5 text-yellow-700 dark:text-yellow-300 mt-0.5 shrink-0" />
           <div>
-            <p className="font-medium text-yellow-800">Validation en cours</p>
-            <p className="text-sm text-yellow-700 mt-1">
+            <p className="font-medium text-yellow-700 dark:text-yellow-300">Validation en cours</p>
+            <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
               Votre boutique est en attente de validation par notre équipe. Vous pourrez ajouter des produits une fois approuvé.
             </p>
           </div>
@@ -100,15 +92,15 @@ export function VendorDashboardContent() {
 
       {/* Stripe Warning */}
       {vendor.approved && !stripeStatus?.onboardingComplete && (
-        <div className="rounded-lg bg-orange-50 border border-orange-200 p-4 flex items-start gap-3">
-          <CreditCard className="h-5 w-5 text-orange-600 mt-0.5 shrink-0" />
+        <div className="rounded-lg bg-orange-500/10 border border-orange-500/30 p-4 flex items-start gap-3">
+          <CreditCard className="h-5 w-5 text-orange-700 dark:text-orange-300 mt-0.5 shrink-0" />
           <div className="flex-1">
-            <p className="font-medium text-orange-800">Configuration des paiements requise</p>
-            <p className="text-sm text-orange-700 mt-1">
+            <p className="font-medium text-orange-700 dark:text-orange-300">Configuration des paiements requise</p>
+            <p className="text-sm text-orange-700 dark:text-orange-300 mt-1">
               Configurez Stripe Connect pour recevoir les paiements de vos ventes.
             </p>
           </div>
-          <Button asChild size="sm" variant="outline" className="shrink-0 border-orange-300 text-orange-700 hover:bg-orange-100">
+          <Button asChild size="sm" variant="outline" className="shrink-0 border-orange-500/30 text-orange-700 dark:text-orange-300 hover:bg-orange-500/15">
             <Link href="/vendor/payouts">Configurer</Link>
           </Button>
         </div>
@@ -133,8 +125,8 @@ export function VendorDashboardContent() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-chart-2/20">
-                <ShoppingCart className="h-6 w-6 text-chart-2" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                <ShoppingCart className="h-6 w-6 text-primary" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Commandes</p>
@@ -147,8 +139,8 @@ export function VendorDashboardContent() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-                <TrendingUp className="h-6 w-6 text-green-600" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-500/15">
+                <TrendingUp className="h-6 w-6 text-green-700 dark:text-green-300" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Revenus</p>
@@ -163,8 +155,8 @@ export function VendorDashboardContent() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange-100">
-                <Clock className="h-6 w-6 text-orange-600" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange-500/15">
+                <Clock className="h-6 w-6 text-orange-700 dark:text-orange-300" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">À traiter</p>
@@ -225,7 +217,7 @@ export function VendorDashboardContent() {
                       </div>
                     </div>
                     <div className="flex items-center gap-3 shrink-0">
-                      <Badge variant="secondary" className={statusColorMap[status] || ''}>
+                      <Badge variant="secondary" className={ORDER_STATUS_BADGE[status] || ''}>
                         {statusInfo?.label || status}
                       </Badge>
                       <span className="font-semibold text-foreground">
@@ -261,8 +253,8 @@ export function VendorDashboardContent() {
           href="/vendor/products"
           className="flex items-center gap-4 p-5 rounded-lg border hover:border-primary/30 hover:bg-primary/5 transition-colors group"
         >
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-chart-2/20 group-hover:bg-chart-2/30 transition-colors">
-            <Coffee className="h-5 w-5 text-chart-2" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+            <Coffee className="h-5 w-5 text-primary" />
           </div>
           <div>
             <p className="font-medium text-foreground">Gérer mes produits</p>
@@ -273,8 +265,8 @@ export function VendorDashboardContent() {
           href="/vendor/payouts"
           className="flex items-center gap-4 p-5 rounded-lg border hover:border-primary/30 hover:bg-primary/5 transition-colors group"
         >
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 group-hover:bg-green-200 transition-colors">
-            <CreditCard className="h-5 w-5 text-green-600" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-500/15 group-hover:bg-green-500/25 transition-colors">
+            <CreditCard className="h-5 w-5 text-green-700 dark:text-green-300" />
           </div>
           <div>
             <p className="font-medium text-foreground">Paiements</p>
@@ -287,10 +279,10 @@ export function VendorDashboardContent() {
 
       {/* Approval status */}
       {vendor.approved && (
-        <div className="rounded-lg bg-green-50 border border-green-200 p-4 flex items-center gap-3">
-          <CheckCircle2 className="h-5 w-5 text-green-600 shrink-0" />
+        <div className="rounded-lg bg-green-500/10 border border-green-500/30 p-4 flex items-center gap-3">
+          <CheckCircle2 className="h-5 w-5 text-green-700 dark:text-green-300 shrink-0" />
           <div>
-            <p className="text-sm text-green-800">
+            <p className="text-sm text-green-700 dark:text-green-300">
               <span className="font-medium">Boutique approuvée</span> &mdash; Commission : {vendor.commissionRate || '15'}%
             </p>
           </div>

@@ -12,6 +12,7 @@ import {
 } from '@/components/product/product-card';
 import { PRODUCT_CATEGORIES } from '@/lib/constants';
 import { cn } from '@/lib/utils';
+import { PageHero } from '@/components/layout/page-hero';
 
 export function ProductsContent() {
   const router = useRouter();
@@ -70,15 +71,9 @@ export function ProductsContent() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-secondary via-secondary/80 to-primary text-foreground">
-        <div className="container mx-auto px-4 py-16">
-          <h1 className="text-3xl md:text-5xl font-bold mb-3">Nos Produits</h1>
-          <p className="text-lg text-foreground/70 max-w-2xl">
-            Des capsules de café artisanales, conçues pour accompagner chaque
-            type d&apos;esprit neuroatypique.
-          </p>
-        </div>
-      </section>
+      <PageHero title="Nos Produits">
+        Des capsules de café artisanales, conçues pour accompagner chaque type d&apos;esprit neuroatypique.
+      </PageHero>
 
       {/* Filters & Grid */}
       <section className="container mx-auto px-4 py-8">

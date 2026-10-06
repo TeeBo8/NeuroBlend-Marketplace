@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Mail, MessageCircle, Clock } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { ContactForm } from './contact-form';
+import { PageHero } from '@/components/layout/page-hero';
 
 export const metadata: Metadata = {
   title: 'Contact — Écrivez-nous',
@@ -44,18 +45,9 @@ export default function ContactPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-primary via-primary/90 to-indigo-800 text-primary-foreground">
-        <div className="container mx-auto px-4 py-16 md:py-20">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Contactez-nous
-            </h1>
-            <p className="text-xl text-primary-foreground/80">
-              Une question, une idée, un partenariat ? Nous sommes à votre écoute.
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero title="Contactez-nous">
+        Une question, une idée, un partenariat ? Nous sommes à votre écoute.
+      </PageHero>
 
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">

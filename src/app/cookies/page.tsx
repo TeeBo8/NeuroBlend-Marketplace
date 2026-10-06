@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Card, CardContent } from '@/components/ui/card';
 import { APP_NAME } from '@/lib/constants';
+import { PageHero } from '@/components/layout/page-hero';
 
 export const metadata: Metadata = {
   title: 'Politique Cookies',
@@ -41,20 +42,13 @@ const cookieTypes = [
 export default function CookiesPage() {
   return (
     <>
-      <section className="bg-gradient-to-br from-primary via-primary/90 to-indigo-800 text-primary-foreground">
-        <div className="container mx-auto px-4 py-16 md:py-20">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Politique Cookies
-          </h1>
-          <p className="text-primary-foreground/80">
-            Dernière mise à jour : 7 février 2026
-          </p>
-        </div>
-      </section>
+      <PageHero title="Politique Cookies">
+        Dernière mise à jour : 7 février 2026
+      </PageHero>
 
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4 max-w-3xl">
-          <div className="prose prose-gray prose-headings:text-foreground prose-a:text-primary mb-12">
+          <div className="rich-text mb-12">
             <h2>Qu&apos;est-ce qu&apos;un cookie ?</h2>
             <p>
               Un cookie est un petit fichier texte déposé sur votre appareil
@@ -109,7 +103,7 @@ export default function CookiesPage() {
             ))}
           </div>
 
-          <div className="prose prose-gray prose-headings:text-foreground prose-a:text-primary">
+          <div className="rich-text">
             <h2>Comment gérer vos cookies ?</h2>
             <p>
               Vous pouvez à tout moment modifier vos préférences de cookies

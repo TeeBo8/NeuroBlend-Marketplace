@@ -20,15 +20,7 @@ import { Separator } from '@/components/ui/separator';
 import { api } from '@/trpc/client';
 import { formatPrice, formatDate, cn } from '@/lib/utils';
 import { ORDER_STATUSES } from '@/lib/constants';
-
-const statusColorMap: Record<string, string> = {
-  pending: 'bg-yellow-100 text-yellow-800',
-  paid: 'bg-green-100 text-green-800',
-  processing: 'bg-blue-100 text-blue-800',
-  shipped: 'bg-purple-100 text-purple-800',
-  delivered: 'bg-green-100 text-green-800',
-  cancelled: 'bg-red-100 text-red-800',
-};
+import { ORDER_STATUS_BADGE } from '@/lib/order-status-badge';
 
 const STATUS_STEPS = [
   { key: 'paid', label: 'Payée', icon: CreditCard },
@@ -113,7 +105,7 @@ export function OrderDetailContent({ orderId }: { orderId: string }) {
             </h1>
             <Badge
               variant="secondary"
-              className={cn('text-sm', statusColorMap[status])}
+              className={cn('text-sm', ORDER_STATUS_BADGE[status])}
             >
               {statusInfo?.label || status}
             </Badge>
@@ -176,14 +168,14 @@ export function OrderDetailContent({ orderId }: { orderId: string }) {
 
       {/* Cancelled notice */}
       {isCancelled && (
-        <Card className="border-red-200 bg-red-50">
+        <Card className="border-red-500/30 bg-red-500/10">
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
               <XCircle className="h-5 w-5 text-red-500 shrink-0" />
               <div>
-                <p className="font-medium text-red-800">Commande annulée</p>
+                <p className="font-medium text-red-700 dark:text-red-300">Commande annulée</p>
                 {order.notes && (
-                  <p className="text-sm text-red-600 mt-0.5">{order.notes}</p>
+                  <p className="text-sm text-red-700 dark:text-red-300 mt-0.5">{order.notes}</p>
                 )}
               </div>
             </div>
@@ -244,7 +236,7 @@ export function OrderDetailContent({ orderId }: { orderId: string }) {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Livraison</span>
-                  <span className="text-green-600">Gratuite</span>
+                  <span className="text-green-700 dark:text-green-300">Gratuite</span>
                 </div>
                 <Separator />
                 <div className="flex justify-between font-semibold text-lg">

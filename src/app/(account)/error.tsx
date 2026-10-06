@@ -19,7 +19,7 @@ export default function AccountError({
   return (
     <div className="container mx-auto px-4 py-16">
       <div className="flex flex-col items-center justify-center text-center max-w-md mx-auto">
-        <div className="w-24 h-24 rounded-full bg-red-100 flex items-center justify-center mb-6">
+        <div className="w-24 h-24 rounded-full bg-red-500/15 flex items-center justify-center mb-6">
           <AlertTriangle className="w-12 h-12 text-red-300" />
         </div>
         <h1 className="text-2xl font-bold text-foreground mb-2">

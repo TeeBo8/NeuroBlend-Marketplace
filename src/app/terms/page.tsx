@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { APP_NAME } from '@/lib/constants';
+import { PageHero } from '@/components/layout/page-hero';
 
 export const metadata: Metadata = {
   title: 'Conditions générales de vente',
@@ -13,19 +14,12 @@ export const metadata: Metadata = {
 export default function TermsPage() {
   return (
     <>
-      <section className="bg-gradient-to-br from-primary via-primary/90 to-indigo-800 text-primary-foreground">
-        <div className="container mx-auto px-4 py-16 md:py-20">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Conditions générales de vente
-          </h1>
-          <p className="text-primary-foreground/80">
-            Dernière mise à jour : 7 février 2026
-          </p>
-        </div>
-      </section>
+      <PageHero title="Conditions générales de vente">
+        Dernière mise à jour : 7 février 2026
+      </PageHero>
 
       <section className="py-16 bg-background">
-        <div className="container mx-auto px-4 max-w-3xl prose prose-gray prose-headings:text-foreground prose-a:text-primary">
+        <div className="container mx-auto px-4 max-w-3xl rich-text">
           <h2>1. Objet</h2>
           <p>
             Les présentes Conditions Générales de Vente (CGV) régissent les
