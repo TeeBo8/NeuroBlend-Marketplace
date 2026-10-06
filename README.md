@@ -60,7 +60,7 @@ scripts/                    Commandes d'administration
 | Quoi | Où |
 |---|---|
 | Une table ou une colonne | `src/server/db/schema.ts`, puis `pnpm db:generate` et `pnpm db:migrate` |
-| Les produits de démonstration | `src/server/db/seed.ts` |
+| Les boutiques, produits et avis du décor | `src/server/demo/seed-data.ts` |
 | Les catégories, les formules d'abonnement, les liens du menu | `src/lib/constants.ts` |
 | Les règles du paiement (stock, commission, session Stripe) | `src/server/api/routers/payment.ts` |
 | Ce qui se passe quand une commande est payée | `src/server/orders/fulfillment.ts` |
@@ -79,13 +79,13 @@ Il faut Node 22, pnpm 10 et une base PostgreSQL Neon.
 pnpm install
 cp .env.example .env.local   # puis remplir les valeurs
 pnpm db:migrate              # crée les tables
-pnpm db:seed                 # un vendeur de démonstration et neuf produits
+pnpm db:seed --reset         # vide la base, puis charge le décor de démonstration
 pnpm dev                     # http://localhost:3000
 ```
 
 Pour créer le premier admin, s'inscrire sur le site puis lancer `pnpm db:promote-admin <email>`.
 
-Pour tester un paiement, le vendeur doit avoir relié son compte Stripe depuis `/vendor/payouts`. La carte de test est `4242 4242 4242 4242`, avec une date future et un code quelconque. Pour recevoir les webhooks en local :
+Pour tester un paiement, les boutiques du décor ont besoin d'un compte Stripe Connect de test : mettre son identifiant (`acct_…`) dans `DEMO_STRIPE_ACCOUNT_ID` avant de charger le décor. La carte de test est `4242 4242 4242 4242`, avec une date future et un code quelconque. Pour recevoir les webhooks en local :
 
 ```bash
 stripe listen --forward-to localhost:3000/api/webhooks/stripe
@@ -117,7 +117,7 @@ Le site se construit sans base de données ni clés d'API : chaque variable n'es
 | `pnpm test` | Tous les tests |
 | `pnpm db:generate` | Écrit une migration à partir du schéma |
 | `pnpm db:migrate` | Applique les migrations |
-| `pnpm db:seed` | Charge les données de démonstration |
+| `pnpm db:seed --reset` | Vide la base puis charge le décor : trois boutiques, neuf produits, des commandes et des avis fictifs |
 | `pnpm db:promote-admin <email>` | Donne le rôle admin à un compte |
 
 ## Comment le paiement tient debout
