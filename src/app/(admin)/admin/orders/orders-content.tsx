@@ -61,7 +61,7 @@ export function AdminOrdersContent() {
 
   const cancelOrder = api.order.adminCancel.useMutation({
     onSuccess: () => {
-      toast.success('Commande annulée');
+      toast.success('Commande annulée et remboursée');
       setCancelDialog((prev) => ({ ...prev, open: false }));
       refetch();
     },
@@ -124,7 +124,9 @@ export function AdminOrdersContent() {
               {orders.map((order) => {
                 const status = order.status as keyof typeof ORDER_STATUSES;
                 const statusInfo = ORDER_STATUSES[status];
-                const canCancel = status !== 'delivered' && status !== 'cancelled';
+                // Paiement en attente : il expire tout seul. Livrée : trop tard.
+                const canCancel =
+                  status === 'paid' || status === 'processing' || status === 'shipped';
                 return (
                   <div
                     key={order.id}
@@ -215,6 +217,8 @@ export function AdminOrdersContent() {
             <DialogTitle>Annuler la commande</DialogTitle>
             <DialogDescription>
               Voulez-vous vraiment annuler la commande <strong>{cancelDialog.orderNumber}</strong> ?
+              Le client sera remboursé intégralement. Les articles reviennent en stock
+              si la commande n&apos;est pas encore expédiée.
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">

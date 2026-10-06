@@ -22,3 +22,13 @@ export const isCollected = inArray(orders.status, [...COLLECTED_STATUSES]);
  * encore une commande.
  */
 export const isPlaced = ne(orders.status, 'pending');
+
+/**
+ * Statuts depuis lesquels un vendeur peut faire passer une commande au statut
+ * donné. Une commande n'avance que dans un sens, et seulement une fois payée.
+ */
+export const STATUSES_BEFORE = {
+  processing: ['paid'],
+  shipped: ['paid', 'processing'],
+  delivered: ['shipped'],
+} as const;
