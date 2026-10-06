@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { Coffee, Instagram, Linkedin, Youtube } from 'lucide-react';
 import { APP_NAME, FOOTER_LINKS } from '@/lib/constants';
-import { NewsletterForm } from './newsletter-form';
 
 const footerSections = [
   { title: 'Marketplace', links: FOOTER_LINKS.marketplace },
@@ -70,19 +69,8 @@ export function Footer() {
           ))}
         </div>
 
-        {/* Newsletter */}
-        <div className="mt-12 pt-8 border-t flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div>
-            <h3 className="font-semibold mb-1">Restez informé</h3>
-            <p className="text-sm text-muted-foreground">
-              Recevez nos nouveautés et conseils pour esprits neuroatypiques.
-            </p>
-          </div>
-          <NewsletterForm />
-        </div>
-
         {/* Bottom Bar */}
-        <div className="mt-8 pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-12 pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
             &copy; {new Date().getFullYear()} {APP_NAME}. Tous droits réservés.
           </p>
