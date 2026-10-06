@@ -140,7 +140,7 @@ Avec `DEMO_MODE` et `NEXT_PUBLIC_DEMO_MODE` à `true`, le site devient une démo
 - **Chacun chez soi.** Un visiteur voit le décor (trois boutiques, neuf produits, des commandes livrées et des avis) et ce qu'il a créé lui-même, jamais les commandes ni les avis d'un autre. Une seule condition SQL porte cette règle : `src/server/demo/visibility.ts`.
 - **Décor en lecture seule.** Ce qui le modifierait (catalogue, boutiques, rôles) est refusé par le garde `blockedInDemo` de `src/server/api/trpc.ts`.
 - **Porte d'entrée unique.** L'inscription et la connexion par mot de passe sont fermées côté serveur ; les comptes naissent dans `src/app/api/demo/enter`.
-- **Garde-fous.** Clé Stripe de test obligatoire, aucun e-mail envoyé, nombre d'entrées plafonné par adresse IP, comptes supprimés au bout de 24 heures par une tâche planifiée.
+- **Garde-fous.** Clé Stripe de test obligatoire, aucun e-mail envoyé, nombre d'entrées plafonné par adresse IP, comptes supprimés au bout de 24 heures par une tâche planifiée. Sur le site en ligne, une règle du pare-feu Vercel limite en plus chaque adresse IP à 120 requêtes par minute sur `/api/` ; elle se règle dans le tableau de bord de l'hébergeur, pas dans ce dépôt.
 
 ## Comment le paiement tient debout
 
