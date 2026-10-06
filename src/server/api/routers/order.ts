@@ -15,7 +15,7 @@ import {
   refundOrderPayment,
 } from '@/server/orders/cancellation';
 import { findVendorOfUser } from '@/server/vendors';
-import { ownerVisibleTo } from '@/server/demo/visibility';
+import { ownerEditableBy, ownerVisibleTo } from '@/server/demo/visibility';
 
 export const orderRouter = createTRPCRouter({
   // Get user's orders
@@ -201,7 +201,7 @@ export const orderRouter = createTRPCRouter({
         where: and(
           eq(orders.id, input.orderId),
           eq(orders.vendorId, vendor.id),
-          ownerVisibleTo(orders.userId, ctx)
+          ownerEditableBy(orders.userId, ctx)
         ),
       });
 
@@ -311,7 +311,7 @@ export const orderRouter = createTRPCRouter({
       const order = await ctx.db.query.orders.findFirst({
         where: and(
           eq(orders.id, input.orderId),
-          ownerVisibleTo(orders.userId, ctx)
+          ownerEditableBy(orders.userId, ctx)
         ),
       });
 

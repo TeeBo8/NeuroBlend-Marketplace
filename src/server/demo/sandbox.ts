@@ -1,9 +1,9 @@
 import { createHmac, randomUUID } from 'node:crypto';
-import { and, countDistinct, eq, gt, inArray, isNotNull, lt } from 'drizzle-orm';
+import { and, countDistinct, eq, gt, inArray, isNotNull, lt, sql } from 'drizzle-orm';
 import { getIp } from 'better-auth/api';
 import { auth } from '@/server/auth/config';
 import { db } from '@/server/db';
-import { orders, products, sessions, users } from '@/server/db/schema';
+import { orders, sessions, users } from '@/server/db/schema';
 import {
   DEMO_EMAIL_DOMAIN,
   DEMO_MAX_ACTIVE_SANDBOXES,
@@ -32,9 +32,11 @@ function demoEmail(role: DemoRole, sandboxId: string): string {
 /**
  * Crée le bac à sable d'un visiteur : trois comptes éphémères (client,
  * vendeur, admin) reliés par le même identifiant. Renvoie cet identifiant.
+ * L'adresse IP du visiteur est notée sur les comptes, pour le plafond.
  */
-export async function createSandbox(): Promise<string> {
+export async function createSandbox(headers: Headers): Promise<string> {
   const sandboxId = randomUUID();
+  const demoIp = getIp(headers, auth.options);
 
   for (const role of DEMO_ROLES) {
     const email = demoEmail(role, sandboxId);
@@ -44,7 +46,7 @@ export async function createSandbox(): Promise<string> {
     // Le rôle n'est pas accepté à l'inscription : on le pose ensuite.
     await db
       .update(users)
-      .set({ role, demoSandboxId: sandboxId, emailVerified: true })
+      .set({ role, demoSandboxId: sandboxId, demoIp, emailVerified: true })
       .where(eq(users.id, user.id));
     // L'inscription ouvre une session dont on ne se sert pas.
     await revokeSessions(user.id);
@@ -114,16 +116,15 @@ export async function isDemoFull(): Promise<boolean> {
 }
 
 // Bacs à sable ouverts depuis une adresse IP après une date donnée. L'adresse
-// est celle que Better Auth enregistre sur chaque session ; `getIp` applique
-// la même normalisation, pour que la comparaison tombe juste.
+// est lue sur les comptes, pas sur les sessions : se déconnecter ne remet pas
+// le compteur à zéro.
 async function countSandboxesFromIp(ip: string, since: Date): Promise<number> {
   const [row] = await db
     .select({ count: countDistinct(users.demoSandboxId) })
-    .from(sessions)
-    .innerJoin(users, eq(sessions.userId, users.id))
+    .from(users)
     .where(
       and(
-        eq(sessions.ipAddress, ip),
+        eq(users.demoIp, ip),
         gt(users.createdAt, since),
         isNotNull(users.demoSandboxId)
       )
@@ -170,12 +171,16 @@ export async function deleteExpiredSandboxes(now = new Date()): Promise<number> 
   return deleted.length;
 }
 
-/** Remet le stock des produits du décor à sa valeur de départ. */
+/** Remet le stock des produits du décor à sa valeur de départ, en une requête. */
 export async function resetSeedStock(): Promise<void> {
-  for (const product of SEED_PRODUCTS) {
-    await db
-      .update(products)
-      .set({ stock: product.stock })
-      .where(eq(products.id, product.slug));
-  }
+  const rows = sql.join(
+    SEED_PRODUCTS.map((product) => sql`(${product.slug}, ${product.stock}::integer)`),
+    sql`, `
+  );
+  await db.execute(sql`
+    UPDATE products
+    SET stock = seed.stock
+    FROM (VALUES ${rows}) AS seed(id, stock)
+    WHERE products.id = seed.id AND products.stock IS DISTINCT FROM seed.stock
+  `);
 }

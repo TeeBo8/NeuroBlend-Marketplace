@@ -87,6 +87,15 @@ export default function PrivacyPage() {
             <li>
               <strong>Resend :</strong> envoi d&apos;emails transactionnels
             </li>
+            <li>
+              <strong>UploadThing :</strong> hébergement des photos de produits
+            </li>
+            <li>
+              <strong>Google (Gemini) :</strong> assistant et conseils générés par IA
+            </li>
+            <li>
+              <strong>PostHog :</strong> mesure d&apos;audience, après votre accord
+            </li>
           </ul>
           <p>
             Nous ne vendons jamais vos données personnelles à des tiers.
@@ -113,7 +122,7 @@ export default function PrivacyPage() {
           </ul>
           <p>
             Pour exercer ces droits, contactez-nous à{' '}
-            <a href="mailto:contact@neuroblend.fr">contact@neuroblend.fr</a> ou
+            <a href="mailto:contact@neuroblend.example">contact@neuroblend.example</a> ou
             via notre <a href="/contact">page de contact</a>.
           </p>
 
@@ -134,7 +143,7 @@ export default function PrivacyPage() {
           <h2>10. Contact</h2>
           <p>
             Pour toute question relative à cette politique, contactez-nous à{' '}
-            <a href="mailto:contact@neuroblend.fr">contact@neuroblend.fr</a>.
+            <a href="mailto:contact@neuroblend.example">contact@neuroblend.example</a>.
           </p>
           <p>
             Vous pouvez également adresser une réclamation à la CNIL :{' '}

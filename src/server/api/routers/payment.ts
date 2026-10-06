@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -20,6 +20,10 @@ import {
 import { shippingAddressSchema } from '@/lib/shipping-address';
 import { findVendorOfUser } from '@/server/vendors';
 import { siteUrl } from '@/lib/site-url';
+import { isDemo } from '@/lib/demo';
+
+/** Commandes en attente de paiement qu'un même compte peut avoir ouvertes. */
+const MAX_PENDING_ORDERS = 5;
 
 const cartItemSchema = z.object({
   productId: z.string().min(1).max(100),
@@ -107,6 +111,16 @@ export const paymentRouter = createTRPCRouter({
       };
     }
 
+    // En démo, les boutiques partagent un compte de test : on ne l'interroge
+    // pas à chaque visite et on ne montre pas son identifiant.
+    if (isDemo) {
+      return {
+        connected: true,
+        onboardingComplete: vendor.stripeOnboardingComplete ?? false,
+        payoutsEnabled: vendor.stripeOnboardingComplete ?? false,
+      };
+    }
+
     const account = await getStripe().accounts.retrieve(vendor.stripeAccountId);
 
     const onboardingComplete = account.details_submitted ?? false;
@@ -158,6 +172,20 @@ export const paymentRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      // Chaque appel crée une commande en attente et une page de paiement
+      // Stripe : on borne ce qu'un même compte peut laisser ouvert.
+      const [pending] = await ctx.db
+        .select({ count: sql<number>`count(*)` })
+        .from(orders)
+        .where(and(eq(orders.userId, ctx.session.user.id), eq(orders.status, 'pending')));
+      if (Number(pending.count) >= MAX_PENDING_ORDERS) {
+        throw new TRPCError({
+          code: 'TOO_MANY_REQUESTS',
+          message:
+            'Trop de paiements en cours. Terminez-en un, ou réessayez dans 30 minutes.',
+        });
+      }
+
       const items = mergeCartItems(input.items);
 
       const productsData = await ctx.db.query.products.findMany({

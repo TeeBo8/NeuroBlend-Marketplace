@@ -10,13 +10,12 @@ export function organizationSchema() {
     '@type': 'Organization',
     name: APP_NAME,
     url: BASE_URL,
-    logo: `${BASE_URL}/icon.svg`,
     description: APP_DESCRIPTION,
     foundingDate: '2024',
     sameAs: [],
     contactPoint: {
       '@type': 'ContactPoint',
-      email: 'contact@neuroblend.fr',
+      email: 'contact@neuroblend.example',
       contactType: 'customer service',
       availableLanguage: 'French',
     },
@@ -36,7 +35,7 @@ export function websiteSchema() {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: `${BASE_URL}/products?search={search_term_string}`,
+        urlTemplate: `${BASE_URL}/products?q={search_term_string}`,
       },
       'query-input': 'required name=search_term_string',
     },

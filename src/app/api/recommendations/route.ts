@@ -8,7 +8,7 @@ import { createRateLimiter, getClientIp, tooManyRequests } from '@/lib/rate-limi
 
 const checkRateLimit = createRateLimiter({ limit: 10, windowMs: 10 * 60 * 1000 });
 
-const bodySchema = z.object({ productId: z.uuid() });
+const bodySchema = z.object({ productId: z.string().min(1).max(100) });
 
 export async function POST(req: Request) {
   const rateLimit = checkRateLimit(getClientIp(req));

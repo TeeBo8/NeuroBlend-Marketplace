@@ -66,7 +66,7 @@ export default function AboutPage() {
             <div className="space-y-4 text-muted-foreground leading-relaxed">
               <p>
                 Tout a commencé avec une question : pourquoi le monde du café
-                ignore-t-il 15 à 20% de la population ? Les personnes HPI,
+                ignore-t-il les esprits neuroatypiques ? Les personnes HPI,
                 ADHD et hypersensibles ont un rapport unique à la caféine, aux
                 saveurs et aux rituels. Leur sensibilité est un atout, pas un
                 obstacle.

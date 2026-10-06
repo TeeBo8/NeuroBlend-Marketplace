@@ -15,6 +15,7 @@ import { sendVendorApprovedEmail } from '@/lib/email';
 import { fromCursor, newestFirst, toPage } from '../pagination';
 import { findVendorOfUser } from '@/server/vendors';
 import { ownerVisibleTo } from '@/server/demo/visibility';
+import { isDemo } from '@/lib/demo';
 
 export const vendorRouter = createTRPCRouter({
   // Get all approved vendors (public)
@@ -50,9 +51,9 @@ export const vendorRouter = createTRPCRouter({
     .use(blockedInDemo)
     .input(
       z.object({
-        businessName: z.string().min(2, 'Business name is required'),
-        description: z.string().optional(),
-        website: z.string().url().optional().or(z.literal('')),
+        businessName: z.string().trim().min(2, 'Business name is required').max(100),
+        description: z.string().max(2000).optional(),
+        website: z.string().url().max(300).optional().or(z.literal('')),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -78,10 +79,11 @@ export const vendorRouter = createTRPCRouter({
         .returning();
 
       // Update user role to vendor
+      // Un client devient vendeur ; un admin reste admin.
       await ctx.db
         .update(users)
         .set({ role: 'vendor', updatedAt: new Date() })
-        .where(eq(users.id, ctx.session.user.id));
+        .where(and(eq(users.id, ctx.session.user.id), eq(users.role, 'customer')));
 
       return vendor;
     }),
@@ -91,7 +93,9 @@ export const vendorRouter = createTRPCRouter({
     const vendor = await findVendorOfUser(ctx);
 
     // null, not undefined: React Query rejects a query that returns undefined.
-    return vendor ?? null;
+    if (!vendor) return null;
+    // En démo, l'identifiant du compte Stripe partagé ne sort pas du serveur.
+    return isDemo ? { ...vendor, stripeAccountId: null } : vendor;
   }),
 
   // Vendor dashboard figures, computed over every order rather than over
@@ -194,7 +198,7 @@ export const vendorRouter = createTRPCRouter({
         columns: { email: true },
       });
       if (vendorUser?.email) {
-        sendVendorApprovedEmail(vendorUser.email, updatedVendor.businessName);
+        await sendVendorApprovedEmail(vendorUser.email, updatedVendor.businessName);
       }
 
       return updatedVendor;
@@ -221,14 +225,28 @@ export const vendorRouter = createTRPCRouter({
         });
       }
 
+      // Les commandes gardent un lien vers la boutique : on ne supprime pas
+      // une boutique qui a déjà vendu.
+      const [sold] = await ctx.db
+        .select({ id: orders.id })
+        .from(orders)
+        .where(eq(orders.vendorId, vendor.id))
+        .limit(1);
+      if (sold) {
+        throw new TRPCError({
+          code: 'CONFLICT',
+          message: 'Cette boutique a déjà des commandes : elle ne peut plus être supprimée.',
+        });
+      }
+
       // Delete vendor profile
       await ctx.db.delete(vendors).where(eq(vendors.id, input.vendorId));
 
-      // Reset user role to customer
+      // Le vendeur redevient client ; un admin reste admin.
       await ctx.db
         .update(users)
         .set({ role: 'customer', updatedAt: new Date() })
-        .where(eq(users.id, vendor.userId));
+        .where(and(eq(users.id, vendor.userId), eq(users.role, 'vendor')));
 
       return { success: true };
     }),

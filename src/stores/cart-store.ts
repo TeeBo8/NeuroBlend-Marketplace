@@ -20,7 +20,6 @@ type CartStore = {
   clearCart: () => void;
   getItemCount: () => number;
   getSubtotal: () => number;
-  getVendorId: () => string | null;
 };
 
 export const useCartStore = create<CartStore>()(
@@ -81,11 +80,6 @@ export const useCartStore = create<CartStore>()(
         );
       },
 
-      getVendorId: () => {
-        const { items } = get();
-        if (items.length === 0) return null;
-        return items[0].vendorId;
-      },
     }),
     {
       name: 'neuroblend-cart',

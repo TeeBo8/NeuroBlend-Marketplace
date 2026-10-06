@@ -8,6 +8,7 @@ import {
   getSandboxId,
   isDemoFull,
   isIpOverLimit,
+  resetSeedStock,
   signInSandboxRole,
 } from '@/server/demo/sandbox';
 
@@ -30,7 +31,10 @@ export async function POST(request: Request) {
   await deleteExpiredSandboxes();
   if (await isDemoFull()) return redirectTo(request, '/login?full=1');
 
-  const sandboxId = await createSandbox();
+  // Chaque visiteur trouve un décor en stock, même si le précédent a tout acheté.
+  await resetSeedStock();
+
+  const sandboxId = await createSandbox(request.headers);
   const cookies = await signInSandboxRole(sandboxId, 'customer', request.headers);
   if (!cookies) return redirectTo(request, '/login');
   return redirectTo(request, DEMO_PERSONAS.customer.home, cookies);

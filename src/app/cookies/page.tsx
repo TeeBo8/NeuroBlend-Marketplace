@@ -138,7 +138,7 @@ export default function CookiesPage() {
             <p>
               Pour toute question relative à notre utilisation des cookies,
               contactez-nous à{' '}
-              <a href="mailto:contact@neuroblend.fr">contact@neuroblend.fr</a> ou
+              <a href="mailto:contact@neuroblend.example">contact@neuroblend.example</a> ou
               consultez notre{' '}
               <a href="/privacy">Politique de confidentialité</a>.
             </p>

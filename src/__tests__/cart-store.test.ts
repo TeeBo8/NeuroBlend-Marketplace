@@ -123,14 +123,4 @@ describe("Cart Store", () => {
     });
   });
 
-  describe("getVendorId", () => {
-    it("returns null for empty cart", () => {
-      expect(useCartStore.getState().getVendorId()).toBeNull();
-    });
-
-    it("returns vendor id of first item", () => {
-      useCartStore.getState().addItem(mockItem);
-      expect(useCartStore.getState().getVendorId()).toBe("vendor-1");
-    });
-  });
 });

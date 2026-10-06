@@ -40,8 +40,8 @@ export const userRouter = createTRPCRouter({
   update: protectedProcedure
     .input(
       z.object({
-        name: z.string().min(2).optional(),
-        image: z.string().url().optional(),
+        name: z.string().trim().min(2).max(100).optional(),
+        image: z.string().url().max(500).optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {

@@ -101,6 +101,8 @@ Le site se construit sans base de données ni clés d'API : chaque variable n'es
 | `BETTER_AUTH_SECRET` | Signature des sessions |
 | `NEXT_PUBLIC_APP_URL` | Adresse du site (`http://localhost:3000` en local) |
 | `CRON_SECRET` | En démo seulement : protège le nettoyage nocturne (`/api/demo/cleanup`) |
+| `CONTACT_EMAIL` | Facultative : destinataire du formulaire de contact |
+| `DEMO_STRIPE_ACCOUNT_ID` | Facultative : compte Stripe Connect de test des boutiques du décor (`pnpm db:seed`) |
 | `DEMO_MODE` et `NEXT_PUBLIC_DEMO_MODE` | Facultatives. À `true` toutes les deux, le site devient une démo publique : entrée en un clic, inscription et connexion fermées |
 | `STRIPE_SECRET_KEY` | Paiements et comptes vendeurs |
 | `STRIPE_WEBHOOK_SECRET` | Vérification des webhooks Stripe |

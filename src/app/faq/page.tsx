@@ -6,6 +6,7 @@ import { APP_NAME } from '@/lib/constants';
 import { JsonLd } from '@/components/seo/json-ld';
 import { faqPageSchema, breadcrumbSchema } from '@/lib/schemas';
 import { PageHero } from '@/components/layout/page-hero';
+import { DemoNotice } from '@/components/demo/demo-notice';
 
 export const metadata: Metadata = {
   title: 'FAQ — Questions fréquentes sur le café neuroatypique',
@@ -54,7 +55,7 @@ const faqSections = [
       },
       {
         q: 'La livraison est-elle gratuite ?',
-        a: 'La livraison est offerte pour toute commande supérieure à 25\u20AC et pour tous les abonnements.',
+        a: 'Oui. La livraison est offerte en France métropolitaine, sans minimum d\u2019achat.',
       },
       {
         q: 'Puis-je retourner un produit ?',
@@ -117,6 +118,7 @@ export default function FaqPage() {
       <PageHero title="Questions fréquentes">
         Tout ce que vous devez savoir sur {APP_NAME}, nos produits et nos services.
       </PageHero>
+      <DemoNotice />
 
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4 max-w-3xl">

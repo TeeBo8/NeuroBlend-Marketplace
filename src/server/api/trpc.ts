@@ -22,6 +22,12 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
   errorFormatter({ shape, error }) {
     return {
       ...shape,
+      // Une erreur imprévue (SQL, Stripe) ne montre pas son détail au
+      // navigateur : il reste dans les journaux du serveur.
+      message:
+        error.code === 'INTERNAL_SERVER_ERROR'
+          ? 'Une erreur est survenue. Réessayez dans un instant.'
+          : shape.message,
       data: {
         ...shape.data,
         zodError:
