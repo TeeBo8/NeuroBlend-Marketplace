@@ -21,7 +21,7 @@ export default function VendorLoading() {
           </div>
         </aside>
         {/* Main content skeleton */}
-        <main className="flex-1 min-w-0 space-y-6">
+        <div className="flex-1 min-w-0 space-y-6">
           <div className="h-8 w-56 bg-muted rounded animate-pulse" />
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {Array.from({ length: 4 }, (_, i) => (
@@ -29,7 +29,7 @@ export default function VendorLoading() {
             ))}
           </div>
           <div className="h-72 bg-muted rounded-xl animate-pulse" />
-        </main>
+        </div>
       </div>
     </div>
   );

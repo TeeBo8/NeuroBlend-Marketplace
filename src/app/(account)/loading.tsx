@@ -21,7 +21,7 @@ export default function AccountLoading() {
           </div>
         </aside>
         {/* Main content skeleton */}
-        <main className="flex-1 min-w-0 space-y-6">
+        <div className="flex-1 min-w-0 space-y-6">
           <div className="h-8 w-48 bg-muted rounded animate-pulse" />
           <div className="grid gap-4 md:grid-cols-3">
             {Array.from({ length: 3 }, (_, i) => (
@@ -29,7 +29,7 @@ export default function AccountLoading() {
             ))}
           </div>
           <div className="h-64 bg-muted rounded-xl animate-pulse" />
-        </main>
+        </div>
       </div>
     </div>
   );

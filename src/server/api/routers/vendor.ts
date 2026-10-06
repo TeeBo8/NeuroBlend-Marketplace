@@ -115,7 +115,8 @@ export const vendorRouter = createTRPCRouter({
       where: eq(vendors.userId, ctx.session.user.id),
     });
 
-    return vendor;
+    // null, not undefined: React Query rejects a query that returns undefined.
+    return vendor ?? null;
   }),
 
   // Vendor dashboard figures, computed over every order rather than over

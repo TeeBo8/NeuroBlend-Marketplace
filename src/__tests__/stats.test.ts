@@ -232,3 +232,13 @@ describe("order.myStats", () => {
     expect(await asCustomer().order.myStats()).toEqual({ orders: 0, totalSpent: 0 });
   });
 });
+
+describe("vendor.me", () => {
+  it("renvoie null, et non undefined, pour un utilisateur sans boutique", async () => {
+    expect(await asCustomer().vendor.me()).toBeNull();
+  });
+
+  it("renvoie la boutique du vendeur", async () => {
+    expect(await asVendor().vendor.me()).toMatchObject({ id: shop.vendor.id });
+  });
+});
