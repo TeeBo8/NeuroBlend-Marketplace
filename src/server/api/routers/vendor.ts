@@ -225,8 +225,6 @@ export const vendorRouter = createTRPCRouter({
         .set({ role: 'customer', updatedAt: new Date() })
         .where(eq(users.id, vendor.userId));
 
-      // TODO: Send rejection email with reason
-
       return { success: true };
     }),
 
