@@ -94,11 +94,7 @@ export function ProductDetail({ id }: { id: string }) {
           100
       )
     : null;
-  const averageRating =
-    product.reviews && product.reviews.length > 0
-      ? product.reviews.reduce((sum, r) => sum + r.rating, 0) /
-        product.reviews.length
-      : 0;
+  const { count: reviewCount, average: averageRating } = product.reviewStats;
 
   return (
     <>
@@ -193,11 +189,11 @@ export function ProductDetail({ id }: { id: string }) {
             )}
 
             {/* Rating */}
-            {product.reviews && product.reviews.length > 0 && (
+            {reviewCount > 0 && (
               <div className="flex items-center gap-2 mb-4">
                 <StarRating rating={Math.round(averageRating)} />
                 <span className="text-sm text-muted-foreground">
-                  ({product.reviews.length} avis)
+                  ({reviewCount} avis)
                 </span>
               </div>
             )}
@@ -391,9 +387,9 @@ export function ProductDetail({ id }: { id: string }) {
         <div className="container mx-auto px-4 py-12">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-foreground">
-              Avis clients{product.reviews && product.reviews.length > 0 ? ` (${product.reviews.length})` : ''}
+              Avis clients{reviewCount > 0 ? ` (${reviewCount})` : ''}
             </h2>
-            {product.reviews && product.reviews.length > 0 && (
+            {reviewCount > 0 && (
               <div className="flex items-center gap-2">
                 <StarRating rating={Math.round(averageRating)} />
                 <span className="text-sm font-medium text-foreground">

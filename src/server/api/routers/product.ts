@@ -1,12 +1,13 @@
 import { z } from 'zod';
-import { eq, and, ilike } from 'drizzle-orm';
+import { eq, and, ilike, sql } from 'drizzle-orm';
 import {
   createTRPCRouter,
   publicProcedure,
   vendorProcedure,
   adminProcedure,
 } from '../trpc';
-import { products, vendors } from '@/server/db/schema';
+import type { Database } from '@/server/db';
+import { products, reviews, vendors } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
 import { isAllowedImageUrl } from '@/lib/image-hosts';
 import { fromCursor, newestFirst, toPage } from '../pagination';
@@ -33,6 +34,20 @@ const productInputSchema = z.object({
   flavorNotes: z.array(z.string()).optional(),
   origin: z.string().optional(),
 });
+
+// The product page only loads the latest reviews: the count and the average
+// have to come from the database, over all of them.
+async function getReviewStats(db: Database, productId: string) {
+  const [stats] = await db
+    .select({
+      count: sql<number>`count(*)`,
+      average: sql<string>`coalesce(round(avg(${reviews.rating}), 1), 0)`,
+    })
+    .from(reviews)
+    .where(eq(reviews.productId, productId));
+
+  return { count: Number(stats.count), average: Number(stats.average) };
+}
 
 export const productRouter = createTRPCRouter({
   // Get all products (public)
@@ -127,7 +142,10 @@ export const productRouter = createTRPCRouter({
         });
       }
 
-      return product;
+      return {
+        ...product,
+        reviewStats: await getReviewStats(ctx.db, product.id),
+      };
     }),
 
   // Get product by slug
@@ -168,7 +186,10 @@ export const productRouter = createTRPCRouter({
         });
       }
 
-      return product;
+      return {
+        ...product,
+        reviewStats: await getReviewStats(ctx.db, product.id),
+      };
     }),
 
   // Create product (vendor only)

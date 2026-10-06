@@ -57,16 +57,13 @@ export function productSchema(product: {
   origin?: string | null;
   vendor?: { businessName: string } | null;
   reviews?: Array<{ rating: number; comment?: string | null; user?: { name: string | null } | null; createdAt: Date }>;
+  // Calculés en base sur tous les avis : `reviews` ne contient que les derniers.
+  reviewStats?: { count: number; average: number };
 }) {
   const availability =
     product.stock !== null && product.stock !== undefined && product.stock > 0
       ? 'https://schema.org/InStock'
       : 'https://schema.org/OutOfStock';
-
-  const avgRating =
-    product.reviews && product.reviews.length > 0
-      ? product.reviews.reduce((sum, r) => sum + r.rating, 0) / product.reviews.length
-      : undefined;
 
   return {
     '@context': 'https://schema.org',
@@ -92,12 +89,12 @@ export function productSchema(product: {
         ? { '@type': 'Organization', name: product.vendor.businessName }
         : undefined,
     },
-    ...(avgRating !== undefined && product.reviews && product.reviews.length > 0
+    ...(product.reviewStats && product.reviewStats.count > 0 && product.reviews
       ? {
           aggregateRating: {
             '@type': 'AggregateRating',
-            ratingValue: avgRating.toFixed(1),
-            reviewCount: product.reviews.length,
+            ratingValue: product.reviewStats.average.toFixed(1),
+            reviewCount: product.reviewStats.count,
             bestRating: 5,
             worstRating: 1,
           },

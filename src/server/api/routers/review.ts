@@ -5,7 +5,7 @@ import {
   publicProcedure,
   protectedProcedure,
 } from '../trpc';
-import { reviews, orderItems } from '@/server/db/schema';
+import { reviews, orderItems, orders } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
 import { fromCursor, newestFirst, toPage } from '../pagination';
 
@@ -36,22 +36,22 @@ export const reviewRouter = createTRPCRouter({
         });
       }
 
-      // Check if user has purchased this product (for verified badge)
-      const purchasedItem = await ctx.db.query.orderItems.findFirst({
-        where: eq(orderItems.productId, input.productId),
-        with: {
-          order: {
-            columns: {
-              userId: true,
-              status: true,
-            },
-          },
-        },
-      });
+      // Verified badge: this user received this product in one of their
+      // own orders.
+      const [deliveredPurchase] = await ctx.db
+        .select({ id: orderItems.id })
+        .from(orderItems)
+        .innerJoin(orders, eq(orders.id, orderItems.orderId))
+        .where(
+          and(
+            eq(orderItems.productId, input.productId),
+            eq(orders.userId, ctx.session.user.id),
+            eq(orders.status, 'delivered')
+          )
+        )
+        .limit(1);
 
-      const isVerified =
-        purchasedItem?.order?.userId === ctx.session.user.id &&
-        purchasedItem?.order?.status === 'delivered';
+      const isVerified = deliveredPurchase !== undefined;
 
       const [review] = await ctx.db
         .insert(reviews)
