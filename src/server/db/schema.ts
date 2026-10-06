@@ -20,15 +20,6 @@ export const orderStatusEnum = pgEnum('order_status', [
   'cancelled',
 ]);
 export const categoryEnum = pgEnum('category', ['HPI', 'ADHD', 'hypersensitive']);
-export const subscriptionStatusEnum = pgEnum('subscription_status', [
-  'active',
-  'paused',
-  'cancelled',
-]);
-export const subscriptionFrequencyEnum = pgEnum('subscription_frequency', [
-  'monthly',
-  'quarterly',
-]);
 
 // Users table
 export const users = pgTable('users', {
@@ -181,33 +172,6 @@ export const orderItems = pgTable('order_items', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
-// Subscriptions table
-export const subscriptions = pgTable('subscriptions', {
-  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
-  userId: text('user_id')
-    .notNull()
-    .references(() => users.id, { onDelete: 'cascade' }),
-  stripeSubscriptionId: text('stripe_subscription_id'),
-  status: subscriptionStatusEnum('status').default('active'),
-  frequency: subscriptionFrequencyEnum('frequency').default('monthly'),
-  nextDelivery: timestamp('next_delivery'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
-});
-
-// Subscription items table
-export const subscriptionItems = pgTable('subscription_items', {
-  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
-  subscriptionId: text('subscription_id')
-    .notNull()
-    .references(() => subscriptions.id, { onDelete: 'cascade' }),
-  productId: text('product_id')
-    .notNull()
-    .references(() => products.id),
-  quantity: integer('quantity').notNull().default(1),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-});
-
 // Reviews table
 export const reviews = pgTable('reviews', {
   id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
@@ -232,7 +196,6 @@ export const usersRelations = relations(users, ({ many, one }) => ({
   vendor: one(vendors),
   orders: many(orders),
   reviews: many(reviews),
-  subscriptions: many(subscriptions),
 }));
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
@@ -265,7 +228,6 @@ export const productsRelations = relations(products, ({ one, many }) => ({
   }),
   orderItems: many(orderItems),
   reviews: many(reviews),
-  subscriptionItems: many(subscriptionItems),
 }));
 
 export const ordersRelations = relations(orders, ({ one, many }) => ({
@@ -291,25 +253,6 @@ export const orderItemsRelations = relations(orderItems, ({ one }) => ({
   }),
 }));
 
-export const subscriptionsRelations = relations(subscriptions, ({ one, many }) => ({
-  user: one(users, {
-    fields: [subscriptions.userId],
-    references: [users.id],
-  }),
-  items: many(subscriptionItems),
-}));
-
-export const subscriptionItemsRelations = relations(subscriptionItems, ({ one }) => ({
-  subscription: one(subscriptions, {
-    fields: [subscriptionItems.subscriptionId],
-    references: [subscriptions.id],
-  }),
-  product: one(products, {
-    fields: [subscriptionItems.productId],
-    references: [products.id],
-  }),
-}));
-
 export const reviewsRelations = relations(reviews, ({ one }) => ({
   user: one(users, {
     fields: [reviews.userId],
@@ -328,5 +271,4 @@ export type Product = typeof products.$inferSelect;
 export type NewProduct = typeof products.$inferInsert;
 export type Order = typeof orders.$inferSelect;
 export type OrderItem = typeof orderItems.$inferSelect;
-export type Subscription = typeof subscriptions.$inferSelect;
 export type Review = typeof reviews.$inferSelect;

@@ -33,8 +33,6 @@ export async function seedDemo(db: Database, options: SeedOptions = {}) {
   await db.delete(schema.reviews);
   await db.delete(schema.orderItems);
   await db.delete(schema.orders);
-  await db.delete(schema.subscriptionItems);
-  await db.delete(schema.subscriptions);
   await db.delete(schema.products);
   await db.delete(schema.vendors);
   await db.delete(schema.sessions);
