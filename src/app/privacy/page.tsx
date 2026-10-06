@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { APP_NAME } from '@/lib/constants';
 import { PageHero } from '@/components/layout/page-hero';
+import { DemoNotice } from '@/components/demo/demo-notice';
+import { siteUrl } from '@/lib/site-url';
 
 export const metadata: Metadata = {
   title: 'Politique de confidentialité',
@@ -17,6 +19,7 @@ export default function PrivacyPage() {
       <PageHero title="Politique de confidentialité">
         Dernière mise à jour : 7 février 2026
       </PageHero>
+      <DemoNotice />
 
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4 max-w-3xl rich-text">
@@ -25,9 +28,7 @@ export default function PrivacyPage() {
             Le responsable du traitement des données personnelles collectées sur
             le site {APP_NAME} est la société {APP_NAME}, accessible à
             l&apos;adresse{' '}
-            <a href="https://neuro-blend-marketplace.vercel.app" rel="noopener noreferrer">
-              neuro-blend-marketplace.vercel.app
-            </a>
+            <a href={siteUrl}>{new URL(siteUrl).host}</a>
             .
           </p>
 

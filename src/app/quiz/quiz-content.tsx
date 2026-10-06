@@ -164,11 +164,11 @@ const PROFILES: Record<
     emoji: "⚡",
     title: "L'Esprit Dynamique",
     description:
-      "Votre énergie a besoin d'être canalisée, pas freinée. Nos blends ADHD offrent une libération progressive de caféine pour un focus stable et durable, sans les pics suivis de crashes.",
+      "Votre énergie demande un café régulier, pas un coup de fouet. Nos blends ADHD misent sur des assemblages à faible acidité et un corps rond, pour une tasse franche et sans à-coups.",
     color: "border-secondary bg-secondary/10 text-secondary-foreground",
     traits: [
-      "Libération progressive de caféine",
-      "Équilibre énergie et concentration",
+      "Faible acidité",
+      "Intensité régulière",
       "Corps rond et réconfortant",
     ],
   },

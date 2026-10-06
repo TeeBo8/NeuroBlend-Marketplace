@@ -62,17 +62,20 @@ export const metadata: Metadata = {
     title: `${APP_NAME} - Café pour esprits neuroatypiques`,
     description: APP_DESCRIPTION,
   },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
+  // La démo ne doit pas apparaître dans les moteurs de recherche.
+  robots: isDemo
+    ? { index: false, follow: false }
+    : {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          "max-video-preview": -1,
+          "max-image-preview": "large",
+          "max-snippet": -1,
+        },
+      },
   alternates: {
     canonical: "/",
   },

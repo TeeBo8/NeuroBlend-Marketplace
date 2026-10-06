@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Truck, RotateCcw, Clock, MapPin } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { PageHero } from '@/components/layout/page-hero';
+import { DemoNotice } from '@/components/demo/demo-notice';
 
 export const metadata: Metadata = {
   title: 'Livraison & Retours — Délais et tarifs',
@@ -43,6 +44,7 @@ export default function ShippingPage() {
       <PageHero title="Livraison">
         Recevez vos capsules rapidement et en toute sécurité, partout en France.
       </PageHero>
+      <DemoNotice />
 
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4 max-w-4xl">

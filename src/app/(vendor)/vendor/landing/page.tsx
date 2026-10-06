@@ -86,21 +86,21 @@ const STEPS = [
 const VENDOR_TESTIMONIALS = [
   {
     name: "Sophie R.",
-    image: "/images/testimonials/sophie.jpg",
+    image: "/images/avatars/sophie.svg",
     location: "Toulouse",
     quote:
       "En 3 mois sur NeuroBlend, j'ai touché une clientèle que je n'aurais jamais atteinte seule. Les retours des clients neuroatypiques sont incroyablement précis et constructifs.",
   },
   {
     name: "Marc L.",
-    image: "/images/testimonials/marc.jpg",
+    image: "/images/avatars/marc.svg",
     location: "Strasbourg",
     quote:
       "La plateforme est simple et les paiements arrivent rapidement. Je peux me concentrer sur ce que je fais de mieux : torréfier du café d'exception.",
   },
   {
     name: "Emma B.",
-    image: "/images/testimonials/emma.jpg",
+    image: "/images/avatars/emma.svg",
     location: "Marseille",
     quote:
       "J'adore l'idée de créer des blends adaptés à chaque profil cognitif. C'est un vrai challenge créatif et mes ventes ont doublé depuis mon arrivée.",
@@ -267,7 +267,7 @@ export default function VendorLandingPage() {
             Ils vendent déjà sur {APP_NAME}
           </h2>
           <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
-            Découvrez les retours de torréfacteurs qui ont rejoint notre plateforme.
+            Des témoignages d&apos;illustration : {APP_NAME} est une marque fictive.
           </p>
           <div className="grid md:grid-cols-3 gap-6">
             {VENDOR_TESTIMONIALS.map((testimonial) => (
@@ -282,7 +282,8 @@ export default function VendorLandingPage() {
                     alt={testimonial.name}
                     width={40}
                     height={40}
-                    className="w-10 h-10 rounded-full object-cover"
+                    unoptimized
+                    className="w-10 h-10 rounded-full bg-muted object-cover"
                   />
                   <div>
                     <p className="font-semibold text-sm">{testimonial.name}</p>

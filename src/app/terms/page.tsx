@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { APP_NAME } from '@/lib/constants';
 import { PageHero } from '@/components/layout/page-hero';
+import { DemoNotice } from '@/components/demo/demo-notice';
 
 export const metadata: Metadata = {
   title: 'Conditions générales de vente',
@@ -17,6 +18,7 @@ export default function TermsPage() {
       <PageHero title="Conditions générales de vente">
         Dernière mise à jour : 7 février 2026
       </PageHero>
+      <DemoNotice />
 
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4 max-w-3xl rich-text">

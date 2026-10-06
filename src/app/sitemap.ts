@@ -1,8 +1,11 @@
 import type { MetadataRoute } from "next";
 import { PRODUCT_CATEGORIES } from "@/lib/constants";
 import { siteUrl } from "@/lib/site-url";
+import { isDemo } from "@/lib/demo";
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  if (isDemo) return [];
+
   const baseUrl = siteUrl;
 
   const staticPages: MetadataRoute.Sitemap = [

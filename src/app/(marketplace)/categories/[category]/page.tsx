@@ -20,7 +20,7 @@ const CATEGORY_SEO: Record<
   HPI: {
     title: 'Capsules HPI (Haut Potentiel) — Café pour esprits analytiques',
     description:
-      'Découvrez nos capsules de café artisanales conçues pour les profils HPI (Haut Potentiel Intellectuel). Des blends qui stimulent la pensée profonde et la créativité, sélectionnés par des torréfacteurs spécialisés.',
+      'Découvrez nos capsules de café artisanales conçues pour les profils HPI (Haut Potentiel Intellectuel). Des blends aux arômes complexes, sélectionnés par des torréfacteurs spécialisés.',
     keywords: [
       'café HPI',
       'haut potentiel intellectuel',
@@ -31,14 +31,14 @@ const CATEGORY_SEO: Record<
     ],
   },
   ADHD: {
-    title: 'Capsules ADHD — Café pour la concentration et le focus',
+    title: 'Capsules ADHD — Café franc et régulier',
     description:
-      'Nos capsules de café ADHD sont spécialement formulées pour favoriser la concentration et canaliser l\u2019énergie. Des torréfactions artisanales équilibrées, parfaites pour les esprits dynamiques.',
+      'Nos capsules de café ADHD : des torréfactions artisanales équilibrées, à faible acidité, pour les esprits dynamiques.',
     keywords: [
       'café ADHD',
       'café concentration',
       'café focus',
-      'capsules TDAH',
+      'café équilibré',
       'neurodiversité',
       'café énergie',
     ],

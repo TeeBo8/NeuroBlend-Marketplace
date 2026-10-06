@@ -2,8 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { APP_NAME, PRODUCT_CATEGORIES, SUBSCRIPTION_PLANS } from "@/lib/constants";
-import { Shield, Truck, RefreshCcw, Star, Quote, Users, Brain, Coffee, Heart, Lock, Lightbulb, Zap, Feather, Check, MapPin, type LucideIcon } from "lucide-react";
-import { AnimatedCounter } from "@/components/home/animated-counter";
+import { Shield, Truck, RefreshCcw, Star, Quote, Brain, Coffee, Heart, Lock, Lightbulb, Zap, Feather, Check, MapPin, type LucideIcon } from "lucide-react";
 import { TrackedCta } from "@/components/home/tracked-cta";
 import { JsonLd } from "@/components/seo/json-ld";
 import { websiteSchema } from "@/lib/schemas";
@@ -12,28 +11,28 @@ const TESTIMONIALS = [
   {
     name: "Léa",
     profile: "HPI" as const,
-    image: "/images/testimonials/lea.jpg",
+    image: "/images/avatars/lea.svg",
     quote:
       "Depuis que j'ai trouvé mon blend HPI, mes sessions de deep work sont incomparables. Ce café comprend mon cerveau.",
   },
   {
     name: "Thomas",
     profile: "ADHD" as const,
-    image: "/images/testimonials/thomas.jpg",
+    image: "/images/avatars/thomas.svg",
     quote:
-      "Le blend ADHD m'aide à canaliser mon énergie sans les tremblements du café classique. Un vrai game changer !",
+      "Le blend ADHD est devenu mon café du matin : franc, régulier, sans amertume. Je ne reviendrai pas en arrière.",
   },
   {
     name: "Camille",
     profile: "Hypersensible" as const,
-    image: "/images/testimonials/camille.jpg",
+    image: "/images/avatars/camille.svg",
     quote:
       "Enfin un café doux qui ne m'agresse pas. Les notes florales sont subtiles et apaisantes. Je me sens comprise.",
   },
   {
     name: "Maxime",
     profile: "HPI" as const,
-    image: "/images/testimonials/maxime.jpg",
+    image: "/images/avatars/maxime.svg",
     quote:
       "La qualité artisanale se sent dès la première gorgée. Mon rituel café du matin a complètement changé.",
   },
@@ -48,12 +47,12 @@ const PROFILE_COLORS: Record<string, string> = {
 const CATEGORY_DETAILS: Record<string, { icon: LucideIcon; benefit: string; image: string }> = {
   HPI: {
     icon: Lightbulb,
-    benefit: "Stimule la pensée profonde et la créativité sans surexcitation",
+    benefit: "Des arômes complexes pour accompagner les longues sessions de réflexion",
     image: "/images/categories/hpi-lifestyle.jpg",
   },
   ADHD: {
     icon: Zap,
-    benefit: "Favorise la concentration et canalise l'énergie naturellement",
+    benefit: "Une intensité franche et régulière, pour un café sans à-coups",
     image: "/images/categories/adhd-lifestyle.jpg",
   },
   hypersensitive: {
@@ -66,23 +65,23 @@ const CATEGORY_DETAILS: Record<string, { icon: LucideIcon; benefit: string; imag
 const ROASTERS = [
   {
     name: "Antoine Dubois",
-    image: "/images/artisans/antoine.jpg",
+    image: "/images/avatars/antoine.svg",
     location: "Lyon",
     specialty: "Blend HPI",
     quote:
-      "Chaque grain est sélectionné pour stimuler la créativité sans surexcitation. La torréfaction lente révèle des arômes complexes.",
+      "Chaque grain est sélectionné pour sa complexité. La torréfaction lente révèle des arômes qui se découvrent gorgée après gorgée.",
   },
   {
     name: "Marie Chen",
-    image: "/images/artisans/marie.jpg",
+    image: "/images/avatars/marie.svg",
     location: "Bordeaux",
     specialty: "Blend ADHD",
     quote:
-      "Je torréfie des cafés qui aident à canaliser l'énergie, pas à l'étouffer. L'équilibre est la clé.",
+      "Je torréfie des cafés francs et réguliers, sans amertume. L'équilibre est la clé.",
   },
   {
     name: "Julien Moreau",
-    image: "/images/artisans/julien.jpg",
+    image: "/images/avatars/julien.svg",
     location: "Nantes",
     specialty: "Blend Hypersensible",
     quote:
@@ -229,10 +228,10 @@ export default function HomePage() {
             Ils ont trouvé leur blend
           </h2>
           <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
-            Découvrez les témoignages de ceux qui ont transformé leur rituel café.
+            Des témoignages d&apos;illustration : NeuroBlend est une marque fictive.
           </p>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {TESTIMONIALS.map((testimonial) => (
               <div
                 key={testimonial.name}
@@ -245,7 +244,8 @@ export default function HomePage() {
                     alt={testimonial.name}
                     width={40}
                     height={40}
-                    className="w-10 h-10 rounded-full object-cover"
+                    unoptimized
+                    className="w-10 h-10 rounded-full bg-muted object-cover"
                   />
                   <div>
                     <p className="font-semibold text-sm">{testimonial.name}</p>
@@ -269,19 +269,6 @@ export default function HomePage() {
                 </div>
               </div>
             ))}
-          </div>
-
-          {/* Animated Counter */}
-          <div className="flex flex-col items-center gap-3 text-center">
-            <div className="flex items-center gap-3">
-              <Users className="h-6 w-6 text-primary" />
-              <span className="text-4xl md:text-5xl font-bold text-primary">
-                <AnimatedCounter target={2847} />
-              </span>
-            </div>
-            <p className="text-lg text-muted-foreground">
-              esprits neuroatypiques nous font confiance
-            </p>
           </div>
         </div>
       </section>
@@ -440,7 +427,7 @@ export default function HomePage() {
             Les artisans derrière vos capsules
           </h2>
           <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
-            Des torréfacteurs passionnés qui comprennent les besoins des esprits neuroatypiques.
+            Trois torréfacteurs fictifs, pour montrer à quoi ressemble une place de marché multi-vendeurs.
           </p>
           <div className="grid md:grid-cols-3 gap-6">
             {ROASTERS.map((roaster) => (
@@ -454,7 +441,8 @@ export default function HomePage() {
                     alt={roaster.name}
                     width={48}
                     height={48}
-                    className="w-12 h-12 rounded-full object-cover"
+                    unoptimized
+                    className="w-12 h-12 rounded-full bg-muted object-cover"
                   />
                   <div>
                     <p className="font-semibold">{roaster.name}</p>

@@ -33,7 +33,11 @@ const faqSections = [
       },
       {
         q: 'Qu\u2019est-ce qu\u2019un profil neuroatypique ?',
-        a: 'La neurodiversité englobe les personnes HPI (Haut Potentiel Intellectuel), ADHD (Trouble du Déficit de l\u2019Attention avec ou sans Hyperactivité) et hypersensibles. Environ 15 à 20% de la population est concernée.',
+        a: 'La neurodiversité englobe les personnes HPI (Haut Potentiel Intellectuel), ADHD (Trouble du Déficit de l\u2019Attention avec ou sans Hyperactivité) et hypersensibles.',
+      },
+      {
+        q: 'Vos cafés ont-ils un effet sur le TDAH ou la concentration ?',
+        a: 'Non. Nos blends sont des cafés, choisis pour leur goût et leur intensité. Ce ne sont pas des produits de santé : ils ne traitent ni le TDAH ni aucun autre trouble, et ne remplacent pas un avis médical.',
       },
       {
         q: 'En quoi le café est-il adapté à mon profil ?',
