@@ -70,7 +70,7 @@ export default function PrivacyPage() {
           <h2>4. Base légale</h2>
           <p>
             Le traitement de vos données repose sur : l&apos;exécution du contrat
-            (commandes), votre consentement (cookies non essentiels, newsletter),
+            (commandes), votre consentement (cookies non essentiels),
             et notre intérêt légitime (amélioration du service, sécurité).
           </p>
 
