@@ -38,6 +38,11 @@ export const users = pgTable('users', {
   emailVerified: boolean('email_verified').default(false),
   image: text('image'),
   role: userRoleEnum('role').default('customer'),
+  // Démo : identifiant du bac à sable d'un visiteur (ses trois comptes
+  // éphémères le partagent). Nul pour un vrai compte et pour le décor.
+  demoSandboxId: text('demo_sandbox_id'),
+  // Démo : compte de décor, sur lequel personne ne peut se connecter.
+  isSeed: boolean('is_seed').default(false).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });

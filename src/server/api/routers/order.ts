@@ -6,7 +6,7 @@ import {
   vendorProcedure,
   adminProcedure,
 } from '../trpc';
-import { orders, vendors } from '@/server/db/schema';
+import { orders } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
 import { fromCursor, newestFirst, toPage } from '../pagination';
 import { isCollected, isPlaced, STATUSES_BEFORE } from '@/server/orders/status';
@@ -14,6 +14,7 @@ import {
   markOrderCancelled,
   refundOrderPayment,
 } from '@/server/orders/cancellation';
+import { findVendorOfUser } from '@/server/vendors';
 
 export const orderRouter = createTRPCRouter({
   // Get user's orders
@@ -128,9 +129,7 @@ export const orderRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const vendor = await ctx.db.query.vendors.findFirst({
-        where: eq(vendors.userId, ctx.session.user.id),
-      });
+      const vendor = await findVendorOfUser(ctx);
 
       if (!vendor) {
         return { items: [], nextCursor: undefined };
@@ -187,9 +186,7 @@ export const orderRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const vendor = await ctx.db.query.vendors.findFirst({
-        where: eq(vendors.userId, ctx.session.user.id),
-      });
+      const vendor = await findVendorOfUser(ctx);
 
       if (!vendor) {
         throw new TRPCError({

@@ -17,6 +17,7 @@ import {
   toCents,
 } from '@/lib/order-totals';
 import { shippingAddressSchema } from '@/lib/shipping-address';
+import { findVendorOfUser } from '@/server/vendors';
 
 const cartItemSchema = z.object({
   productId: z.string().min(1).max(100),
@@ -35,12 +36,7 @@ const toStripeImages = (imageUrl: string | null) => {
 export const paymentRouter = createTRPCRouter({
   // Create Stripe Connect account for vendor
   createConnectAccount: vendorProcedure.mutation(async ({ ctx }) => {
-    const vendor = await ctx.db.query.vendors.findFirst({
-      where: eq(vendors.userId, ctx.session.user.id),
-      with: {
-        user: true,
-      },
-    });
+    const vendor = await findVendorOfUser(ctx);
 
     if (!vendor) {
       throw new TRPCError({
@@ -65,7 +61,7 @@ export const paymentRouter = createTRPCRouter({
     const account = await getStripe().accounts.create({
       type: 'express',
       country: 'FR',
-      email: vendor.user.email,
+      email: ctx.session.user.email,
       capabilities: {
         card_payments: { requested: true },
         transfers: { requested: true },
@@ -99,9 +95,7 @@ export const paymentRouter = createTRPCRouter({
 
   // Get Stripe Connect account status
   getConnectStatus: vendorProcedure.query(async ({ ctx }) => {
-    const vendor = await ctx.db.query.vendors.findFirst({
-      where: eq(vendors.userId, ctx.session.user.id),
-    });
+    const vendor = await findVendorOfUser(ctx);
 
     if (!vendor || !vendor.stripeAccountId) {
       return {
@@ -137,9 +131,7 @@ export const paymentRouter = createTRPCRouter({
 
   // Get Stripe dashboard link for vendor
   getDashboardLink: vendorProcedure.query(async ({ ctx }) => {
-    const vendor = await ctx.db.query.vendors.findFirst({
-      where: eq(vendors.userId, ctx.session.user.id),
-    });
+    const vendor = await findVendorOfUser(ctx);
 
     if (!vendor?.stripeAccountId) {
       throw new TRPCError({
