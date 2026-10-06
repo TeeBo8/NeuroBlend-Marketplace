@@ -4,6 +4,10 @@ Place de marché de capsules de café où plusieurs torréfacteurs vendent leurs
 
 Projet d'entraînement : la marque et les produits sont fictifs, les paiements passent par Stripe en mode test.
 
+**Démo en ligne : [neuroblend-demo.teebostudio.fr](https://neuroblend-demo.teebostudio.fr)**. Un clic sur « Entrer dans la démo » vous donne trois comptes jetables (client, vendeur, admin) pour faire tout le parcours : commander avec la carte de test `4242 4242 4242 4242`, expédier la commande, puis l'annuler et la rembourser.
+
+![Page d'accueil de NeuroBlend](docs/apercu.jpg)
+
 ## Ce que fait le site
 
 | Pour qui | Ce qu'il peut faire |
@@ -40,18 +44,22 @@ src/
 │   ├── (vendor)/           Espace vendeur
 │   ├── (admin)/            Espace admin
 │   ├── (auth)/             Connexion, inscription
-│   └── api/                tRPC, webhook Stripe, chat IA, contact, upload
+│   └── api/                tRPC, webhook Stripe, chat et conseils IA, contact, upload,
+│                           entrée et nettoyage de la démo
 ├── components/             Composants partagés (ui/ = shadcn)
 ├── lib/                    Constantes, validation, e-mails, utilitaires
 ├── server/
 │   ├── api/routers/        Une procédure tRPC par action, rangées par domaine
 │   ├── orders/             Validation, annulation et statuts des commandes
-│   ├── db/                 Schéma Drizzle et données de démonstration
+│   ├── demo/               Mode démo : bacs à sable, cloisonnement, décor
+│   ├── db/                 Schéma Drizzle, script de chargement du décor
+│   ├── vendors.ts          « Quelle boutique gère cet utilisateur ? »
 │   └── auth/               Configuration Better Auth
 ├── stores/                 Panier
 ├── proxy.ts                Protège /account, /vendor et /admin selon le rôle
 └── __tests__/              Tests
 drizzle/                    Migrations SQL
+docs/                       Capture d'écran et crédits des photos
 scripts/                    Commandes d'administration
 ```
 
@@ -124,12 +132,26 @@ Le site se construit sans base de données ni clés d'API : chaque variable n'es
 | `pnpm db:seed --reset` | Vide la base puis charge le décor : trois boutiques, neuf produits, des commandes et des avis fictifs |
 | `pnpm db:promote-admin <email>` | Donne le rôle admin à un compte |
 
+## Comment marche la démo
+
+Avec `DEMO_MODE` et `NEXT_PUBLIC_DEMO_MODE` à `true`, le site devient une démo publique. Sans ces variables, c'est une place de marché normale.
+
+- **Un bac à sable par visiteur.** L'entrée crée trois comptes éphémères reliés (client, vendeur, admin). Le bandeau du haut fait passer de l'un à l'autre.
+- **Chacun chez soi.** Un visiteur voit le décor (trois boutiques, neuf produits, des commandes livrées et des avis) et ce qu'il a créé lui-même, jamais les commandes ni les avis d'un autre. Une seule condition SQL porte cette règle : `src/server/demo/visibility.ts`.
+- **Décor en lecture seule.** Ce qui le modifierait (catalogue, boutiques, rôles) est refusé par le garde `blockedInDemo` de `src/server/api/trpc.ts`.
+- **Porte d'entrée unique.** L'inscription et la connexion par mot de passe sont fermées côté serveur ; les comptes naissent dans `src/app/api/demo/enter`.
+- **Garde-fous.** Clé Stripe de test obligatoire, aucun e-mail envoyé, nombre d'entrées plafonné par adresse IP, comptes supprimés au bout de 24 heures par une tâche planifiée. Sur le site en ligne, une règle du pare-feu Vercel limite en plus chaque adresse IP à 120 requêtes par minute sur `/api/` ; elle se règle dans le tableau de bord de l'hébergeur, pas dans ce dépôt.
+
 ## Comment le paiement tient debout
 
 1. La commande est enregistrée « en attente » avant que le client parte payer, avec les prix lus en base. Stripe ne transporte que son identifiant.
 2. Le webhook Stripe et la page de retour appellent la même validation. Une seule requête SQL passe la commande à « payée » et retire le stock : le premier arrivé fait le travail, le second ne change rien.
 3. Une session abandonnée expire au bout de 30 minutes et sa commande est supprimée.
 4. À l'annulation, le client est remboursé chez Stripe avant toute écriture en base, puis une seule requête annule la commande et remet le stock.
+
+## Crédits
+
+Les photos viennent de StockSnap et les avatars du style Lorelei, tous sous licence CC0. Le détail, fichier par fichier, est dans [docs/CREDITS-PHOTOS.md](docs/CREDITS-PHOTOS.md).
 
 ## Règles du projet
 

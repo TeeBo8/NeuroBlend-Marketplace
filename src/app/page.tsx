@@ -95,20 +95,17 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <section className="relative bg-neutral-900 text-white overflow-hidden">
-        {/* Video background with image fallback */}
         <div className="absolute inset-0">
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            poster="/images/hero/coffee-beans.jpg"
-            className="w-full h-full object-cover"
-          >
-            <source src="/images/hero/cappuccino-hero.mp4" type="video/mp4" />
-          </video>
+          <Image
+            src="/images/hero/coffee-beans.jpg"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
           {/* Voile sombre neutre, identique en clair et en sombre : le texte
-              reste blanc et lisible sur la vidéo. */}
+              reste blanc et lisible sur la photo. */}
           <div className="absolute inset-0 bg-black/55" />
         </div>
 

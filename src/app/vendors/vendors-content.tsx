@@ -21,16 +21,14 @@ export function VendorsContent() {
       {/* Hero */}
       <section className="relative text-white overflow-hidden">
         <div className="absolute inset-0">
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            poster="/images/vendors/vendors-hero.jpg"
-            className="w-full h-full object-cover"
-          >
-            <source src="/images/hero/coffee-beans-hero.mp4" type="video/mp4" />
-          </video>
+          <Image
+            src="/images/vendors/vendors-hero.jpg"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
         </div>
         <div className="absolute inset-0 bg-black/60" />
         <div className="relative container mx-auto px-4 py-16 md:py-20">
