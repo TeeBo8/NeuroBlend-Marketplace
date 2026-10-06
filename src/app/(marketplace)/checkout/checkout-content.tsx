@@ -13,6 +13,7 @@ import { useCartStore } from '@/stores/cart-store';
 import { useSession } from '@/lib/auth-client';
 import { api } from '@/trpc/client';
 import { formatPrice } from '@/lib/utils';
+import { shippingAddressSchema } from '@/lib/shipping-address';
 import { toast } from 'sonner';
 
 export function CheckoutContent() {
@@ -36,8 +37,12 @@ export function CheckoutContent() {
       }
     },
     onError: (error) => {
+      // Une erreur de validation arrive sous forme de JSON technique : on ne
+      // l'affiche pas tel quel.
       toast.error('Erreur lors de la création du paiement', {
-        description: error.message,
+        description: error.data?.zodError
+          ? "Certaines informations du panier ou de l'adresse sont invalides."
+          : error.message,
       });
     },
   });
@@ -100,8 +105,11 @@ export function CheckoutContent() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!shipping.name || !shipping.address || !shipping.city || !shipping.postalCode) {
-      toast.error('Veuillez remplir tous les champs de livraison');
+    const address = shippingAddressSchema.safeParse(shipping);
+    if (!address.success) {
+      toast.error('Adresse de livraison incomplète', {
+        description: address.error.issues[0].message,
+      });
       return;
     }
 
@@ -110,7 +118,7 @@ export function CheckoutContent() {
         productId: item.productId,
         quantity: item.quantity,
       })),
-      shippingAddress: shipping,
+      shippingAddress: address.data,
     });
   };
 

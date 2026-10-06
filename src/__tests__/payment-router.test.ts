@@ -117,7 +117,7 @@ describe("payment.createCheckoutSession", () => {
         items: [{ productId: shop.product.id, quantity: 11 }],
         shippingAddress: address,
       })
-    ).rejects.toThrow(/Not enough stock/);
+    ).rejects.toThrow(/Stock insuffisant/);
 
     expect(await allOrders()).toHaveLength(0);
     expect(stripe.create).not.toHaveBeenCalled();
@@ -131,7 +131,7 @@ describe("payment.createCheckoutSession", () => {
         items: [{ productId: shop.product.id, quantity: 1 }],
         shippingAddress: address,
       })
-    ).rejects.toThrow(/no longer available/);
+    ).rejects.toThrow(/ne sont plus disponibles/);
 
     expect(stripe.create).not.toHaveBeenCalled();
   });
@@ -142,7 +142,7 @@ describe("payment.createCheckoutSession", () => {
         items: [{ productId: "inconnu", quantity: 1 }],
         shippingAddress: address,
       })
-    ).rejects.toThrow(/no longer available/);
+    ).rejects.toThrow(/ne sont plus disponibles/);
   });
 
   it("refuse un vendeur qui n'est pas approuvé", async () => {
@@ -153,7 +153,7 @@ describe("payment.createCheckoutSession", () => {
         items: [{ productId: shop.product.id, quantity: 1 }],
         shippingAddress: address,
       })
-    ).rejects.toThrow(/Vendor payment setup incomplete/);
+    ).rejects.toThrow(/ne peut pas encore recevoir de paiements/);
 
     expect(await allOrders()).toHaveLength(0);
   });

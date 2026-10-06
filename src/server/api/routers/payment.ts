@@ -16,18 +16,11 @@ import {
   mergeCartItems,
   toCents,
 } from '@/lib/order-totals';
+import { shippingAddressSchema } from '@/lib/shipping-address';
 
 const cartItemSchema = z.object({
   productId: z.string().min(1).max(100),
   quantity: z.number().int().min(1).max(99),
-});
-
-const shippingAddressSchema = z.object({
-  name: z.string().trim().min(2).max(100),
-  address: z.string().trim().min(5).max(200),
-  city: z.string().trim().min(2).max(100),
-  postalCode: z.string().trim().min(2).max(20),
-  country: z.string().trim().min(2).max(60),
 });
 
 // Stripe only accepts absolute, publicly reachable image URLs.
@@ -191,13 +184,14 @@ export const paymentRouter = createTRPCRouter({
         if (!product || !product.active) {
           throw new TRPCError({
             code: 'BAD_REQUEST',
-            message: 'One or more products are no longer available',
+            message:
+              'Un ou plusieurs produits ne sont plus disponibles. Retirez-les du panier.',
           });
         }
         if ((product.stock ?? 0) < item.quantity) {
           throw new TRPCError({
             code: 'BAD_REQUEST',
-            message: `Not enough stock for "${product.name}"`,
+            message: `Stock insuffisant pour « ${product.name} »`,
           });
         }
         return { product, quantity: item.quantity };
@@ -208,7 +202,7 @@ export const paymentRouter = createTRPCRouter({
         throw new TRPCError({
           code: 'BAD_REQUEST',
           message:
-            'Multi-vendor checkout not supported yet. Please checkout items from one vendor at a time.',
+            'Les produits de plusieurs vendeurs ne peuvent pas encore être payés ensemble. Commandez un vendeur à la fois.',
         });
       }
 
@@ -221,7 +215,7 @@ export const paymentRouter = createTRPCRouter({
       ) {
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Vendor payment setup incomplete',
+          message: 'Ce vendeur ne peut pas encore recevoir de paiements',
         });
       }
 
