@@ -38,7 +38,7 @@ export const SEED_VENDORS: SeedVendor[] = [
     ownerEmail: 'marie.chen@neuroblend.example',
     businessName: 'Maison Chen',
     description:
-      'Torréfactrice à Bordeaux. Des blends francs et réguliers, pensés pour tenir la concentration sans à-coups.',
+      'Torréfactrice à Bordeaux. Des blends francs et réguliers, pensés pour une tasse sans à-coups.',
     commissionRate: '15.00',
     category: 'ADHD',
   },
@@ -246,9 +246,9 @@ export const SEED_PRODUCTS: Omit<NewProduct, 'vendorId'>[] = [
     name: "Hyper Focus",
     slug: "hyper-focus",
     description:
-      "Spécialement formulé pour soutenir la concentration, Hyper Focus est un assemblage brésilien à faible acidité avec des notes de noix et de chocolat au lait. Sa libération progressive de caféine aide à maintenir un focus stable sans les pics d'énergie suivis de crashes.",
+      "Hyper Focus est un assemblage brésilien à faible acidité, avec des notes de noix et de chocolat au lait. Une tasse ronde et régulière, pensée pour les longues sessions de travail.",
     shortDescription:
-      "Assemblage brésilien doux, libération progressive pour un focus stable.",
+      "Assemblage brésilien doux, rond et régulier.",
     price: "13.90",
     compareAtPrice: "15.90",
     capsuleCount: 10,
@@ -267,9 +267,9 @@ export const SEED_PRODUCTS: Omit<NewProduct, 'vendorId'>[] = [
     name: "Flow State",
     slug: "flow-state",
     description:
-      "Entrez dans votre zone de flow. Ce blend associe un robusta sélectionné pour son apport énergétique maîtrisé à un arabica péruvien doux et fruité. Le résultat : une stimulation constante qui accompagne votre rythme sans le bousculer.",
+      "Entrez dans votre zone de flow. Ce blend associe un robusta choisi pour son corps à un arabica péruvien doux et fruité. Le résultat : une tasse constante, qui accompagne votre rythme sans le bousculer.",
     shortDescription:
-      "Blend arabica-robusta pour une énergie maîtrisée et constante.",
+      "Blend arabica-robusta, corps affirmé et tasse constante.",
     price: "11.90",
     capsuleCount: 10,
     category: "ADHD",

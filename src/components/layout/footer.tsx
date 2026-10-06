@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Coffee, Instagram, Linkedin, Youtube } from 'lucide-react';
 import { APP_NAME, FOOTER_LINKS } from '@/lib/constants';
+import { isDemo } from '@/lib/demo';
 
 const footerSections = [
   { title: 'Marketplace', links: FOOTER_LINKS.marketplace },
@@ -72,10 +73,12 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} {APP_NAME}. Tous droits réservés.
+            {isDemo
+              ? `Démonstration technique · ${APP_NAME} est une marque fictive, aucune commande n'est livrée`
+              : `© ${new Date().getFullYear()} ${APP_NAME}. Tous droits réservés.`}
           </p>
           <p className="text-sm text-muted-foreground">
-            Fait avec ☕ pour les esprits extraordinaires
+            Nos cafés ne sont pas des produits de santé
           </p>
         </div>
       </div>

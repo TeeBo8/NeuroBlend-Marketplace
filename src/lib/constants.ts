@@ -9,7 +9,7 @@ export const DEFAULT_COMMISSION_RATE = 15; // 15%
 // Product categories
 export const PRODUCT_CATEGORIES = [
   { value: 'HPI', label: 'HPI (Haut Potentiel)', description: 'Pour les esprits analytiques et créatifs' },
-  { value: 'ADHD', label: 'ADHD', description: 'Pour améliorer la concentration et le focus' },
+  { value: 'ADHD', label: 'ADHD', description: 'Pour les esprits dynamiques' },
   { value: 'hypersensitive', label: 'Hypersensible', description: 'Saveurs douces et équilibrées' },
 ] as const;
 

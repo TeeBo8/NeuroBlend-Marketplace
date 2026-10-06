@@ -25,11 +25,11 @@ const CATEGORY_SEO_CONTENT: Record<
     ],
   },
   ADHD: {
-    heading: 'Des capsules de café conçues pour le focus et la concentration',
+    heading: 'Des capsules de café franches et régulières',
     paragraphs: [
-      'Le TDAH (Trouble du Déficit de l\u2019Attention avec ou sans Hyperactivité) concerne environ 5% de la population adulte en France. Les personnes ADHD ont souvent un rapport particulier à la caféine : elle peut aider à canaliser l\u2019énergie et favoriser le focus, à condition de choisir le bon dosage.',
-      'Nos blends ADHD sont créés par des torréfacteurs qui comprennent ce besoin d\u2019équilibre. Des cafés ni trop forts ni trop légers, avec une libération progressive de la caféine pour un effet durable sans les pics d\u2019énergie suivis de crashes. L\u2019intensité est calibrée pour soutenir la concentration sur la durée.',
-      'Chaque capsule est le fruit d\u2019un savoir-faire artisanal pensé pour les esprits dynamiques. Commandez vos capsules et découvrez comment le bon café peut transformer votre productivité au quotidien.',
+      'Certains amateurs de café cherchent avant tout la régularité : une tasse qui a le même caractère le matin et l\u2019après-midi, sans amertume ni acidité marquée. C\u2019est l\u2019idée de notre gamme ADHD, pensée pour les esprits dynamiques.',
+      'Nos torréfacteurs y travaillent des cafés ni trop forts ni trop légers : assemblages à faible acidité, torréfaction moyenne, corps rond. Notes de noix, de chocolat au lait et de céréales.',
+      'Chaque capsule est le fruit d\u2019un savoir-faire artisanal. Un café reste un café : nos blends ne sont pas des produits de santé et ne remplacent aucun avis médical.',
     ],
   },
   hypersensitive: {

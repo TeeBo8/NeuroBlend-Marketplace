@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Card, CardContent } from '@/components/ui/card';
 import { APP_NAME } from '@/lib/constants';
 import { PageHero } from '@/components/layout/page-hero';
+import { DemoNotice } from '@/components/demo/demo-notice';
 
 export const metadata: Metadata = {
   title: 'Politique Cookies',
@@ -45,6 +46,7 @@ export default function CookiesPage() {
       <PageHero title="Politique Cookies">
         Dernière mise à jour : 7 février 2026
       </PageHero>
+      <DemoNotice />
 
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4 max-w-3xl">
