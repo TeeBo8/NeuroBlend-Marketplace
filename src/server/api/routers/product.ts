@@ -49,6 +49,23 @@ async function getReviewStats(db: Database, productId: string) {
   return { count: Number(stats.count), average: Number(stats.average) };
 }
 
+// A product taken off the catalogue stays reachable for the people who
+// manage it: its own vendor (to edit it) and the admins.
+async function canSeeInactive(
+  ctx: { db: Database; session: { user: { id: string; role?: string | null } } | null },
+  product: { vendorId: string }
+) {
+  const user = ctx.session?.user;
+  if (!user) return false;
+  if (user.role === 'admin') return true;
+
+  const ownVendor = await ctx.db.query.vendors.findFirst({
+    where: and(eq(vendors.id, product.vendorId), eq(vendors.userId, user.id)),
+    columns: { id: true },
+  });
+  return ownVendor !== undefined;
+}
+
 export const productRouter = createTRPCRouter({
   // Get all products (public)
   list: publicProcedure
@@ -135,7 +152,7 @@ export const productRouter = createTRPCRouter({
         },
       });
 
-      if (!product) {
+      if (!product || !(product.active || (await canSeeInactive(ctx, product)))) {
         throw new TRPCError({
           code: 'NOT_FOUND',
           message: 'Product not found',
