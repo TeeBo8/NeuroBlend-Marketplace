@@ -12,6 +12,7 @@ import { isCollected, isPlaced } from '@/server/orders/status';
 import { TRPCError } from '@trpc/server';
 import { sendVendorApprovedEmail } from '@/lib/email';
 import { fromCursor, newestFirst, toPage } from '../pagination';
+import { findVendorOfUser } from '@/server/vendors';
 
 export const vendorRouter = createTRPCRouter({
   // Get all approved vendors (public)
@@ -53,9 +54,7 @@ export const vendorRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       // Check if user already has a vendor profile
-      const existingVendor = await ctx.db.query.vendors.findFirst({
-        where: eq(vendors.userId, ctx.session.user.id),
-      });
+      const existingVendor = await findVendorOfUser(ctx);
 
       if (existingVendor) {
         throw new TRPCError({
@@ -86,9 +85,7 @@ export const vendorRouter = createTRPCRouter({
 
   // Get current user's vendor profile
   me: protectedProcedure.query(async ({ ctx }) => {
-    const vendor = await ctx.db.query.vendors.findFirst({
-      where: eq(vendors.userId, ctx.session.user.id),
-    });
+    const vendor = await findVendorOfUser(ctx);
 
     // null, not undefined: React Query rejects a query that returns undefined.
     return vendor ?? null;
@@ -97,10 +94,7 @@ export const vendorRouter = createTRPCRouter({
   // Vendor dashboard figures, computed over every order rather than over
   // the few rows a list page happens to show.
   myStats: vendorProcedure.query(async ({ ctx }) => {
-    const vendor = await ctx.db.query.vendors.findFirst({
-      where: eq(vendors.userId, ctx.session.user.id),
-      columns: { id: true },
-    });
+    const vendor = await findVendorOfUser(ctx);
 
     if (!vendor) {
       return { products: 0, orders: 0, revenue: 0, toProcess: 0 };

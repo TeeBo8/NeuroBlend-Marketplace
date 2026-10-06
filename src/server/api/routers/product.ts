@@ -11,6 +11,7 @@ import { products, reviews, vendors } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
 import { isAllowedImageUrl } from '@/lib/image-hosts';
 import { fromCursor, newestFirst, toPage } from '../pagination';
+import { findVendorOfUser } from '@/server/vendors';
 
 // Seules les images passées par l'upload sont acceptées : next/image refuse
 // tout autre hôte, et une URL libre ferait planter les pages qui l'affichent.
@@ -170,9 +171,7 @@ export const productRouter = createTRPCRouter({
     .input(productInputSchema)
     .mutation(async ({ ctx, input }) => {
       // Get vendor for the current user
-      const vendor = await ctx.db.query.vendors.findFirst({
-        where: eq(vendors.userId, ctx.session.user.id),
-      });
+      const vendor = await findVendorOfUser(ctx);
 
       if (!vendor) {
         throw new TRPCError({
@@ -237,9 +236,7 @@ export const productRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const vendor = await ctx.db.query.vendors.findFirst({
-        where: eq(vendors.userId, ctx.session.user.id),
-      });
+      const vendor = await findVendorOfUser(ctx);
 
       if (!vendor) {
         throw new TRPCError({
@@ -295,9 +292,7 @@ export const productRouter = createTRPCRouter({
   delete: vendorProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const vendor = await ctx.db.query.vendors.findFirst({
-        where: eq(vendors.userId, ctx.session.user.id),
-      });
+      const vendor = await findVendorOfUser(ctx);
 
       if (!vendor) {
         throw new TRPCError({
@@ -410,9 +405,7 @@ export const productRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const vendor = await ctx.db.query.vendors.findFirst({
-        where: eq(vendors.userId, ctx.session.user.id),
-      });
+      const vendor = await findVendorOfUser(ctx);
 
       if (!vendor) {
         return { items: [], nextCursor: undefined };
