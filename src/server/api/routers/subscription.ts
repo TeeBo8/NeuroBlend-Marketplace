@@ -5,6 +5,7 @@ import { subscriptions } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
 import { getStripe } from '@/server/stripe';
 import { SUBSCRIPTION_PLANS } from '@/lib/constants';
+import { siteUrl } from '@/lib/site-url';
 
 export const subscriptionRouter = createTRPCRouter({
   // Get current user's subscription
@@ -93,8 +94,8 @@ export const subscriptionRouter = createTRPCRouter({
             frequency: input.frequency,
           },
         },
-        success_url: `${process.env.NEXT_PUBLIC_APP_URL}/subscriptions?success=true`,
-        cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/subscriptions?cancelled=true`,
+        success_url: `${siteUrl}/subscriptions?success=true`,
+        cancel_url: `${siteUrl}/subscriptions?cancelled=true`,
         metadata: {
           userId: ctx.session.user.id,
           planId: input.planId,
@@ -132,7 +133,7 @@ export const subscriptionRouter = createTRPCRouter({
 
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: customerId,
-      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/subscriptions`,
+      return_url: `${siteUrl}/subscriptions`,
     });
 
     return { url: portalSession.url };

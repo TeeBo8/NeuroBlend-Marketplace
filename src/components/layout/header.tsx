@@ -19,6 +19,7 @@ import { MobileNav } from './mobile-nav';
 import { cn } from '@/lib/utils';
 import { useCartStore } from '@/stores/cart-store';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { isDemoClient } from '@/lib/demo';
 
 export function Header() {
   const pathname = usePathname();
@@ -140,6 +141,10 @@ export function Header() {
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
+                ) : isDemoClient ? (
+                  <Button size="sm" asChild className="hidden md:flex">
+                    <Link href="/login">Entrer dans la démo</Link>
+                  </Button>
                 ) : (
                   /* Auth Buttons - Not logged in */
                   <div className="hidden md:flex items-center gap-2">

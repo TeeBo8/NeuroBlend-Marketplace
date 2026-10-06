@@ -1,6 +1,7 @@
 import { APP_NAME, APP_DESCRIPTION } from './constants';
+import { siteUrl } from '@/lib/site-url';
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+const BASE_URL = siteUrl;
 
 // --- Organization ---
 export function organizationSchema() {

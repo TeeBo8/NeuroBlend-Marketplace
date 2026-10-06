@@ -12,6 +12,9 @@ import { AnalyticsLoader } from "@/components/analytics-loader";
 import { ThemeProvider } from "next-themes";
 import { JsonLd } from "@/components/seo/json-ld";
 import { organizationSchema } from "@/lib/schemas";
+import { siteUrl } from "@/lib/site-url";
+import { isDemo } from "@/lib/demo";
+import { DemoBanner } from "@/components/demo/demo-banner";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -20,7 +23,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
+  metadataBase: new URL(siteUrl),
   title: {
     default: `${APP_NAME} - Café pour esprits neuroatypiques`,
     template: `%s | ${APP_NAME}`,
@@ -91,6 +94,7 @@ export default function RootLayout({
       <body className={`${inter.variable} font-sans antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <TRPCProvider>
+            {isDemo && <DemoBanner />}
             <Header />
             <main className="min-h-[calc(100vh-4rem)]">{children}</main>
             <Footer />
