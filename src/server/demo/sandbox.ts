@@ -1,9 +1,20 @@
 import { createHmac, randomUUID } from 'node:crypto';
-import { and, eq } from 'drizzle-orm';
+import { and, countDistinct, eq, gt, inArray, isNotNull, lt } from 'drizzle-orm';
+import { getIp } from 'better-auth/api';
 import { auth } from '@/server/auth/config';
 import { db } from '@/server/db';
-import { sessions, users } from '@/server/db/schema';
-import { DEMO_EMAIL_DOMAIN, DEMO_PERSONAS, DEMO_ROLES, type DemoRole } from '@/lib/demo';
+import { orders, products, sessions, users } from '@/server/db/schema';
+import {
+  DEMO_EMAIL_DOMAIN,
+  DEMO_MAX_ACTIVE_SANDBOXES,
+  DEMO_MAX_SANDBOXES_PER_IP_PER_DAY,
+  DEMO_MAX_SANDBOXES_PER_IP_PER_HOUR,
+  DEMO_PERSONAS,
+  DEMO_ROLES,
+  SANDBOX_TTL_HOURS,
+  type DemoRole,
+} from '@/lib/demo';
+import { SEED_PRODUCTS } from './seed-data';
 
 // Mot de passe d'un compte de démo : dérivé de son e-mail avec le secret du
 // serveur. Rien n'est stocké en clair, et personne ne peut le recalculer sans
@@ -89,4 +100,82 @@ export async function signInSandboxRole(
 /** Ferme les sessions d'un compte (au changement de rôle, pour ne pas en accumuler). */
 export async function revokeSessions(userId: string): Promise<void> {
   await db.delete(sessions).where(eq(sessions.userId, userId));
+}
+
+const HOUR_MS = 60 * 60 * 1000;
+
+/** Vrai quand trop de bacs à sable sont ouverts en même temps. */
+export async function isDemoFull(): Promise<boolean> {
+  const [row] = await db
+    .select({ count: countDistinct(users.demoSandboxId) })
+    .from(users)
+    .where(isNotNull(users.demoSandboxId));
+  return Number(row?.count ?? 0) >= DEMO_MAX_ACTIVE_SANDBOXES;
+}
+
+// Bacs à sable ouverts depuis une adresse IP après une date donnée. L'adresse
+// est celle que Better Auth enregistre sur chaque session ; `getIp` applique
+// la même normalisation, pour que la comparaison tombe juste.
+async function countSandboxesFromIp(ip: string, since: Date): Promise<number> {
+  const [row] = await db
+    .select({ count: countDistinct(users.demoSandboxId) })
+    .from(sessions)
+    .innerJoin(users, eq(sessions.userId, users.id))
+    .where(
+      and(
+        eq(sessions.ipAddress, ip),
+        gt(users.createdAt, since),
+        isNotNull(users.demoSandboxId)
+      )
+    );
+  return Number(row?.count ?? 0);
+}
+
+/**
+ * Limite par adresse IP, sur une heure et sur un jour. Sans adresse lisible,
+ * la limite ne s'applique pas : le plafond global reste le filet de sécurité.
+ */
+export async function isIpOverLimit(headers: Headers, now = new Date()): Promise<boolean> {
+  const ip = getIp(headers, auth.options);
+  if (!ip) return false;
+
+  const [lastHour, lastDay] = await Promise.all([
+    countSandboxesFromIp(ip, new Date(now.getTime() - HOUR_MS)),
+    countSandboxesFromIp(ip, new Date(now.getTime() - 24 * HOUR_MS)),
+  ]);
+  return (
+    lastHour >= DEMO_MAX_SANDBOXES_PER_IP_PER_HOUR ||
+    lastDay >= DEMO_MAX_SANDBOXES_PER_IP_PER_DAY
+  );
+}
+
+/**
+ * Supprime les bacs à sable expirés et renvoie le nombre de comptes retirés.
+ * Les commandes n'ont pas de suppression en cascade (on ne perd pas une
+ * commande par accident) : on les retire d'abord, leurs lignes suivent. Les
+ * sessions, avis et abonnements partent avec le compte.
+ */
+export async function deleteExpiredSandboxes(now = new Date()): Promise<number> {
+  const cutoff = new Date(now.getTime() - SANDBOX_TTL_HOURS * HOUR_MS);
+  const expired = db
+    .select({ id: users.id })
+    .from(users)
+    .where(and(isNotNull(users.demoSandboxId), lt(users.createdAt, cutoff)));
+
+  await db.delete(orders).where(inArray(orders.userId, expired));
+  const deleted = await db
+    .delete(users)
+    .where(and(isNotNull(users.demoSandboxId), lt(users.createdAt, cutoff)))
+    .returning({ id: users.id });
+  return deleted.length;
+}
+
+/** Remet le stock des produits du décor à sa valeur de départ. */
+export async function resetSeedStock(): Promise<void> {
+  for (const product of SEED_PRODUCTS) {
+    await db
+      .update(products)
+      .set({ stock: product.stock })
+      .where(eq(products.id, product.slug));
+  }
 }

@@ -45,3 +45,8 @@ export function isDemoAuthRouteAllowed(method: string, pathname: string): boolea
   const path = pathname.replace(/^\/api\/auth/, '').replace(/\/$/, '');
   return DEMO_ALLOWED_AUTH_ROUTES.includes(`${method.toUpperCase()} ${path}`);
 }
+
+/** Plafonds contre l'abus : bacs à sable ouverts en même temps, et par adresse IP. */
+export const DEMO_MAX_ACTIVE_SANDBOXES = 300;
+export const DEMO_MAX_SANDBOXES_PER_IP_PER_HOUR = 5;
+export const DEMO_MAX_SANDBOXES_PER_IP_PER_DAY = 15;
