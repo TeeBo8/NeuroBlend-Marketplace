@@ -24,6 +24,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { api } from '@/trpc/client';
+import { LoadMore } from '@/components/load-more';
 import { formatPrice, formatDate } from '@/lib/utils';
 import { ORDER_STATUSES } from '@/lib/constants';
 import { cn } from '@/lib/utils';
@@ -268,24 +269,11 @@ export function VendorOrdersContent() {
       )}
 
       {/* Load more */}
-      {hasNextPage && (
-        <div className="flex justify-center">
-          <Button
-            variant="outline"
-            onClick={() => fetchNextPage()}
-            disabled={isFetchingNextPage}
-          >
-            {isFetchingNextPage ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Chargement...
-              </>
-            ) : (
-              'Charger plus'
-            )}
-          </Button>
-        </div>
-      )}
+      <LoadMore
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+        onLoadMore={() => fetchNextPage()}
+      />
 
       {/* Update Status Dialog */}
       <Dialog open={!!updateOrderId} onOpenChange={() => {
