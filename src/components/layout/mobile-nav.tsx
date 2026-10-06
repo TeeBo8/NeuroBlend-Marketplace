@@ -16,6 +16,7 @@ import { Separator } from '@/components/ui/separator';
 import { APP_NAME, NAV_LINKS } from '@/lib/constants';
 import { useSession, signOut } from '@/lib/auth-client';
 import { cn } from '@/lib/utils';
+import { isDemoClient } from '@/lib/demo';
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
@@ -112,16 +113,26 @@ export function MobileNav() {
           /* Not logged in state */
           <>
             <div className="flex flex-col gap-3">
-              <Button asChild className="w-full">
-                <Link href="/register" onClick={handleLinkClick}>
-                  Inscription
-                </Link>
-              </Button>
-              <Button variant="outline" asChild className="w-full">
-                <Link href="/login" onClick={handleLinkClick}>
-                  Connexion
-                </Link>
-              </Button>
+              {isDemoClient ? (
+                <Button asChild className="w-full">
+                  <Link href="/login" onClick={handleLinkClick}>
+                    Entrer dans la démo
+                  </Link>
+                </Button>
+              ) : (
+                <>
+                  <Button asChild className="w-full">
+                    <Link href="/register" onClick={handleLinkClick}>
+                      Inscription
+                    </Link>
+                  </Button>
+                  <Button variant="outline" asChild className="w-full">
+                    <Link href="/login" onClick={handleLinkClick}>
+                      Connexion
+                    </Link>
+                  </Button>
+                </>
+              )}
             </div>
 
             <Separator className="my-6" />

@@ -18,7 +18,7 @@ import {
 import { signIn } from '@/lib/auth-client';
 import { toast } from 'sonner';
 
-export default function LoginPage() {
+export function LoginForm() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

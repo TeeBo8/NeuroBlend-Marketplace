@@ -19,7 +19,7 @@ import { signUp } from '@/lib/auth-client';
 import { toast } from 'sonner';
 import { trackSignup } from '@/lib/analytics';
 
-export default function RegisterPage() {
+export function RegisterForm() {
   const router = useRouter();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
