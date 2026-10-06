@@ -14,14 +14,6 @@ const CONSENT_KEY = "neuroblend-cookie-consent";
 const CONSENT_MAX_AGE_DAYS = 395; // ~13 months (CNIL recommendation)
 const CONSENT_MAX_AGE_MS = CONSENT_MAX_AGE_DAYS * 24 * 60 * 60 * 1000;
 
-/** Default consent: only essential cookies */
-export const DEFAULT_CONSENT: CookieConsent = {
-  essential: true,
-  functional: false,
-  analytics: false,
-  timestamp: 0,
-};
-
 /** Read consent from cookie (works in both SSR and client) */
 function readConsentFromCookie(): CookieConsent | null {
   if (typeof document === "undefined") return null;
@@ -79,7 +71,7 @@ export function saveConsent(consent: CookieConsent): void {
 }
 
 /** Clear all consent data */
-export function clearConsent(): void {
+function clearConsent(): void {
   try {
     localStorage.removeItem(CONSENT_KEY);
   } catch {

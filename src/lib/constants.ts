@@ -6,7 +6,6 @@ export const APP_DESCRIPTION =
 // Commission rates
 export const DEFAULT_COMMISSION_RATE = 15; // 15%
 export const PREMIUM_COMMISSION_RATE = 10; // 10% for premium vendors
-export const PREMIUM_VENDOR_PRICE = 29; // $29/month
 
 // Product categories
 export const PRODUCT_CATEGORIES = [

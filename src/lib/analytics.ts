@@ -46,7 +46,7 @@ export function shutdownAnalytics() {
 }
 
 /** Returns true if PostHog is initialised and capturing. */
-export function isAnalyticsReady(): boolean {
+function isAnalyticsReady(): boolean {
   return initialized && typeof window !== "undefined";
 }
 

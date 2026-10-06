@@ -20,8 +20,6 @@ export const shippingAddressSchema = z.object({
   country: field('Le pays', 2, 60),
 });
 
-export type ShippingAddress = z.infer<typeof shippingAddressSchema>;
-
 /** Premier message d'erreur de l'adresse, ou null si elle est valide. */
 export function firstAddressError(address: unknown): string | null {
   const result = shippingAddressSchema.safeParse(address);
