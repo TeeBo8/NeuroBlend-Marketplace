@@ -31,6 +31,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { api } from '@/trpc/client';
+import { LoadMore } from '@/components/load-more';
 import { formatPrice } from '@/lib/utils';
 import { PRODUCT_CATEGORIES } from '@/lib/constants';
 import { toast } from 'sonner';
@@ -39,7 +40,10 @@ export function ProductsContent() {
   const utils = api.useUtils();
   const [deleteProductId, setDeleteProductId] = useState<string | null>(null);
 
-  const { data, isLoading } = api.product.myProducts.useQuery({ limit: 50 });
+  const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } =
+    api.product.myProducts.useInfiniteQuery({ limit: 50 }, {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    });
 
   const deleteProduct = api.product.delete.useMutation({
     onSuccess: () => {
@@ -58,7 +62,7 @@ export function ProductsContent() {
     return <ProductsSkeleton />;
   }
 
-  const products = data?.items || [];
+  const products = data?.pages.flatMap((page) => page.items) ?? [];
 
   return (
     <div className="space-y-6">
@@ -67,7 +71,7 @@ export function ProductsContent() {
         <div>
           <h1 className="text-2xl font-bold text-foreground">Mes produits</h1>
           <p className="text-muted-foreground mt-1">
-            {products.length} produit{products.length !== 1 ? 's' : ''}
+            {products.length}{hasNextPage ? '+' : ''} produit{products.length !== 1 ? 's' : ''}
           </p>
         </div>
         <Button asChild className="bg-primary hover:bg-primary/90">
@@ -198,6 +202,12 @@ export function ProductsContent() {
           })}
         </div>
       )}
+
+      <LoadMore
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+        onLoadMore={() => fetchNextPage()}
+      />
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={!!deleteProductId} onOpenChange={() => setDeleteProductId(null)}>

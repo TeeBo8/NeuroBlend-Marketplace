@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { api } from '@/trpc/client';
+import { LoadMore } from '@/components/load-more';
 import { formatPrice } from '@/lib/utils';
 import { PRODUCT_CATEGORIES } from '@/lib/constants';
 import { toast } from 'sonner';
@@ -37,7 +38,10 @@ export function AdminProductsContent() {
     ...(searchQuery.trim() && { search: searchQuery.trim() }),
   };
 
-  const { data, isLoading, refetch } = api.product.adminList.useQuery(queryInput);
+  const { data, isLoading, refetch, hasNextPage, isFetchingNextPage, fetchNextPage } =
+    api.product.adminList.useInfiniteQuery(queryInput, {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    });
 
   const toggleFeatured = api.admin.toggleProductFeatured.useMutation({
     onSuccess: (product) => {
@@ -59,7 +63,7 @@ export function AdminProductsContent() {
     },
   });
 
-  const products = data?.items || [];
+  const products = data?.pages.flatMap((page) => page.items) ?? [];
 
   if (isLoading) {
     return <ProductsSkeleton />;
@@ -71,7 +75,7 @@ export function AdminProductsContent() {
       <div>
         <h1 className="text-2xl font-bold text-foreground">Tous les produits</h1>
         <p className="text-muted-foreground mt-1">
-          {products.length} produit{products.length > 1 ? 's' : ''}
+          {products.length}{hasNextPage ? '+' : ''} produit{products.length > 1 ? 's' : ''}
         </p>
       </div>
 
@@ -209,6 +213,12 @@ export function AdminProductsContent() {
           )}
         </CardContent>
       </Card>
+
+      <LoadMore
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+        onLoadMore={() => fetchNextPage()}
+      />
     </div>
   );
 }
