@@ -128,8 +128,8 @@ export function VendorOrdersContent() {
             const statusInfo = ORDER_STATUSES[status];
 
             return (
-              <Card key={order.id}>
-                <CardContent className="p-5">
+              <Card key={order.id} className="gap-0 py-0">
+                <CardContent className="p-5 [&>*:last-child]:mb-0">
                   {/* Order header */}
                   <div className="flex items-start justify-between mb-4">
                     <div>

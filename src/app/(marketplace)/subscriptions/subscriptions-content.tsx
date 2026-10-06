@@ -145,19 +145,18 @@ export function SubscriptionsContent() {
             <Card
               key={plan.id}
               className={cn(
-                'relative overflow-hidden transition-shadow hover:shadow-lg',
-                plan.highlight &&
-                  'border-2 border-primary shadow-md'
+                'relative transition-shadow hover:shadow-lg',
+                plan.highlight && 'border-primary shadow-md ring-2 ring-primary/20'
               )}
             >
+              {/* Étiquette posée à cheval sur le bord : elle ne décale pas le
+                  contenu, les trois cartes restent alignées. */}
               {plan.highlight && (
-                <div className="absolute top-0 left-0 right-0 bg-primary text-primary-foreground text-center text-xs font-semibold py-1.5">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground">
                   Le plus populaire
                 </div>
               )}
-              <CardHeader
-                className={cn('text-center pb-2', plan.highlight && 'pt-10')}
-              >
+              <CardHeader className="text-center pb-2">
                 <div
                   className={cn(
                     'w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3',
@@ -183,8 +182,8 @@ export function SubscriptionsContent() {
                   <span className="text-muted-foreground">/mois</span>
                 </div>
               </CardHeader>
-              <CardContent className="pt-4">
-                <ul className="space-y-3 mb-6">
+              <CardContent className="flex flex-1 flex-col pt-4">
+                <ul className="space-y-3 mb-6 flex-1">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-start gap-2">
                       <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
