@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Truck, RotateCcw, Clock, MapPin } from 'lucide-react';
+import { Truck, RotateCcw } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { PageHero } from '@/components/layout/page-hero';
 import { DemoNotice } from '@/components/demo/demo-notice';
@@ -18,22 +18,8 @@ const deliveryOptions = [
     icon: Truck,
     title: 'Livraison standard',
     delay: '3 à 5 jours ouvrés',
-    price: '4,90\u20AC',
-    detail: 'Gratuite dès 25\u20AC d\u2019achat',
-  },
-  {
-    icon: Clock,
-    title: 'Livraison express',
-    delay: '1 à 2 jours ouvrés',
-    price: '9,90\u20AC',
-    detail: 'Commandez avant 14h',
-  },
-  {
-    icon: MapPin,
-    title: 'Point relais',
-    delay: '3 à 5 jours ouvrés',
-    price: '3,90\u20AC',
-    detail: 'Gratuit dès 25\u20AC d\u2019achat',
+    price: 'Offerte',
+    detail: 'En France métropolitaine, sans minimum d\u2019achat',
   },
 ];
 
@@ -50,7 +36,7 @@ export default function ShippingPage() {
         <div className="container mx-auto px-4 max-w-4xl">
           {/* Options */}
           <h2 className="text-2xl font-bold text-foreground mb-8">
-            Nos options de livraison
+            Notre livraison
           </h2>
           <div className="grid md:grid-cols-3 gap-6 mb-16">
             {deliveryOptions.map((option) => (

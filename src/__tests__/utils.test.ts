@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { cn, formatPrice, formatDate, slugify, truncate, isDefined } from "@/lib/utils";
+import { cn, formatPrice, formatDate, truncate } from "@/lib/utils";
 
 describe("cn", () => {
   it("merges class names", () => {
@@ -72,34 +72,6 @@ describe("formatDate", () => {
   });
 });
 
-describe("slugify", () => {
-  it("converts to lowercase", () => {
-    expect(slugify("Hello World")).toBe("hello-world");
-  });
-
-  it("removes accents", () => {
-    expect(slugify("Café Crème")).toBe("cafe-creme");
-  });
-
-  it("replaces special characters with hyphens", () => {
-    expect(slugify("hello@world!")).toBe("hello-world");
-  });
-
-  it("removes leading and trailing hyphens", () => {
-    expect(slugify("---hello---")).toBe("hello");
-  });
-
-  it("handles multiple spaces", () => {
-    expect(slugify("hello   world")).toBe("hello-world");
-  });
-
-  it("handles French characters", () => {
-    expect(slugify("Haut Potentiel Intellectuel")).toBe(
-      "haut-potentiel-intellectuel"
-    );
-  });
-});
-
 describe("truncate", () => {
   it("returns full string if shorter than limit", () => {
     expect(truncate("hello", 10)).toBe("hello");
@@ -115,22 +87,5 @@ describe("truncate", () => {
 
   it("handles empty string", () => {
     expect(truncate("", 5)).toBe("");
-  });
-});
-
-describe("isDefined", () => {
-  it("returns true for defined values", () => {
-    expect(isDefined("hello")).toBe(true);
-    expect(isDefined(0)).toBe(true);
-    expect(isDefined(false)).toBe(true);
-    expect(isDefined("")).toBe(true);
-  });
-
-  it("returns false for null", () => {
-    expect(isDefined(null)).toBe(false);
-  });
-
-  it("returns false for undefined", () => {
-    expect(isDefined(undefined)).toBe(false);
   });
 });

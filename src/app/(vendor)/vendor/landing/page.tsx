@@ -160,7 +160,7 @@ export default function VendorLandingPage() {
               Espace torréfacteurs
             </div>
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-balance mb-6 leading-tight">
-              Vendez votre café à 15-20% de la population française
+              Vendez votre café à une communauté qui vous attend
             </h1>
             <p className="text-lg md:text-2xl text-muted-foreground mb-8 leading-relaxed">
               Rejoignez {APP_NAME} et touchez une communauté passionnée

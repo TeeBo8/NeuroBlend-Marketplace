@@ -138,7 +138,7 @@ export default function TermsPage() {
           <h2>13. Contact</h2>
           <p>
             Pour toute question relative aux présentes CGV, contactez-nous à{' '}
-            <a href="mailto:contact@neuroblend.fr">contact@neuroblend.fr</a> ou
+            <a href="mailto:contact@neuroblend.example">contact@neuroblend.example</a> ou
             via notre <a href="/contact">page de contact</a>.
           </p>
         </div>

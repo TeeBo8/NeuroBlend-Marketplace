@@ -3,6 +3,7 @@ import { Mail, MessageCircle, Clock } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { ContactForm } from './contact-form';
 import { PageHero } from '@/components/layout/page-hero';
+import { DemoNotice } from '@/components/demo/demo-notice';
 
 export const metadata: Metadata = {
   title: 'Contact — Écrivez-nous',
@@ -24,7 +25,7 @@ const contactInfo = [
   {
     icon: Mail,
     title: 'Email',
-    description: 'contact@neuroblend.fr',
+    description: 'contact@neuroblend.example',
     detail: 'Réponse sous 24-48h',
   },
   {
@@ -48,6 +49,7 @@ export default function ContactPage() {
       <PageHero title="Contactez-nous">
         Une question, une idée, un partenariat ? Nous sommes à votre écoute.
       </PageHero>
+      <DemoNotice />
 
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">

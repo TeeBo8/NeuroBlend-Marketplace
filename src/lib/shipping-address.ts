@@ -19,9 +19,3 @@ export const shippingAddressSchema = z.object({
   postalCode: field('Le code postal', 2, 20),
   country: field('Le pays', 2, 60),
 });
-
-/** Premier message d'erreur de l'adresse, ou null si elle est valide. */
-export function firstAddressError(address: unknown): string | null {
-  const result = shippingAddressSchema.safeParse(address);
-  return result.success ? null : result.error.issues[0].message;
-}

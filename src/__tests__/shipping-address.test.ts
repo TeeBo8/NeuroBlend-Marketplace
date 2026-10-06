@@ -1,5 +1,11 @@
 import { describe, it, expect } from "vitest";
-import { shippingAddressSchema, firstAddressError } from "@/lib/shipping-address";
+import { shippingAddressSchema } from "@/lib/shipping-address";
+
+/** Premier message d'erreur de l'adresse, ou null si elle est valide. */
+function firstAddressError(address: unknown): string | null {
+  const result = shippingAddressSchema.safeParse(address);
+  return result.success ? null : result.error.issues[0].message;
+}
 
 const valid = {
   name: "Léa Client",
