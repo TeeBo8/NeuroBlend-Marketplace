@@ -1,3 +1,4 @@
+import { useSyncExternalStore } from 'react';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -88,6 +89,23 @@ export const useCartStore = create<CartStore>()(
     }),
     {
       name: 'neuroblend-cart',
+      // Le panier vit dans le navigateur : le serveur rend toujours un panier
+      // vide. Le lire dès le premier rendu donnerait un HTML différent de
+      // celui du serveur (erreur d'hydratation). L'en-tête le charge donc
+      // après le montage, avec rehydrate().
+      skipHydration: true,
     }
   )
 );
+
+/**
+ * Vrai une fois le panier relu depuis le navigateur. Avant, il paraît vide :
+ * les pages qui affichent « panier vide » attendent ce signal.
+ */
+export function useCartHydrated() {
+  return useSyncExternalStore(
+    (onChange) => useCartStore.persist.onFinishHydration(onChange),
+    () => useCartStore.persist.hasHydrated(),
+    () => false
+  );
+}

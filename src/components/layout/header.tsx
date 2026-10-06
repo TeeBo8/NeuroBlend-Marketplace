@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { ShoppingCart, Coffee, LogOut, LayoutDashboard, Store, Shield } from 'lucide-react';
@@ -24,6 +25,12 @@ export function Header() {
   const router = useRouter();
   const { data: session, isPending } = useSession();
   const itemCount = useCartStore((s) => s.getItemCount());
+
+  // L'en-tête est sur toutes les pages : c'est lui qui relit le panier
+  // enregistré dans le navigateur, une fois la page montée.
+  useEffect(() => {
+    void useCartStore.persist.rehydrate();
+  }, []);
 
   const handleSignOut = async () => {
     await signOut();

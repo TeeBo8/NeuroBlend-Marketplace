@@ -9,7 +9,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { useCartStore } from '@/stores/cart-store';
+import { useCartHydrated, useCartStore } from '@/stores/cart-store';
 import { useSession } from '@/lib/auth-client';
 import { api } from '@/trpc/client';
 import { formatPrice } from '@/lib/utils';
@@ -21,6 +21,7 @@ export function CheckoutContent() {
   const { items, getSubtotal, getItemCount } = useCartStore();
   const subtotal = getSubtotal();
   const itemCount = getItemCount();
+  const cartHydrated = useCartHydrated();
 
   const [shipping, setShipping] = useState({
     name: '',
@@ -47,8 +48,8 @@ export function CheckoutContent() {
     },
   });
 
-  // Loading session
-  if (sessionLoading) {
+  // Loading session or cart
+  if (sessionLoading || !cartHydrated) {
     return (
       <div className="container mx-auto px-4 py-16">
         <div className="flex items-center justify-center py-32">

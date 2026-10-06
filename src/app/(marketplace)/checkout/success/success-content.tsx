@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { CheckCircle2, Package, ArrowRight, XCircle, Loader2 } from 'lucide-react';
@@ -14,21 +14,20 @@ import { formatPrice } from '@/lib/utils';
 export function SuccessContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get('session_id');
-  const hasVerified = useRef(false);
 
-  const verifyCheckout = api.payment.verifyCheckout.useMutation();
+  const verifyCheckout = api.payment.verifyCheckout.useMutation({
+    onSuccess: () => {
+      useCartStore.getState().clearCart();
+    },
+  });
 
+  // Pas de garde « déjà vérifié » : en développement React monte le composant
+  // deux fois, et un garde laisserait la page abonnée à une requête dont elle
+  // ne reçoit plus la réponse. La vérification peut être rejouée sans risque,
+  // le serveur ne valide une commande qu'une fois.
   useEffect(() => {
-    if (sessionId && !hasVerified.current) {
-      hasVerified.current = true;
-      verifyCheckout.mutate(
-        { sessionId },
-        {
-          onSuccess: () => {
-            useCartStore.getState().clearCart();
-          },
-        }
-      );
+    if (sessionId) {
+      verifyCheckout.mutate({ sessionId });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId]);
@@ -56,7 +55,7 @@ export function SuccessContent() {
   }
 
   // Verifying payment
-  if (verifyCheckout.isPending) {
+  if (verifyCheckout.isIdle || verifyCheckout.isPending) {
     return (
       <div className="container mx-auto px-4 py-16">
         <div className="flex flex-col items-center justify-center text-center max-w-md mx-auto">
