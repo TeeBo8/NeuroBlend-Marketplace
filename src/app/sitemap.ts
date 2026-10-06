@@ -1,8 +1,9 @@
 import type { MetadataRoute } from "next";
 import { PRODUCT_CATEGORIES } from "@/lib/constants";
+import { siteUrl } from "@/lib/site-url";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const baseUrl = siteUrl;
 
   const staticPages: MetadataRoute.Sitemap = [
     {

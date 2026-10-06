@@ -1,4 +1,5 @@
 import { Resend } from 'resend';
+import { siteUrl } from '@/lib/site-url';
 
 export const getResend = () => {
   if (!process.env.RESEND_API_KEY) {
@@ -121,7 +122,7 @@ function orderConfirmationTemplate(data: {
       <span style="font-size:18px;font-weight:bold;color:#111827;">Total : ${data.total}</span>
     </div>
     <div style="text-align:center;margin-top:24px;">
-      <a href="${process.env.NEXT_PUBLIC_APP_URL}/account/orders" style="display:inline-block;background-color:#6B46C1;color:#ffffff;text-decoration:none;padding:12px 32px;border-radius:8px;font-weight:600;">
+      <a href="${siteUrl}/account/orders" style="display:inline-block;background-color:#6B46C1;color:#ffffff;text-decoration:none;padding:12px 32px;border-radius:8px;font-weight:600;">
         Suivre ma commande
       </a>
     </div>
@@ -140,7 +141,7 @@ function vendorApprovedTemplate(businessName: string) {
       Pour commencer, rendez-vous dans votre espace vendeur pour configurer votre boutique et ajouter vos premières capsules.
     </p>
     <div style="text-align:center;">
-      <a href="${process.env.NEXT_PUBLIC_APP_URL}/vendor/dashboard" style="display:inline-block;background-color:#6B46C1;color:#ffffff;text-decoration:none;padding:12px 32px;border-radius:8px;font-weight:600;">
+      <a href="${siteUrl}/vendor/dashboard" style="display:inline-block;background-color:#6B46C1;color:#ffffff;text-decoration:none;padding:12px 32px;border-radius:8px;font-weight:600;">
         Accéder à mon espace vendeur
       </a>
     </div>

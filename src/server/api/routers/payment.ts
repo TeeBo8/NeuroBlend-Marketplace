@@ -18,6 +18,7 @@ import {
 } from '@/lib/order-totals';
 import { shippingAddressSchema } from '@/lib/shipping-address';
 import { findVendorOfUser } from '@/server/vendors';
+import { siteUrl } from '@/lib/site-url';
 
 const cartItemSchema = z.object({
   productId: z.string().min(1).max(100),
@@ -28,7 +29,7 @@ const cartItemSchema = z.object({
 const toStripeImages = (imageUrl: string | null) => {
   if (!imageUrl) return undefined;
   const url = imageUrl.startsWith('/')
-    ? `${process.env.NEXT_PUBLIC_APP_URL}${imageUrl}`
+    ? `${siteUrl}${imageUrl}`
     : imageUrl;
   return url.startsWith('https://') ? [url] : undefined;
 };
@@ -49,8 +50,8 @@ export const paymentRouter = createTRPCRouter({
       // Return existing account link for onboarding
       const accountLink = await getStripe().accountLinks.create({
         account: vendor.stripeAccountId,
-        refresh_url: `${process.env.NEXT_PUBLIC_APP_URL}/vendor/payouts?refresh=true`,
-        return_url: `${process.env.NEXT_PUBLIC_APP_URL}/vendor/payouts?success=true`,
+        refresh_url: `${siteUrl}/vendor/payouts?refresh=true`,
+        return_url: `${siteUrl}/vendor/payouts?success=true`,
         type: 'account_onboarding',
       });
 
@@ -85,8 +86,8 @@ export const paymentRouter = createTRPCRouter({
     // Create account link for onboarding
     const accountLink = await getStripe().accountLinks.create({
       account: account.id,
-      refresh_url: `${process.env.NEXT_PUBLIC_APP_URL}/vendor/payouts?refresh=true`,
-      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/vendor/payouts?success=true`,
+      refresh_url: `${siteUrl}/vendor/payouts?refresh=true`,
+      return_url: `${siteUrl}/vendor/payouts?success=true`,
       type: 'account_onboarding',
     });
 
@@ -284,8 +285,8 @@ export const paymentRouter = createTRPCRouter({
           // Shortest lifetime Stripe allows: an abandoned checkout releases
           // its pending order after 30 minutes.
           expires_at: Math.floor(Date.now() / 1000) + 30 * 60,
-          success_url: `${process.env.NEXT_PUBLIC_APP_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-          cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/cart`,
+          success_url: `${siteUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+          cancel_url: `${siteUrl}/cart`,
           metadata,
         });
 
