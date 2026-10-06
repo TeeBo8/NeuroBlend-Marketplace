@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { eq, and, ne } from 'drizzle-orm';
+import { eq, and, ne, sql } from 'drizzle-orm';
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -9,6 +9,7 @@ import {
 import { orders, vendors } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
 import { fromCursor, newestFirst, toPage } from '../pagination';
+import { isCollected, isPlaced } from '@/server/orders/status';
 
 export const orderRouter = createTRPCRouter({
   // Get user's orders
@@ -59,6 +60,22 @@ export const orderRouter = createTRPCRouter({
 
       return toPage(items, input.limit);
     }),
+
+  // Customer dashboard figures, computed over every order.
+  myStats: protectedProcedure.query(async ({ ctx }) => {
+    const [totals] = await ctx.db
+      .select({
+        count: sql<number>`count(*)`,
+        totalSpent: sql<string>`coalesce(sum(${orders.total}) filter (where ${isCollected}), 0)`,
+      })
+      .from(orders)
+      .where(and(eq(orders.userId, ctx.session.user.id), isPlaced));
+
+    return {
+      orders: Number(totals.count),
+      totalSpent: Number(totals.totalSpent),
+    };
+  }),
 
   // Get single order
   byId: protectedProcedure

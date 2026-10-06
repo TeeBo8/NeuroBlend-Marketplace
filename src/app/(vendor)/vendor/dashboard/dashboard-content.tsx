@@ -33,12 +33,12 @@ const statusColorMap: Record<string, string> = {
 export function VendorDashboardContent() {
   const { data: session } = useSession();
   const { data: vendor, isLoading: vendorLoading } = api.vendor.me.useQuery();
-  const { data: productsData, isLoading: productsLoading } = api.product.myProducts.useQuery(
+  const { data: ordersData, isLoading: ordersLoading } = api.order.vendorOrders.useQuery(
     { limit: 5 },
     { enabled: !!vendor }
   );
-  const { data: ordersData, isLoading: ordersLoading } = api.order.vendorOrders.useQuery(
-    { limit: 5 },
+  const { data: stats, isLoading: statsLoading } = api.vendor.myStats.useQuery(
+    undefined,
     { enabled: !!vendor }
   );
   const { data: stripeStatus } = api.payment.getConnectStatus.useQuery(
@@ -46,7 +46,7 @@ export function VendorDashboardContent() {
     { enabled: !!vendor }
   );
 
-  const isLoading = vendorLoading || productsLoading || ordersLoading;
+  const isLoading = vendorLoading || ordersLoading || statsLoading;
 
   if (isLoading) {
     return <DashboardSkeleton />;
@@ -71,15 +71,7 @@ export function VendorDashboardContent() {
     );
   }
 
-  const products = productsData?.items || [];
   const orders = ordersData?.items || [];
-  const totalProducts = products.length;
-  const totalOrders = orders.length;
-  const totalRevenue = orders.reduce(
-    (sum, order) => sum + Number(order.total) - Number(order.commission || 0),
-    0
-  );
-  const pendingOrders = orders.filter((o) => o.status === 'paid' || o.status === 'processing').length;
 
   return (
     <div className="space-y-8">
@@ -132,7 +124,7 @@ export function VendorDashboardContent() {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Produits</p>
-                <p className="text-2xl font-bold text-foreground">{totalProducts}</p>
+                <p className="text-2xl font-bold text-foreground">{stats?.products ?? 0}</p>
               </div>
             </div>
           </CardContent>
@@ -146,7 +138,7 @@ export function VendorDashboardContent() {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Commandes</p>
-                <p className="text-2xl font-bold text-foreground">{totalOrders}</p>
+                <p className="text-2xl font-bold text-foreground">{stats?.orders ?? 0}</p>
               </div>
             </div>
           </CardContent>
@@ -161,7 +153,7 @@ export function VendorDashboardContent() {
               <div>
                 <p className="text-sm text-muted-foreground">Revenus</p>
                 <p className="text-2xl font-bold text-foreground">
-                  {formatPrice(totalRevenue)}
+                  {formatPrice(stats?.revenue ?? 0)}
                 </p>
               </div>
             </div>
@@ -176,7 +168,7 @@ export function VendorDashboardContent() {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">À traiter</p>
-                <p className="text-2xl font-bold text-foreground">{pendingOrders}</p>
+                <p className="text-2xl font-bold text-foreground">{stats?.toProcess ?? 0}</p>
               </div>
             </div>
           </CardContent>

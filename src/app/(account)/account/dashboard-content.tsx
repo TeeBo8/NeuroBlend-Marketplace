@@ -31,19 +31,16 @@ export function DashboardContent() {
   const { data: user, isLoading: userLoading } = api.user.me.useQuery();
   const { data: ordersData, isLoading: ordersLoading } =
     api.order.myOrders.useQuery({ limit: 5 });
+  const { data: stats, isLoading: statsLoading } =
+    api.order.myStats.useQuery();
 
-  const isLoading = userLoading || ordersLoading;
+  const isLoading = userLoading || ordersLoading || statsLoading;
 
   if (isLoading) {
     return <DashboardSkeleton />;
   }
 
   const orders = ordersData?.items || [];
-  const totalOrders = orders.length;
-  const totalSpent = orders.reduce(
-    (sum, order) => sum + Number(order.total),
-    0
-  );
 
   return (
     <div className="space-y-8">
@@ -68,7 +65,7 @@ export function DashboardContent() {
               <div>
                 <p className="text-sm text-muted-foreground">Commandes</p>
                 <p className="text-2xl font-bold text-foreground">
-                  {totalOrders}
+                  {stats?.orders ?? 0}
                 </p>
               </div>
             </div>
@@ -84,7 +81,7 @@ export function DashboardContent() {
               <div>
                 <p className="text-sm text-muted-foreground">Total dépensé</p>
                 <p className="text-2xl font-bold text-foreground">
-                  {formatPrice(totalSpent)}
+                  {formatPrice(stats?.totalSpent ?? 0)}
                 </p>
               </div>
             </div>

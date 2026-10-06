@@ -1,12 +1,14 @@
 import { z } from 'zod';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 import {
   createTRPCRouter,
   publicProcedure,
   protectedProcedure,
+  vendorProcedure,
   adminProcedure,
 } from '../trpc';
-import { vendors, users } from '@/server/db/schema';
+import { vendors, users, products, orders } from '@/server/db/schema';
+import { isCollected, isPlaced } from '@/server/orders/status';
 import { TRPCError } from '@trpc/server';
 import { sendVendorApprovedEmail } from '@/lib/email';
 import { isAllowedImageUrl } from '@/lib/image-hosts';
@@ -114,6 +116,42 @@ export const vendorRouter = createTRPCRouter({
     });
 
     return vendor;
+  }),
+
+  // Vendor dashboard figures, computed over every order rather than over
+  // the few rows a list page happens to show.
+  myStats: vendorProcedure.query(async ({ ctx }) => {
+    const vendor = await ctx.db.query.vendors.findFirst({
+      where: eq(vendors.userId, ctx.session.user.id),
+      columns: { id: true },
+    });
+
+    if (!vendor) {
+      return { products: 0, orders: 0, revenue: 0, toProcess: 0 };
+    }
+
+    const [[productCount], [orderTotals]] = await Promise.all([
+      ctx.db
+        .select({ count: sql<number>`count(*)` })
+        .from(products)
+        .where(eq(products.vendorId, vendor.id)),
+      ctx.db
+        .select({
+          count: sql<number>`count(*)`,
+          // What the vendor actually receives: total minus the commission.
+          revenue: sql<string>`coalesce(sum(${orders.total} - ${orders.commission}) filter (where ${isCollected}), 0)`,
+          toProcess: sql<number>`count(*) filter (where ${orders.status} in ('paid', 'processing'))`,
+        })
+        .from(orders)
+        .where(and(eq(orders.vendorId, vendor.id), isPlaced)),
+    ]);
+
+    return {
+      products: Number(productCount.count),
+      orders: Number(orderTotals.count),
+      revenue: Number(orderTotals.revenue),
+      toProcess: Number(orderTotals.toProcess),
+    };
   }),
 
   // Update vendor profile
