@@ -10,12 +10,6 @@ import {
   NAV_LINKS,
   FOOTER_LINKS,
   DEFAULT_COMMISSION_RATE,
-  PREMIUM_COMMISSION_RATE,
-  DEFAULT_PAGE_SIZE,
-  MAX_PAGE_SIZE,
-  MAX_FILE_SIZE,
-  ACCEPTED_IMAGE_TYPES,
-  COLORS,
 } from "@/lib/constants";
 
 describe("App Configuration", () => {
@@ -152,37 +146,8 @@ describe("Navigation", () => {
 });
 
 describe("Business Constants", () => {
-  it("commission rates are valid percentages", () => {
+  it("commission rate is a valid percentage", () => {
     expect(DEFAULT_COMMISSION_RATE).toBeGreaterThan(0);
     expect(DEFAULT_COMMISSION_RATE).toBeLessThanOrEqual(100);
-    expect(PREMIUM_COMMISSION_RATE).toBeGreaterThan(0);
-    expect(PREMIUM_COMMISSION_RATE).toBeLessThan(DEFAULT_COMMISSION_RATE);
-  });
-
-  it("pagination limits are sensible", () => {
-    expect(DEFAULT_PAGE_SIZE).toBeGreaterThan(0);
-    expect(MAX_PAGE_SIZE).toBeGreaterThan(DEFAULT_PAGE_SIZE);
-  });
-
-  it("file upload limits are sensible", () => {
-    expect(MAX_FILE_SIZE).toBe(4 * 1024 * 1024);
-    expect(ACCEPTED_IMAGE_TYPES).toContain("image/jpeg");
-    expect(ACCEPTED_IMAGE_TYPES).toContain("image/png");
-    expect(ACCEPTED_IMAGE_TYPES).toContain("image/webp");
-  });
-
-  it("color palette has required keys", () => {
-    expect(COLORS.primary).toBeTruthy();
-    expect(COLORS.secondary).toBeTruthy();
-    expect(COLORS.accent).toBeTruthy();
-    expect(COLORS.success).toBeTruthy();
-    expect(COLORS.error).toBeTruthy();
-    expect(COLORS.warning).toBeTruthy();
-  });
-
-  it("colors are valid hex values", () => {
-    Object.values(COLORS).forEach((color) => {
-      expect(color).toMatch(/^#[0-9A-Fa-f]{6}$/);
-    });
   });
 });

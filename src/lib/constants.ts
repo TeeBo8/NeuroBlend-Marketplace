@@ -3,9 +3,8 @@ export const APP_NAME = 'NeuroBlend';
 export const APP_DESCRIPTION =
   'Marketplace de capsules de café pour les personnes neuroatypiques (HPI, ADHD, hypersensibles)';
 
-// Commission rates
+// Commission rate
 export const DEFAULT_COMMISSION_RATE = 15; // 15%
-export const PREMIUM_COMMISSION_RATE = 10; // 10% for premium vendors
 
 // Product categories
 export const PRODUCT_CATEGORIES = [
@@ -36,24 +35,6 @@ export const USER_ROLES = {
   customer: { label: 'Client', description: 'Peut acheter des produits' },
   vendor: { label: 'Vendeur', description: 'Peut vendre des produits' },
   admin: { label: 'Admin', description: 'Accès complet à la plateforme' },
-} as const;
-
-// Pagination
-export const DEFAULT_PAGE_SIZE = 20;
-export const MAX_PAGE_SIZE = 100;
-
-// File uploads
-export const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
-export const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
-
-// Colors (for design system)
-export const COLORS = {
-  primary: '#6B46C1', // Purple (identity, creativity)
-  secondary: '#38B2AC', // Teal (calm, focus)
-  accent: '#F6AD55', // Warm orange (energy)
-  success: '#48BB78',
-  error: '#F56565',
-  warning: '#ED8936',
 } as const;
 
 // Subscription plans
