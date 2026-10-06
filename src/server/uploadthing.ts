@@ -2,6 +2,7 @@ import { createUploadthing, type FileRouter } from 'uploadthing/next';
 import { UploadThingError } from 'uploadthing/server';
 import { auth } from '@/server/auth/config';
 import { headers } from 'next/headers';
+import { isDemo } from '@/lib/demo';
 
 const f = createUploadthing();
 
@@ -13,6 +14,10 @@ export const uploadRouter = {
     },
   })
     .middleware(async () => {
+      if (isDemo) {
+        throw new UploadThingError('Envoi désactivé dans la démonstration');
+      }
+
       const session = await auth.api.getSession({
         headers: await headers(),
       });

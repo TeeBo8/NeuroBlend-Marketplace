@@ -1,15 +1,19 @@
 import { z } from 'zod';
-import { eq, sql, desc } from 'drizzle-orm';
-import { createTRPCRouter, adminProcedure } from '../trpc';
+import { and, eq, sql, desc } from 'drizzle-orm';
+import { createTRPCRouter, adminProcedure, blockedInDemo } from '../trpc';
 import { orders, vendors, users, products } from '@/server/db/schema';
 import { isCollected, isPlaced } from '@/server/orders/status';
+import { ownerVisibleTo } from '@/server/demo/visibility';
 
 export const adminRouter = createTRPCRouter({
   // Get platform statistics
   getStats: adminProcedure.query(async ({ ctx }) => {
     const [[userCount], [vendorCounts], [productCount], [orderTotals], ordersByStatus] =
       await Promise.all([
-        ctx.db.select({ count: sql<number>`count(*)` }).from(users),
+        ctx.db
+          .select({ count: sql<number>`count(*)` })
+          .from(users)
+          .where(ownerVisibleTo(users.id, ctx)),
         ctx.db
           .select({
             approved: sql<number>`count(*) filter (where ${vendors.approved})`,
@@ -29,14 +33,14 @@ export const adminRouter = createTRPCRouter({
             commission: sql<string>`coalesce(sum(${orders.commission}) filter (where ${isCollected}), 0)`,
           })
           .from(orders)
-          .where(isPlaced),
+          .where(and(isPlaced, ownerVisibleTo(orders.userId, ctx))),
         ctx.db
           .select({
             status: orders.status,
             count: sql<number>`count(*)`,
           })
           .from(orders)
-          .where(isPlaced)
+          .where(and(isPlaced, ownerVisibleTo(orders.userId, ctx)))
           .groupBy(orders.status),
       ]);
 
@@ -60,7 +64,7 @@ export const adminRouter = createTRPCRouter({
     .input(z.object({ limit: z.number().min(1).max(50).default(10) }))
     .query(async ({ ctx, input }) => {
       const recentOrders = await ctx.db.query.orders.findMany({
-        where: isPlaced,
+        where: and(isPlaced, ownerVisibleTo(orders.userId, ctx)),
         limit: input.limit,
         orderBy: [desc(orders.createdAt)],
         with: {
@@ -94,7 +98,7 @@ export const adminRouter = createTRPCRouter({
           orderCount: sql<number>`count(*)`,
         })
         .from(orders)
-        .where(isCollected)
+        .where(and(isCollected, ownerVisibleTo(orders.userId, ctx)))
         .groupBy(orders.vendorId)
         .orderBy(sql`SUM(${orders.total}) DESC`)
         .limit(input.limit);
@@ -119,6 +123,7 @@ export const adminRouter = createTRPCRouter({
 
   // Toggle product featured status
   toggleProductFeatured: adminProcedure
+    .use(blockedInDemo)
     .input(z.object({ productId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const product = await ctx.db.query.products.findFirst({

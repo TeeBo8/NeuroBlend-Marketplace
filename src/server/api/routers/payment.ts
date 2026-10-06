@@ -4,6 +4,7 @@ import {
   createTRPCRouter,
   protectedProcedure,
   vendorProcedure,
+  blockedInDemo,
 } from '../trpc';
 import { vendors, orders, orderItems } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
@@ -36,7 +37,7 @@ const toStripeImages = (imageUrl: string | null) => {
 
 export const paymentRouter = createTRPCRouter({
   // Create Stripe Connect account for vendor
-  createConnectAccount: vendorProcedure.mutation(async ({ ctx }) => {
+  createConnectAccount: vendorProcedure.use(blockedInDemo).mutation(async ({ ctx }) => {
     const vendor = await findVendorOfUser(ctx);
 
     if (!vendor) {
@@ -131,7 +132,7 @@ export const paymentRouter = createTRPCRouter({
   }),
 
   // Get Stripe dashboard link for vendor
-  getDashboardLink: vendorProcedure.query(async ({ ctx }) => {
+  getDashboardLink: vendorProcedure.use(blockedInDemo).query(async ({ ctx }) => {
     const vendor = await findVendorOfUser(ctx);
 
     if (!vendor?.stripeAccountId) {

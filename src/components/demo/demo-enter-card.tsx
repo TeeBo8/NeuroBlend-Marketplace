@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -22,6 +23,12 @@ const STEPS = [
 // Remplace la page de connexion en mode démo.
 export function DemoEnterCard() {
   const [loading, setLoading] = useState(false);
+  const params = useSearchParams();
+  const notice = params.get('limit')
+    ? 'Vous avez ouvert plusieurs démos récemment. Réessayez un peu plus tard.'
+    : params.get('full')
+      ? 'La démo est complète pour le moment. Réessayez un peu plus tard.'
+      : null;
 
   return (
     <Card>
@@ -42,6 +49,11 @@ export function DemoEnterCard() {
             </li>
           ))}
         </ol>
+        {notice && (
+          <p role="alert" className="text-sm text-destructive">
+            {notice}
+          </p>
+        )}
         <form action="/api/demo/enter" method="post" onSubmit={() => setLoading(true)}>
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? (

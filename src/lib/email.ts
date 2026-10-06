@@ -1,7 +1,12 @@
 import { Resend } from 'resend';
 import { siteUrl } from '@/lib/site-url';
+import { isDemo } from '@/lib/demo';
 
 export const getResend = () => {
+  // Les comptes de démo ont des adresses fictives : aucun e-mail ne part.
+  if (isDemo) {
+    throw new Error('E-mails désactivés dans la démonstration');
+  }
   if (!process.env.RESEND_API_KEY) {
     throw new Error('RESEND_API_KEY is not configured');
   }
