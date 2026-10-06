@@ -94,7 +94,7 @@ function orderConfirmationTemplate(data: {
     .map(
       (item) => `
     <tr>
-      <td style="padding:8px 0;border-bottom:1px solid #f3f4f6;color:#374151;">${item.name}</td>
+      <td style="padding:8px 0;border-bottom:1px solid #f3f4f6;color:#374151;">${escapeHtml(item.name)}</td>
       <td style="padding:8px 0;border-bottom:1px solid #f3f4f6;color:#6b7280;text-align:center;">${item.quantity}</td>
       <td style="padding:8px 0;border-bottom:1px solid #f3f4f6;color:#374151;text-align:right;">${item.price}</td>
     </tr>`
@@ -109,7 +109,7 @@ function orderConfirmationTemplate(data: {
       Commande n° ${data.orderNumber}
     </p>
     <p style="margin:0 0 24px;color:#4b5563;line-height:1.6;">
-      Bonjour ${data.name}, votre commande a bien été enregistrée et est en cours de traitement.
+      Bonjour ${escapeHtml(data.name)}, votre commande a bien été enregistrée et est en cours de traitement.
     </p>
     <table style="width:100%;border-collapse:collapse;margin-bottom:24px;">
       <thead>
@@ -140,7 +140,7 @@ function vendorApprovedTemplate(businessName: string) {
       Félicitations ! Votre boutique est approuvée
     </h2>
     <p style="margin:0 0 16px;color:#4b5563;line-height:1.6;">
-      <strong>${businessName}</strong> est maintenant active sur NeuroBlend. Vous pouvez commencer à ajouter vos produits et recevoir des commandes.
+      <strong>${escapeHtml(businessName)}</strong> est maintenant active sur NeuroBlend. Vous pouvez commencer à ajouter vos produits et recevoir des commandes.
     </p>
     <p style="margin:0 0 24px;color:#4b5563;line-height:1.6;">
       Pour commencer, rendez-vous dans votre espace vendeur pour configurer votre boutique et ajouter vos premières capsules.
@@ -151,4 +151,15 @@ function vendorApprovedTemplate(businessName: string) {
       </a>
     </div>
   `);
+}
+
+// Les noms de produit, de client et de boutique sont saisis par des
+// utilisateurs : ils entrent dans le HTML de l'e-mail échappés.
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }

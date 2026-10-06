@@ -8,7 +8,7 @@ import {
   blockedInDemo,
 } from '../trpc';
 import type { Database } from '@/server/db';
-import { products, reviews, vendors } from '@/server/db/schema';
+import { orderItems, products, reviews, vendors } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
 import { isAllowedImageUrl } from '@/lib/image-hosts';
 import { fromCursor, newestFirst, toPage } from '../pagination';
@@ -22,20 +22,21 @@ const uploadedImageUrl = z.string().refine(isAllowedImageUrl, {
 });
 
 const productInputSchema = z.object({
-  name: z.string().min(3, 'Name must be at least 3 characters'),
-  description: z.string().optional(),
+  name: z.string().trim().min(3, 'Name must be at least 3 characters').max(120),
+  description: z.string().max(5000).optional(),
   shortDescription: z.string().max(200).optional(),
-  price: z.number().positive('Price must be positive'),
-  compareAtPrice: z.number().positive().optional(),
-  capsuleCount: z.number().int().positive().default(10),
+  // Les colonnes de prix sont en decimal(10,2) : on reste très en dessous.
+  price: z.number().positive('Price must be positive').max(9999),
+  compareAtPrice: z.number().positive().max(9999).optional(),
+  capsuleCount: z.number().int().positive().max(1000).default(10),
   category: z.enum(['HPI', 'ADHD', 'hypersensitive']).optional(),
   imageUrl: uploadedImageUrl.optional(),
   images: z.array(uploadedImageUrl).max(5).optional(),
-  stock: z.number().int().min(0).default(0),
+  stock: z.number().int().min(0).max(100000).default(0),
   intensityLevel: z.number().int().min(1).max(10).optional(),
   roastLevel: z.enum(['light', 'medium', 'dark']).optional(),
-  flavorNotes: z.array(z.string()).optional(),
-  origin: z.string().optional(),
+  flavorNotes: z.array(z.string().max(40)).max(10).optional(),
+  origin: z.string().max(100).optional(),
 });
 
 type ReviewViewer = { db: Database } & Parameters<typeof ownerVisibleTo>[1];
@@ -77,7 +78,7 @@ export const productRouter = createTRPCRouter({
     .input(
       z.object({
         category: z.enum(['HPI', 'ADHD', 'hypersensitive']).optional(),
-        search: z.string().optional(),
+        search: z.string().max(100).optional(),
         limit: z.number().min(1).max(100).default(20),
         cursor: z.string().optional(),
         featured: z.boolean().optional(),
@@ -323,6 +324,21 @@ export const productRouter = createTRPCRouter({
         });
       }
 
+      // Les commandes gardent un lien vers le produit : un produit déjà vendu
+      // se retire du catalogue, il ne se supprime pas.
+      const [sold] = await ctx.db
+        .select({ id: orderItems.id })
+        .from(orderItems)
+        .where(eq(orderItems.productId, input.id))
+        .limit(1);
+      if (sold) {
+        throw new TRPCError({
+          code: 'CONFLICT',
+          message:
+            'Ce produit a déjà été commandé : il ne peut plus être supprimé. Désactivez-le pour le retirer du catalogue.',
+        });
+      }
+
       await ctx.db.delete(products).where(eq(products.id, input.id));
 
       return { success: true };
@@ -334,7 +350,7 @@ export const productRouter = createTRPCRouter({
       z.object({
         limit: z.number().min(1).max(100).default(50),
         cursor: z.string().optional(),
-        search: z.string().optional(),
+        search: z.string().max(100).optional(),
         category: z.enum(['HPI', 'ADHD', 'hypersensitive']).optional(),
         active: z.boolean().optional(),
         featured: z.boolean().optional(),

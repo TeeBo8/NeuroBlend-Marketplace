@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,8 +18,15 @@ import {
 import { signIn } from '@/lib/auth-client';
 import { toast } from 'sonner';
 
+// Page vers laquelle revenir après la connexion. Seul un chemin du site est
+// accepté : une adresse complète enverrait le visiteur sur un autre site.
+function safeCallbackUrl(value: string | null): string {
+  return value && value.startsWith('/') && !value.startsWith('//') ? value : '/';
+}
+
 export function LoginForm() {
   const router = useRouter();
+  const callbackUrl = safeCallbackUrl(useSearchParams().get('callbackUrl'));
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -38,7 +45,7 @@ export function LoginForm() {
 
       if (data) {
         toast.success('Connexion réussie !');
-        router.push('/');
+        router.push(callbackUrl);
         router.refresh();
       }
     } catch (err) {
