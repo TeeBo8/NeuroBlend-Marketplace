@@ -1,15 +1,18 @@
 import { z } from 'zod';
-import { eq } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 import {
   createTRPCRouter,
   publicProcedure,
   protectedProcedure,
+  vendorProcedure,
   adminProcedure,
 } from '../trpc';
-import { vendors, users } from '@/server/db/schema';
+import { vendors, users, products, orders } from '@/server/db/schema';
+import { isCollected, isPlaced } from '@/server/orders/status';
 import { TRPCError } from '@trpc/server';
 import { sendVendorApprovedEmail } from '@/lib/email';
 import { isAllowedImageUrl } from '@/lib/image-hosts';
+import { fromCursor, newestFirst, toPage } from '../pagination';
 
 export const vendorRouter = createTRPCRouter({
   // Get vendor by ID (public)
@@ -46,8 +49,12 @@ export const vendorRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       const items = await ctx.db.query.vendors.findMany({
-        where: eq(vendors.approved, true),
+        where: and(
+          eq(vendors.approved, true),
+          fromCursor(vendors, input.cursor)
+        ),
         limit: input.limit + 1,
+        orderBy: newestFirst(vendors),
         columns: {
           id: true,
           businessName: true,
@@ -57,13 +64,7 @@ export const vendorRouter = createTRPCRouter({
         },
       });
 
-      let nextCursor: typeof input.cursor | undefined = undefined;
-      if (items.length > input.limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem!.id;
-      }
-
-      return { items, nextCursor };
+      return toPage(items, input.limit);
     }),
 
   // Register as vendor (authenticated users only)
@@ -114,7 +115,44 @@ export const vendorRouter = createTRPCRouter({
       where: eq(vendors.userId, ctx.session.user.id),
     });
 
-    return vendor;
+    // null, not undefined: React Query rejects a query that returns undefined.
+    return vendor ?? null;
+  }),
+
+  // Vendor dashboard figures, computed over every order rather than over
+  // the few rows a list page happens to show.
+  myStats: vendorProcedure.query(async ({ ctx }) => {
+    const vendor = await ctx.db.query.vendors.findFirst({
+      where: eq(vendors.userId, ctx.session.user.id),
+      columns: { id: true },
+    });
+
+    if (!vendor) {
+      return { products: 0, orders: 0, revenue: 0, toProcess: 0 };
+    }
+
+    const [[productCount], [orderTotals]] = await Promise.all([
+      ctx.db
+        .select({ count: sql<number>`count(*)` })
+        .from(products)
+        .where(eq(products.vendorId, vendor.id)),
+      ctx.db
+        .select({
+          count: sql<number>`count(*)`,
+          // What the vendor actually receives: total minus the commission.
+          revenue: sql<string>`coalesce(sum(${orders.total} - ${orders.commission}) filter (where ${isCollected}), 0)`,
+          toProcess: sql<number>`count(*) filter (where ${orders.status} in ('paid', 'processing'))`,
+        })
+        .from(orders)
+        .where(and(eq(orders.vendorId, vendor.id), isPlaced)),
+    ]);
+
+    return {
+      products: Number(productCount.count),
+      orders: Number(orderTotals.count),
+      revenue: Number(orderTotals.revenue),
+      toProcess: Number(orderTotals.toProcess),
+    };
   }),
 
   // Update vendor profile
@@ -162,15 +200,16 @@ export const vendorRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const conditions = [];
+      const conditions = [fromCursor(vendors, input.cursor)];
 
       if (input.approved !== undefined) {
         conditions.push(eq(vendors.approved, input.approved));
       }
 
       const items = await ctx.db.query.vendors.findMany({
-        where: conditions.length > 0 ? conditions[0] : undefined,
+        where: and(...conditions),
         limit: input.limit + 1,
+        orderBy: newestFirst(vendors),
         with: {
           user: {
             columns: {
@@ -182,13 +221,7 @@ export const vendorRouter = createTRPCRouter({
         },
       });
 
-      let nextCursor: typeof input.cursor | undefined = undefined;
-      if (items.length > input.limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem!.id;
-      }
-
-      return { items, nextCursor };
+      return toPage(items, input.limit);
     }),
 
   // Admin: Get pending vendor applications

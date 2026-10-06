@@ -29,6 +29,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { api } from '@/trpc/client';
+import { LoadMore } from '@/components/load-more';
 import { formatDate } from '@/lib/utils';
 import { toast } from 'sonner';
 
@@ -51,7 +52,10 @@ export function AdminVendorsContent() {
     ? { limit: 50 as const }
     : { limit: 50 as const, approved: statusFilter === 'approved' };
 
-  const { data, isLoading, refetch } = api.vendor.adminList.useQuery(queryInput);
+  const { data, isLoading, refetch, hasNextPage, isFetchingNextPage, fetchNextPage } =
+    api.vendor.adminList.useInfiniteQuery(queryInput, {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    });
 
   const approveVendor = api.vendor.approve.useMutation({
     onSuccess: () => {
@@ -85,7 +89,7 @@ export function AdminVendorsContent() {
     },
   });
 
-  const vendors = data?.items || [];
+  const vendors = data?.pages.flatMap((page) => page.items) ?? [];
 
   if (isLoading) {
     return <VendorsSkeleton />;
@@ -97,7 +101,7 @@ export function AdminVendorsContent() {
       <div>
         <h1 className="text-2xl font-bold text-foreground">Gestion des vendeurs</h1>
         <p className="text-muted-foreground mt-1">
-          {vendors.length} vendeur{vendors.length > 1 ? 's' : ''}
+          {vendors.length}{hasNextPage ? '+' : ''} vendeur{vendors.length > 1 ? 's' : ''}
         </p>
       </div>
 
@@ -244,6 +248,12 @@ export function AdminVendorsContent() {
           )}
         </CardContent>
       </Card>
+
+      <LoadMore
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+        onLoadMore={() => fetchNextPage()}
+      />
 
       {/* Reject Dialog */}
       <Dialog

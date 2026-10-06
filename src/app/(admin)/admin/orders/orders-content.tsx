@@ -25,6 +25,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { api } from '@/trpc/client';
+import { LoadMore } from '@/components/load-more';
 import { formatPrice, formatDate } from '@/lib/utils';
 import { ORDER_STATUSES } from '@/lib/constants';
 import { toast } from 'sonner';
@@ -53,11 +54,14 @@ export function AdminOrdersContent() {
     ? { limit: 50 as const }
     : { limit: 50 as const, status: statusFilter as OrderStatus };
 
-  const { data, isLoading, refetch } = api.order.adminList.useQuery(queryInput);
+  const { data, isLoading, refetch, hasNextPage, isFetchingNextPage, fetchNextPage } =
+    api.order.adminList.useInfiniteQuery(queryInput, {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    });
 
   const cancelOrder = api.order.adminCancel.useMutation({
     onSuccess: () => {
-      toast.success('Commande annulée');
+      toast.success('Commande annulée et remboursée');
       setCancelDialog((prev) => ({ ...prev, open: false }));
       refetch();
     },
@@ -66,7 +70,7 @@ export function AdminOrdersContent() {
     },
   });
 
-  const orders = data?.items || [];
+  const orders = data?.pages.flatMap((page) => page.items) ?? [];
 
   if (isLoading) {
     return <OrdersSkeleton />;
@@ -78,7 +82,7 @@ export function AdminOrdersContent() {
       <div>
         <h1 className="text-2xl font-bold text-foreground">Toutes les commandes</h1>
         <p className="text-muted-foreground mt-1">
-          {orders.length} commande{orders.length > 1 ? 's' : ''}
+          {orders.length}{hasNextPage ? '+' : ''} commande{orders.length > 1 ? 's' : ''}
         </p>
       </div>
 
@@ -120,7 +124,9 @@ export function AdminOrdersContent() {
               {orders.map((order) => {
                 const status = order.status as keyof typeof ORDER_STATUSES;
                 const statusInfo = ORDER_STATUSES[status];
-                const canCancel = status !== 'delivered' && status !== 'cancelled';
+                // Paiement en attente : il expire tout seul. Livrée : trop tard.
+                const canCancel =
+                  status === 'paid' || status === 'processing' || status === 'shipped';
                 return (
                   <div
                     key={order.id}
@@ -195,6 +201,12 @@ export function AdminOrdersContent() {
         </CardContent>
       </Card>
 
+      <LoadMore
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+        onLoadMore={() => fetchNextPage()}
+      />
+
       {/* Cancel Dialog */}
       <Dialog
         open={cancelDialog.open}
@@ -205,6 +217,8 @@ export function AdminOrdersContent() {
             <DialogTitle>Annuler la commande</DialogTitle>
             <DialogDescription>
               Voulez-vous vraiment annuler la commande <strong>{cancelDialog.orderNumber}</strong> ?
+              Le client sera remboursé intégralement. Les articles reviennent en stock
+              si la commande n&apos;est pas encore expédiée.
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">

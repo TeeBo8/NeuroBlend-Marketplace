@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import { SuccessContent } from './success-content';
 
 export const metadata: Metadata = {
-  title: 'Commande confirmée | NeuroBlend',
+  title: 'Commande confirmée',
   description: 'Votre commande a été confirmée avec succès',
 };
 

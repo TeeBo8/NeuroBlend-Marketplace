@@ -6,7 +6,7 @@ import { Trash2, Minus, Plus, ShoppingBag, ArrowRight, Coffee } from 'lucide-rea
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { useCartStore, type CartItem } from '@/stores/cart-store';
+import { useCartHydrated, useCartStore, type CartItem } from '@/stores/cart-store';
 import { formatPrice } from '@/lib/utils';
 import { toast } from 'sonner';
 
@@ -97,6 +97,17 @@ export function CartContent() {
   const { items, getSubtotal, getItemCount, clearCart } = useCartStore();
   const subtotal = getSubtotal();
   const itemCount = getItemCount();
+  const cartHydrated = useCartHydrated();
+
+  if (!cartHydrated) {
+    return (
+      <div className="container mx-auto px-4 py-16">
+        <div className="flex items-center justify-center py-32">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        </div>
+      </div>
+    );
+  }
 
   if (items.length === 0) {
     return (

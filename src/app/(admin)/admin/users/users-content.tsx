@@ -26,6 +26,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { api } from '@/trpc/client';
+import { LoadMore } from '@/components/load-more';
 import { formatDate } from '@/lib/utils';
 import { USER_ROLES } from '@/lib/constants';
 import { toast } from 'sonner';
@@ -56,7 +57,10 @@ export function AdminUsersContent() {
     ? { limit: 50 as const }
     : { limit: 50 as const, role: roleFilter as 'customer' | 'vendor' | 'admin' };
 
-  const { data, isLoading, refetch } = api.user.adminList.useQuery(queryInput);
+  const { data, isLoading, refetch, hasNextPage, isFetchingNextPage, fetchNextPage } =
+    api.user.adminList.useInfiniteQuery(queryInput, {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    });
   const updateRole = api.user.adminUpdateRole.useMutation({
     onSuccess: () => {
       toast.success('Rôle mis à jour avec succès');
@@ -68,7 +72,7 @@ export function AdminUsersContent() {
     },
   });
 
-  const users = data?.items || [];
+  const users = data?.pages.flatMap((page) => page.items) ?? [];
 
   const handleRoleChange = (userId: string, userName: string, currentRole: string, newRole: string) => {
     setRoleDialog({ open: true, userId, userName, currentRole, newRole });
@@ -91,7 +95,7 @@ export function AdminUsersContent() {
       <div>
         <h1 className="text-2xl font-bold text-foreground">Gestion des utilisateurs</h1>
         <p className="text-muted-foreground mt-1">
-          {users.length} utilisateur{users.length > 1 ? 's' : ''}
+          {users.length}{hasNextPage ? '+' : ''} utilisateur{users.length > 1 ? 's' : ''}
         </p>
       </div>
 
@@ -179,6 +183,12 @@ export function AdminUsersContent() {
           )}
         </CardContent>
       </Card>
+
+      <LoadMore
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+        onLoadMore={() => fetchNextPage()}
+      />
 
       {/* Confirm Role Change Dialog */}
       <Dialog

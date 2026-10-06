@@ -4,13 +4,17 @@ import { Coffee, ExternalLink, Store } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { api } from '@/trpc/client';
+import { LoadMore } from '@/components/load-more';
 import Link from 'next/link';
 import Image from 'next/image';
 
 export function VendorsContent() {
-  const { data, isLoading } = api.vendor.list.useQuery({ limit: 50 });
+  const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } =
+    api.vendor.list.useInfiniteQuery({ limit: 24 }, {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    });
 
-  const vendors = data?.items ?? [];
+  const vendors = data?.pages.flatMap((page) => page.items) ?? [];
 
   return (
     <>
@@ -122,6 +126,16 @@ export function VendorsContent() {
                   </CardContent>
                 </Card>
               ))}
+            </div>
+          )}
+
+          {hasNextPage && (
+            <div className="mt-12">
+              <LoadMore
+                hasNextPage={hasNextPage}
+                isFetchingNextPage={isFetchingNextPage}
+                onLoadMore={() => fetchNextPage()}
+              />
             </div>
           )}
         </div>

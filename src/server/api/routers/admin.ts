@@ -1,72 +1,53 @@
 import { z } from 'zod';
 import { eq, sql, desc, and, gte } from 'drizzle-orm';
 import { createTRPCRouter, adminProcedure } from '../trpc';
-import { orders, vendors, users, products } from '@/server/db/schema';
+import { orders, orderItems, vendors, users, products } from '@/server/db/schema';
+import { isCollected, isPlaced } from '@/server/orders/status';
 
 export const adminRouter = createTRPCRouter({
   // Get platform statistics
   getStats: adminProcedure.query(async ({ ctx }) => {
-    // Total users
-    const [userCount] = await ctx.db
-      .select({ count: sql<number>`count(*)` })
-      .from(users);
-
-    // Total vendors
-    const [vendorCount] = await ctx.db
-      .select({ count: sql<number>`count(*)` })
-      .from(vendors)
-      .where(eq(vendors.approved, true));
-
-    // Pending vendor applications
-    const [pendingVendors] = await ctx.db
-      .select({ count: sql<number>`count(*)` })
-      .from(vendors)
-      .where(eq(vendors.approved, false));
-
-    // Total products
-    const [productCount] = await ctx.db
-      .select({ count: sql<number>`count(*)` })
-      .from(products)
-      .where(eq(products.active, true));
-
-    // Total orders
-    const [orderCount] = await ctx.db
-      .select({ count: sql<number>`count(*)` })
-      .from(orders);
-
-    // Total revenue (GMV)
-    const [revenue] = await ctx.db
-      .select({
-        total: sql<string>`COALESCE(SUM(${orders.total}), 0)`,
-      })
-      .from(orders)
-      .where(eq(orders.status, 'paid'));
-
-    // Total commission earned
-    const [commission] = await ctx.db
-      .select({
-        total: sql<string>`COALESCE(SUM(${orders.commission}), 0)`,
-      })
-      .from(orders)
-      .where(eq(orders.status, 'paid'));
-
-    // Orders by status
-    const ordersByStatus = await ctx.db
-      .select({
-        status: orders.status,
-        count: sql<number>`count(*)`,
-      })
-      .from(orders)
-      .groupBy(orders.status);
+    const [[userCount], [vendorCounts], [productCount], [orderTotals], ordersByStatus] =
+      await Promise.all([
+        ctx.db.select({ count: sql<number>`count(*)` }).from(users),
+        ctx.db
+          .select({
+            approved: sql<number>`count(*) filter (where ${vendors.approved})`,
+            pending: sql<number>`count(*) filter (where not ${vendors.approved})`,
+          })
+          .from(vendors),
+        ctx.db
+          .select({ count: sql<number>`count(*)` })
+          .from(products)
+          .where(eq(products.active, true)),
+        // GMV and commission cover every order whose payment was collected,
+        // whatever its shipping progress.
+        ctx.db
+          .select({
+            count: sql<number>`count(*)`,
+            gmv: sql<string>`coalesce(sum(${orders.total}) filter (where ${isCollected}), 0)`,
+            commission: sql<string>`coalesce(sum(${orders.commission}) filter (where ${isCollected}), 0)`,
+          })
+          .from(orders)
+          .where(isPlaced),
+        ctx.db
+          .select({
+            status: orders.status,
+            count: sql<number>`count(*)`,
+          })
+          .from(orders)
+          .where(isPlaced)
+          .groupBy(orders.status),
+      ]);
 
     return {
       users: Number(userCount.count),
-      vendors: Number(vendorCount.count),
-      pendingVendors: Number(pendingVendors.count),
+      vendors: Number(vendorCounts.approved),
+      pendingVendors: Number(vendorCounts.pending),
       products: Number(productCount.count),
-      orders: Number(orderCount.count),
-      gmv: parseFloat(revenue.total),
-      commissionEarned: parseFloat(commission.total),
+      orders: Number(orderTotals.count),
+      gmv: Number(orderTotals.gmv),
+      commissionEarned: Number(orderTotals.commission),
       ordersByStatus: ordersByStatus.map((o) => ({
         status: o.status,
         count: Number(o.count),
@@ -79,6 +60,7 @@ export const adminRouter = createTRPCRouter({
     .input(z.object({ limit: z.number().min(1).max(50).default(10) }))
     .query(async ({ ctx, input }) => {
       const recentOrders = await ctx.db.query.orders.findMany({
+        where: isPlaced,
         limit: input.limit,
         orderBy: [desc(orders.createdAt)],
         with: {
@@ -120,19 +102,14 @@ export const adminRouter = createTRPCRouter({
           orderCount: sql<number>`count(*)`,
         })
         .from(orders)
-        .where(
-          and(
-            gte(orders.createdAt, startDate),
-            eq(orders.status, 'paid')
-          )
-        )
+        .where(and(gte(orders.createdAt, startDate), isCollected))
         .groupBy(sql`DATE(${orders.createdAt})`)
         .orderBy(sql`DATE(${orders.createdAt})`);
 
       return revenueByDay.map((day) => ({
         date: day.date,
-        revenue: parseFloat(day.revenue),
-        commission: parseFloat(day.commission),
+        revenue: Number(day.revenue),
+        commission: Number(day.commission),
         orderCount: Number(day.orderCount),
       }));
     }),
@@ -148,7 +125,7 @@ export const adminRouter = createTRPCRouter({
           orderCount: sql<number>`count(*)`,
         })
         .from(orders)
-        .where(eq(orders.status, 'paid'))
+        .where(isCollected)
         .groupBy(orders.vendorId)
         .orderBy(sql`SUM(${orders.total}) DESC`)
         .limit(input.limit);
@@ -166,7 +143,7 @@ export const adminRouter = createTRPCRouter({
 
       return topVendors.map((v) => ({
         vendor: vendorDetails.find((vd) => vd.id === v.vendorId),
-        totalRevenue: parseFloat(v.totalRevenue),
+        totalRevenue: Number(v.totalRevenue),
         orderCount: Number(v.orderCount),
       }));
     }),
@@ -175,17 +152,17 @@ export const adminRouter = createTRPCRouter({
   getTopProducts: adminProcedure
     .input(z.object({ limit: z.number().min(1).max(20).default(10) }))
     .query(async ({ ctx, input }) => {
-      const { orderItems: orderItemsTable } = await import('@/server/db/schema');
-
       const topProducts = await ctx.db
         .select({
-          productId: orderItemsTable.productId,
-          totalSold: sql<number>`COALESCE(SUM(${orderItemsTable.quantity}), 0)`,
-          totalRevenue: sql<string>`COALESCE(SUM(${orderItemsTable.totalPrice}), 0)`,
+          productId: orderItems.productId,
+          totalSold: sql<number>`COALESCE(SUM(${orderItems.quantity}), 0)`,
+          totalRevenue: sql<string>`COALESCE(SUM(${orderItems.totalPrice}), 0)`,
         })
-        .from(orderItemsTable)
-        .groupBy(orderItemsTable.productId)
-        .orderBy(sql`SUM(${orderItemsTable.quantity}) DESC`)
+        .from(orderItems)
+        .innerJoin(orders, eq(orders.id, orderItems.orderId))
+        .where(isCollected)
+        .groupBy(orderItems.productId)
+        .orderBy(sql`SUM(${orderItems.quantity}) DESC`)
         .limit(input.limit);
 
       // Get product details
@@ -211,7 +188,7 @@ export const adminRouter = createTRPCRouter({
       return topProducts.map((p) => ({
         product: productDetails.find((pd) => pd.id === p.productId),
         totalSold: Number(p.totalSold),
-        totalRevenue: parseFloat(p.totalRevenue),
+        totalRevenue: Number(p.totalRevenue),
       }));
     }),
 

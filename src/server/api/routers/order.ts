@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { eq, and, desc, ne } from 'drizzle-orm';
+import { eq, and, ne, sql } from 'drizzle-orm';
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -8,6 +8,12 @@ import {
 } from '../trpc';
 import { orders, vendors } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
+import { fromCursor, newestFirst, toPage } from '../pagination';
+import { isCollected, isPlaced, STATUSES_BEFORE } from '@/server/orders/status';
+import {
+  markOrderCancelled,
+  refundOrderPayment,
+} from '@/server/orders/cancellation';
 
 export const orderRouter = createTRPCRouter({
   // Get user's orders
@@ -22,7 +28,10 @@ export const orderRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const conditions = [eq(orders.userId, ctx.session.user.id)];
+      const conditions = [
+        eq(orders.userId, ctx.session.user.id),
+        fromCursor(orders, input.cursor),
+      ];
 
       if (input.status) {
         conditions.push(eq(orders.status, input.status));
@@ -31,7 +40,7 @@ export const orderRouter = createTRPCRouter({
       const items = await ctx.db.query.orders.findMany({
         where: and(...conditions),
         limit: input.limit + 1,
-        orderBy: [desc(orders.createdAt)],
+        orderBy: newestFirst(orders),
         with: {
           items: {
             with: {
@@ -53,14 +62,24 @@ export const orderRouter = createTRPCRouter({
         },
       });
 
-      let nextCursor: typeof input.cursor | undefined = undefined;
-      if (items.length > input.limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem!.id;
-      }
-
-      return { items, nextCursor };
+      return toPage(items, input.limit);
     }),
+
+  // Customer dashboard figures, computed over every order.
+  myStats: protectedProcedure.query(async ({ ctx }) => {
+    const [totals] = await ctx.db
+      .select({
+        count: sql<number>`count(*)`,
+        totalSpent: sql<string>`coalesce(sum(${orders.total}) filter (where ${isCollected}), 0)`,
+      })
+      .from(orders)
+      .where(and(eq(orders.userId, ctx.session.user.id), isPlaced));
+
+    return {
+      orders: Number(totals.count),
+      totalSpent: Number(totals.totalSpent),
+    };
+  }),
 
   // Get single order
   byId: protectedProcedure
@@ -122,6 +141,7 @@ export const orderRouter = createTRPCRouter({
       const conditions = [
         eq(orders.vendorId, vendor.id),
         ne(orders.status, 'pending'),
+        fromCursor(orders, input.cursor),
       ];
 
       if (input.status) {
@@ -131,7 +151,7 @@ export const orderRouter = createTRPCRouter({
       const items = await ctx.db.query.orders.findMany({
         where: and(...conditions),
         limit: input.limit + 1,
-        orderBy: [desc(orders.createdAt)],
+        orderBy: newestFirst(orders),
         with: {
           items: {
             with: {
@@ -154,13 +174,7 @@ export const orderRouter = createTRPCRouter({
         },
       });
 
-      let nextCursor: typeof input.cursor | undefined = undefined;
-      if (items.length > input.limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem!.id;
-      }
-
-      return { items, nextCursor };
+      return toPage(items, input.limit);
     }),
 
   // Vendor: Update order status
@@ -169,7 +183,7 @@ export const orderRouter = createTRPCRouter({
       z.object({
         orderId: z.string(),
         status: z.enum(['processing', 'shipped', 'delivered']),
-        trackingNumber: z.string().optional(),
+        trackingNumber: z.string().trim().max(100).optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -198,6 +212,15 @@ export const orderRouter = createTRPCRouter({
         });
       }
 
+      // An order only moves forward, and only once it has been paid.
+      const allowedFrom: readonly string[] = STATUSES_BEFORE[input.status];
+      if (!order.status || !allowedFrom.includes(order.status)) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: `Cannot move an order from "${order.status}" to "${input.status}"`,
+        });
+      }
+
       const updateData: Partial<typeof orders.$inferInsert> = {
         status: input.status,
         updatedAt: new Date(),
@@ -210,8 +233,17 @@ export const orderRouter = createTRPCRouter({
       const [updatedOrder] = await ctx.db
         .update(orders)
         .set(updateData)
-        .where(eq(orders.id, input.orderId))
+        // The status is checked again in the query: the order may have been
+        // cancelled since it was read.
+        .where(and(eq(orders.id, order.id), eq(orders.status, order.status)))
         .returning();
+
+      if (!updatedOrder) {
+        throw new TRPCError({
+          code: 'CONFLICT',
+          message: 'The order has changed in the meantime, please reload',
+        });
+      }
 
       // TODO: Send status update email to customer
 
@@ -231,7 +263,7 @@ export const orderRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const conditions = [];
+      const conditions = [fromCursor(orders, input.cursor)];
 
       if (input.status) {
         conditions.push(eq(orders.status, input.status));
@@ -242,9 +274,9 @@ export const orderRouter = createTRPCRouter({
       }
 
       const items = await ctx.db.query.orders.findMany({
-        where: conditions.length > 0 ? and(...conditions) : undefined,
+        where: and(...conditions),
         limit: input.limit + 1,
-        orderBy: [desc(orders.createdAt)],
+        orderBy: newestFirst(orders),
         with: {
           items: true,
           user: {
@@ -263,13 +295,7 @@ export const orderRouter = createTRPCRouter({
         },
       });
 
-      let nextCursor: typeof input.cursor | undefined = undefined;
-      if (items.length > input.limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem!.id;
-      }
-
-      return { items, nextCursor };
+      return toPage(items, input.limit);
     }),
 
   // Admin: Cancel order
@@ -277,7 +303,7 @@ export const orderRouter = createTRPCRouter({
     .input(
       z.object({
         orderId: z.string(),
-        reason: z.string().optional(),
+        reason: z.string().trim().max(500).optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -299,21 +325,48 @@ export const orderRouter = createTRPCRouter({
         });
       }
 
-      const [updatedOrder] = await ctx.db
-        .update(orders)
-        .set({
-          status: 'cancelled',
-          notes: input.reason
-            ? `Cancelled by admin: ${input.reason}`
-            : 'Cancelled by admin',
-          updatedAt: new Date(),
-        })
-        .where(eq(orders.id, input.orderId))
-        .returning();
+      if (order.status === 'cancelled') {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'This order is already cancelled',
+        });
+      }
 
-      // TODO: Process refund via Stripe
+      // The customer may be on the payment page right now: cancelling here
+      // would leave a paid order nobody fulfils. An unpaid order expires by
+      // itself after 30 minutes.
+      if (order.status === 'pending') {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'This order has not been paid yet, it will expire by itself',
+        });
+      }
+
+      // Refund first: if Stripe refuses, nothing has changed on our side and
+      // the admin can simply try again.
+      if (order.stripePaymentIntentId) {
+        await refundOrderPayment(order.id, order.stripePaymentIntentId);
+      }
+
+      const cancelled = await markOrderCancelled(
+        ctx.db,
+        order.id,
+        input.reason
+          ? `Cancelled by admin: ${input.reason}`
+          : 'Cancelled by admin'
+      );
+
+      if (!cancelled) {
+        throw new TRPCError({
+          code: 'CONFLICT',
+          message: 'The order has changed in the meantime, please reload',
+        });
+      }
+
       // TODO: Send cancellation email
 
-      return updatedOrder;
+      return (await ctx.db.query.orders.findFirst({
+        where: eq(orders.id, order.id),
+      }))!;
     }),
 });
