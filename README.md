@@ -8,6 +8,8 @@ Projet d'entraînement : la marque et les produits sont fictifs, les paiements p
 
 ![Page d'accueil de NeuroBlend](docs/apercu.jpg)
 
+L'étude de cas, avec les choix techniques expliqués simplement : [teebostudio.fr/portfolio/neuroblend](https://teebostudio.fr/portfolio/neuroblend).
+
 ## Ce que fait le site
 
 | Pour qui | Ce qu'il peut faire |
