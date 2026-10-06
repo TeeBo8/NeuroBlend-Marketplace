@@ -15,6 +15,7 @@ import {
   refundOrderPayment,
 } from '@/server/orders/cancellation';
 import { findVendorOfUser } from '@/server/vendors';
+import { ownerVisibleTo } from '@/server/demo/visibility';
 
 export const orderRouter = createTRPCRouter({
   // Get user's orders
@@ -140,6 +141,7 @@ export const orderRouter = createTRPCRouter({
       const conditions = [
         eq(orders.vendorId, vendor.id),
         ne(orders.status, 'pending'),
+        ownerVisibleTo(orders.userId, ctx),
         fromCursor(orders, input.cursor),
       ];
 
@@ -198,7 +200,8 @@ export const orderRouter = createTRPCRouter({
       const order = await ctx.db.query.orders.findFirst({
         where: and(
           eq(orders.id, input.orderId),
-          eq(orders.vendorId, vendor.id)
+          eq(orders.vendorId, vendor.id),
+          ownerVisibleTo(orders.userId, ctx)
         ),
       });
 
@@ -258,7 +261,10 @@ export const orderRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const conditions = [fromCursor(orders, input.cursor)];
+      const conditions = [
+        ownerVisibleTo(orders.userId, ctx),
+        fromCursor(orders, input.cursor),
+      ];
 
       if (input.status) {
         conditions.push(eq(orders.status, input.status));
@@ -303,7 +309,10 @@ export const orderRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const order = await ctx.db.query.orders.findFirst({
-        where: eq(orders.id, input.orderId),
+        where: and(
+          eq(orders.id, input.orderId),
+          ownerVisibleTo(orders.userId, ctx)
+        ),
       });
 
       if (!order) {

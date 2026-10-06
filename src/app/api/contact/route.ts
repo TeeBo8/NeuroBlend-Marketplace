@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { getResend } from '@/lib/email';
 import { createRateLimiter, getClientIp, tooManyRequests } from '@/lib/rate-limit';
+import { isDemo } from '@/lib/demo';
 
 const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'onboarding@resend.dev';
 const FROM_EMAIL = 'NeuroBlend <onboarding@resend.dev>';
@@ -16,6 +17,13 @@ const contactSchema = z.object({
 });
 
 export async function POST(request: Request) {
+  if (isDemo) {
+    return NextResponse.json(
+      { error: 'Le formulaire de contact est désactivé dans la démonstration.' },
+      { status: 403 }
+    );
+  }
+
   const rateLimit = checkRateLimit(getClientIp(request));
   if (!rateLimit.allowed) {
     return tooManyRequests(rateLimit.retryAfterSeconds);

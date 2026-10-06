@@ -8,6 +8,7 @@ import {
 import { reviews, orderItems, orders } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
 import { fromCursor, newestFirst, toPage } from '../pagination';
+import { ownerVisibleTo } from '@/server/demo/visibility';
 
 export const reviewRouter = createTRPCRouter({
   // Create a review
@@ -81,6 +82,7 @@ export const reviewRouter = createTRPCRouter({
       const items = await ctx.db.query.reviews.findMany({
         where: and(
           eq(reviews.productId, input.productId),
+          ownerVisibleTo(reviews.userId, ctx),
           fromCursor(reviews, input.cursor)
         ),
         limit: input.limit + 1,

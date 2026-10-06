@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
-import { createTRPCRouter, protectedProcedure } from '../trpc';
+import { createTRPCRouter, protectedProcedure, blockedInDemo } from '../trpc';
 import { subscriptions } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
 import { getStripe } from '@/server/stripe';
@@ -32,6 +32,7 @@ export const subscriptionRouter = createTRPCRouter({
 
   // Create a Stripe Billing checkout session
   createCheckout: protectedProcedure
+    .use(blockedInDemo)
     .input(
       z.object({
         planId: z.enum(['decouverte', 'essentiel', 'premium']),
@@ -107,7 +108,7 @@ export const subscriptionRouter = createTRPCRouter({
     }),
 
   // Manage subscription (redirect to Stripe portal)
-  manage: protectedProcedure.mutation(async ({ ctx }) => {
+  manage: protectedProcedure.use(blockedInDemo).mutation(async ({ ctx }) => {
     const subscription = await ctx.db.query.subscriptions.findFirst({
       where: eq(subscriptions.userId, ctx.session.user.id),
     });

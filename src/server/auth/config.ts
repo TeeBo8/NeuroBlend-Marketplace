@@ -31,6 +31,12 @@ export const auth = betterAuth({
         defaultValue: 'customer',
         input: false,
       },
+      // Lu par le cloisonnement de la démo, jamais accepté à l'inscription.
+      demoSandboxId: {
+        type: 'string',
+        required: false,
+        input: false,
+      },
     },
   },
 });

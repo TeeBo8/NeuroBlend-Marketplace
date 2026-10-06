@@ -4,6 +4,7 @@ import { ZodError } from 'zod';
 import { db } from '@/server/db';
 import { auth, type SessionUser } from '@/server/auth/config';
 import { headers } from 'next/headers';
+import { isDemo } from '@/lib/demo';
 
 export const createTRPCContext = async () => {
   const session = await auth.api.getSession({
@@ -33,6 +34,19 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
 export const createCallerFactory = t.createCallerFactory;
 
 export const createTRPCRouter = t.router;
+
+// En démo, le décor est en lecture seule : les procédures qui le modifieraient
+// (catalogue, boutiques, rôles) ou qui sortent du parcours montré portent ce
+// garde. À ajouter avec `.use(blockedInDemo)`.
+export const blockedInDemo = t.middleware(({ next }) => {
+  if (isDemo) {
+    throw new TRPCError({
+      code: 'FORBIDDEN',
+      message: 'Action désactivée dans la démonstration.',
+    });
+  }
+  return next();
+});
 
 // Public procedure - anyone can access
 export const publicProcedure = t.procedure;

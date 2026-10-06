@@ -4,10 +4,12 @@ import {
   createTRPCRouter,
   protectedProcedure,
   adminProcedure,
+  blockedInDemo,
 } from '../trpc';
 import { users } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
 import { fromCursor, newestFirst, toPage } from '../pagination';
+import { ownerVisibleTo } from '@/server/demo/visibility';
 
 export const userRouter = createTRPCRouter({
   // Get current user profile
@@ -71,7 +73,10 @@ export const userRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const conditions = [fromCursor(users, input.cursor)];
+      const conditions = [
+        ownerVisibleTo(users.id, ctx),
+        fromCursor(users, input.cursor),
+      ];
 
       if (input.role) {
         conditions.push(eq(users.role, input.role));
@@ -96,6 +101,7 @@ export const userRouter = createTRPCRouter({
 
   // Admin: Update user role
   adminUpdateRole: adminProcedure
+    .use(blockedInDemo)
     .input(
       z.object({
         userId: z.string(),

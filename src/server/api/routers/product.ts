@@ -5,6 +5,7 @@ import {
   publicProcedure,
   vendorProcedure,
   adminProcedure,
+  blockedInDemo,
 } from '../trpc';
 import type { Database } from '@/server/db';
 import { products, reviews, vendors } from '@/server/db/schema';
@@ -12,6 +13,7 @@ import { TRPCError } from '@trpc/server';
 import { isAllowedImageUrl } from '@/lib/image-hosts';
 import { fromCursor, newestFirst, toPage } from '../pagination';
 import { findVendorOfUser } from '@/server/vendors';
+import { ownerVisibleTo } from '@/server/demo/visibility';
 
 // Seules les images passées par l'upload sont acceptées : next/image refuse
 // tout autre hôte, et une URL libre ferait planter les pages qui l'affichent.
@@ -36,16 +38,18 @@ const productInputSchema = z.object({
   origin: z.string().optional(),
 });
 
+type ReviewViewer = { db: Database } & Parameters<typeof ownerVisibleTo>[1];
+
 // The product page only loads the latest reviews: the count and the average
 // have to come from the database, over all of them.
-async function getReviewStats(db: Database, productId: string) {
-  const [stats] = await db
+async function getReviewStats(ctx: ReviewViewer, productId: string) {
+  const [stats] = await ctx.db
     .select({
       count: sql<number>`count(*)`,
       average: sql<string>`coalesce(round(avg(${reviews.rating}), 1), 0)`,
     })
     .from(reviews)
-    .where(eq(reviews.productId, productId));
+    .where(and(eq(reviews.productId, productId), ownerVisibleTo(reviews.userId, ctx)));
 
   return { count: Number(stats.count), average: Number(stats.average) };
 }
@@ -138,6 +142,7 @@ export const productRouter = createTRPCRouter({
             },
           },
           reviews: {
+            where: (review) => ownerVisibleTo(review.userId, ctx),
             with: {
               user: {
                 columns: {
@@ -162,12 +167,13 @@ export const productRouter = createTRPCRouter({
 
       return {
         ...product,
-        reviewStats: await getReviewStats(ctx.db, product.id),
+        reviewStats: await getReviewStats(ctx, product.id),
       };
     }),
 
   // Create product (vendor only)
   create: vendorProcedure
+    .use(blockedInDemo)
     .input(productInputSchema)
     .mutation(async ({ ctx, input }) => {
       // Get vendor for the current user
@@ -229,6 +235,7 @@ export const productRouter = createTRPCRouter({
 
   // Update product (vendor only)
   update: vendorProcedure
+    .use(blockedInDemo)
     .input(
       z.object({
         id: z.string(),
@@ -290,6 +297,7 @@ export const productRouter = createTRPCRouter({
 
   // Delete product (vendor only)
   delete: vendorProcedure
+    .use(blockedInDemo)
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const vendor = await findVendorOfUser(ctx);
@@ -371,6 +379,7 @@ export const productRouter = createTRPCRouter({
 
   // Admin: Toggle product active status
   adminToggleActive: adminProcedure
+    .use(blockedInDemo)
     .input(z.object({ productId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const product = await ctx.db.query.products.findFirst({

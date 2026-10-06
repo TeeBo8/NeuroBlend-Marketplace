@@ -6,6 +6,7 @@ import {
   protectedProcedure,
   vendorProcedure,
   adminProcedure,
+  blockedInDemo,
 } from '../trpc';
 import { vendors, users, products, orders } from '@/server/db/schema';
 import { isCollected, isPlaced } from '@/server/orders/status';
@@ -13,6 +14,7 @@ import { TRPCError } from '@trpc/server';
 import { sendVendorApprovedEmail } from '@/lib/email';
 import { fromCursor, newestFirst, toPage } from '../pagination';
 import { findVendorOfUser } from '@/server/vendors';
+import { ownerVisibleTo } from '@/server/demo/visibility';
 
 export const vendorRouter = createTRPCRouter({
   // Get all approved vendors (public)
@@ -45,6 +47,7 @@ export const vendorRouter = createTRPCRouter({
 
   // Register as vendor (authenticated users only)
   register: protectedProcedure
+    .use(blockedInDemo)
     .input(
       z.object({
         businessName: z.string().min(2, 'Business name is required'),
@@ -113,7 +116,13 @@ export const vendorRouter = createTRPCRouter({
           toProcess: sql<number>`count(*) filter (where ${orders.status} in ('paid', 'processing'))`,
         })
         .from(orders)
-        .where(and(eq(orders.vendorId, vendor.id), isPlaced)),
+        .where(
+          and(
+            eq(orders.vendorId, vendor.id),
+            isPlaced,
+            ownerVisibleTo(orders.userId, ctx)
+          )
+        ),
     ]);
 
     return {
@@ -160,6 +169,7 @@ export const vendorRouter = createTRPCRouter({
 
   // Admin: Approve vendor
   approve: adminProcedure
+    .use(blockedInDemo)
     .input(z.object({ vendorId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const [updatedVendor] = await ctx.db
@@ -192,6 +202,7 @@ export const vendorRouter = createTRPCRouter({
 
   // Admin: Reject vendor
   reject: adminProcedure
+    .use(blockedInDemo)
     .input(
       z.object({
         vendorId: z.string(),
@@ -224,6 +235,7 @@ export const vendorRouter = createTRPCRouter({
 
   // Admin: Update commission rate
   updateCommission: adminProcedure
+    .use(blockedInDemo)
     .input(
       z.object({
         vendorId: z.string(),
