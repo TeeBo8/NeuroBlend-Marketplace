@@ -1,21 +1,12 @@
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
-import {
-  createTRPCRouter,
-  publicProcedure,
-  protectedProcedure,
-} from '../trpc';
+import { createTRPCRouter, protectedProcedure } from '../trpc';
 import { subscriptions } from '@/server/db/schema';
 import { TRPCError } from '@trpc/server';
 import { getStripe } from '@/server/stripe';
 import { SUBSCRIPTION_PLANS } from '@/lib/constants';
 
 export const subscriptionRouter = createTRPCRouter({
-  // Get available plans
-  getPlans: publicProcedure.query(() => {
-    return SUBSCRIPTION_PLANS;
-  }),
-
   // Get current user's subscription
   mySubscription: protectedProcedure.query(async ({ ctx }) => {
     const subscription = await ctx.db.query.subscriptions.findFirst({

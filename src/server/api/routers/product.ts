@@ -148,50 +148,6 @@ export const productRouter = createTRPCRouter({
       };
     }),
 
-  // Get product by slug
-  bySlug: publicProcedure
-    .input(z.object({ slug: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const product = await ctx.db.query.products.findFirst({
-        where: eq(products.slug, input.slug),
-        with: {
-          vendor: {
-            columns: {
-              id: true,
-              businessName: true,
-              logo: true,
-              description: true,
-            },
-          },
-          reviews: {
-            with: {
-              user: {
-                columns: {
-                  id: true,
-                  name: true,
-                  image: true,
-                },
-              },
-            },
-            orderBy: (reviews, { desc }) => [desc(reviews.createdAt)],
-            limit: 10,
-          },
-        },
-      });
-
-      if (!product) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Product not found',
-        });
-      }
-
-      return {
-        ...product,
-        reviewStats: await getReviewStats(ctx.db, product.id),
-      };
-    }),
-
   // Create product (vendor only)
   create: vendorProcedure
     .input(productInputSchema)
