@@ -19,6 +19,11 @@ export async function POST(request: Request) {
   const sandboxId = await getSandboxId(session.user.id);
   if (!sandboxId) return redirectTo(request, '/');
 
+  // Déjà dans ce rôle : fermer les sessions du compte fermerait aussi la nouvelle.
+  if ((session.user as { role?: string }).role === role) {
+    return redirectTo(request, DEMO_PERSONAS[role].home);
+  }
+
   const cookies = await signInSandboxRole(sandboxId, role, request.headers);
   if (!cookies) return redirectTo(request, '/login');
 

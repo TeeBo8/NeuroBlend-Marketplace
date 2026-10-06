@@ -211,6 +211,39 @@ describe("cloisonnement : le vendeur d'un bac à sable", () => {
   });
 });
 
+describe("le décor en lecture seule", () => {
+  it("refuse de faire avancer ou d'annuler une commande du décor", async () => {
+    // Si le décor reçoit un jour une commande en cours, elle reste intouchable.
+    await db.update(orders).set({ status: "paid" }).where(eq(orders.id, "seed-order-1"));
+    const seedOrder = (await db.query.orders.findFirst({ where: eq(orders.id, "seed-order-1") }))!;
+    await db.insert(orders).values({
+      orderNumber: "NB-A",
+      userId: "customer-a",
+      vendorId: seedOrder.vendorId,
+      subtotal: "1.00",
+      commission: "0.10",
+      total: "1.00",
+      status: "paid",
+    });
+
+    await expect(
+      as("a", "vendor").order.updateStatus({ orderId: "seed-order-1", status: "shipped" })
+    ).rejects.toMatchObject({ code: "NOT_FOUND" });
+    await expect(
+      as("a", "admin").order.adminCancel({ orderId: "seed-order-1" })
+    ).rejects.toMatchObject({ code: "NOT_FOUND" });
+    expect(refunds.create).not.toHaveBeenCalled();
+  });
+
+  it("ne montre pas l'identifiant du compte Stripe partagé", async () => {
+    const shop = await as("a", "vendor").vendor.me();
+    const status = await as("a", "vendor").payment.getConnectStatus();
+
+    expect(shop?.stripeAccountId).toBeNull();
+    expect(status).toEqual({ connected: true, onboardingComplete: true, payoutsEnabled: true });
+  });
+});
+
 describe("cloisonnement : les avis", () => {
   it("ne montre l'avis d'un visiteur qu'à lui-même", async () => {
     await as("b", "customer").review.create({
@@ -323,13 +356,7 @@ describe("limite par adresse IP", () => {
   /** Un bac à sable ouvert depuis cette adresse, à cette date. */
   async function openFrom(ip: string, sandboxId: string, createdAt: Date) {
     await addSandbox(sandboxId, createdAt);
-    await db.insert(sessions).values({
-      id: `session-${sandboxId}`,
-      userId: `customer-${sandboxId}`,
-      token: `token-${sandboxId}`,
-      expiresAt: new Date(NOW.getTime() + 24 * HOUR_MS),
-      ipAddress: ip,
-    });
+    await db.update(users).set({ demoIp: ip }).where(eq(users.demoSandboxId, sandboxId));
   }
 
   it("bloque la sixième entrée dans l'heure depuis la même adresse", async () => {
@@ -340,6 +367,14 @@ describe("limite par adresse IP", () => {
 
     expect(await isIpOverLimit(from("203.0.113.7"), NOW)).toBe(true);
     expect(await isIpOverLimit(from("203.0.113.8"), NOW)).toBe(false);
+  });
+
+  it("compte encore un visiteur qui s'est déconnecté entre deux entrées", async () => {
+    for (let index = 0; index < 5; index++) await openFrom("203.0.113.7", `d${index}`, NOW);
+    // Se déconnecter supprime les sessions, pas les comptes.
+    await db.delete(sessions);
+
+    expect(await isIpOverLimit(from("203.0.113.7"), NOW)).toBe(true);
   });
 
   it("oublie les entrées de plus d'une heure, dans la limite du jour", async () => {

@@ -80,6 +80,20 @@ describe("entrée dans la démo", () => {
     expect(await db.select().from(sessions)).toHaveLength(1);
   });
 
+  it("note l'adresse IP du visiteur sur ses trois comptes", async () => {
+    const request = post("/api/demo/enter");
+    request.headers.set("x-forwarded-for", "203.0.113.7");
+
+    await enter(request);
+
+    const accounts = await db.select().from(users);
+    expect(accounts.map((account) => account.demoIp)).toEqual([
+      "203.0.113.7",
+      "203.0.113.7",
+      "203.0.113.7",
+    ]);
+  });
+
   it("garde le bac à sable d'un visiteur déjà entré", async () => {
     const first = await enter(post("/api/demo/enter"));
     const second = await enter(post("/api/demo/enter", { cookie: cookieOf(first) }));
@@ -129,6 +143,17 @@ describe("changement de rôle", () => {
     expect(await db.select().from(sessions)).toHaveLength(1);
   });
 
+  it("ne déconnecte pas un visiteur qui redemande son rôle actuel", async () => {
+    const entered = await enter(post("/api/demo/enter"));
+
+    const response = await switchRole(
+      post("/api/demo/switch", { cookie: cookieOf(entered), role: "customer" })
+    );
+
+    expect(new URL(response.headers.get("location")!).pathname).toBe("/products");
+    expect(await whoIs(cookieOf(entered))).not.toBeNull();
+  });
+
   it("refuse un rôle inconnu", async () => {
     const entered = await enter(post("/api/demo/enter"));
 
@@ -147,7 +172,7 @@ describe("changement de rôle", () => {
   });
 
   it("reste dans son bac à sable quand un autre visiteur est présent", async () => {
-    const other = await createSandbox();
+    const other = await createSandbox(new Headers());
     const entered = await enter(post("/api/demo/enter"));
 
     const response = await switchRole(

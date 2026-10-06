@@ -41,6 +41,9 @@ export const users = pgTable('users', {
   // Démo : identifiant du bac à sable d'un visiteur (ses trois comptes
   // éphémères le partagent). Nul pour un vrai compte et pour le décor.
   demoSandboxId: text('demo_sandbox_id'),
+  // Démo : adresse IP qui a ouvert le bac à sable, pour le plafond par
+  // adresse. Elle disparaît avec le compte, au bout de 24 heures.
+  demoIp: text('demo_ip'),
   // Démo : compte de décor, sur lequel personne ne peut se connecter.
   isSeed: boolean('is_seed').default(false).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -320,16 +323,10 @@ export const reviewsRelations = relations(reviews, ({ one }) => ({
 
 // Type exports
 export type User = typeof users.$inferSelect;
-export type NewUser = typeof users.$inferInsert;
 export type Vendor = typeof vendors.$inferSelect;
-export type NewVendor = typeof vendors.$inferInsert;
 export type Product = typeof products.$inferSelect;
 export type NewProduct = typeof products.$inferInsert;
 export type Order = typeof orders.$inferSelect;
-export type NewOrder = typeof orders.$inferInsert;
 export type OrderItem = typeof orderItems.$inferSelect;
-export type NewOrderItem = typeof orderItems.$inferInsert;
 export type Subscription = typeof subscriptions.$inferSelect;
-export type NewSubscription = typeof subscriptions.$inferInsert;
 export type Review = typeof reviews.$inferSelect;
-export type NewReview = typeof reviews.$inferInsert;

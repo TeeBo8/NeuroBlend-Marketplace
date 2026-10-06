@@ -26,3 +26,18 @@ export function ownerVisibleTo(ownerId: AnyColumn, ctx: Viewer): SQL | undefined
     WHERE demo_user.is_seed OR demo_user.demo_sandbox_id = ${sandboxId}
   )`;
 }
+
+/**
+ * Condition SQL pour les écritures : en démo, on ne modifie que ce qui
+ * appartient à son propre bac à sable. Le décor se lit, il ne se change pas.
+ */
+export function ownerEditableBy(ownerId: AnyColumn, ctx: Viewer): SQL | undefined {
+  if (!isDemo) return undefined;
+
+  const sandboxId = ctx.session?.user.demoSandboxId ?? null;
+  return sql`${ownerId} IN (
+    SELECT demo_user.id
+    FROM users AS demo_user
+    WHERE demo_user.demo_sandbox_id = ${sandboxId}
+  )`;
+}
