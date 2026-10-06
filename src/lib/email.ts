@@ -9,19 +9,6 @@ export const getResend = () => {
 
 const FROM_EMAIL = 'NeuroBlend <onboarding@resend.dev>';
 
-export async function sendWelcomeEmail(to: string, name: string) {
-  try {
-    await getResend().emails.send({
-      from: FROM_EMAIL,
-      to,
-      subject: 'Bienvenue sur NeuroBlend !',
-      html: welcomeTemplate(name),
-    });
-  } catch (error) {
-    console.error('Failed to send welcome email:', error);
-  }
-}
-
 export async function sendOrderConfirmationEmail(
   to: string,
   data: {
@@ -89,25 +76,6 @@ function baseTemplate(content: string) {
   </div>
 </body>
 </html>`;
-}
-
-function welcomeTemplate(name: string) {
-  return baseTemplate(`
-    <h2 style="margin:0 0 16px;font-size:22px;color:#111827;">
-      Bienvenue ${name} !
-    </h2>
-    <p style="margin:0 0 16px;color:#4b5563;line-height:1.6;">
-      Merci de rejoindre la communauté NeuroBlend. Nous sommes ravis de vous compter parmi nous.
-    </p>
-    <p style="margin:0 0 24px;color:#4b5563;line-height:1.6;">
-      Découvrez nos capsules de café spécialement conçues pour les profils HPI, ADHD et hypersensibles. Chaque blend est pensé pour accompagner votre quotidien.
-    </p>
-    <div style="text-align:center;">
-      <a href="${process.env.NEXT_PUBLIC_APP_URL}/products" style="display:inline-block;background-color:#6B46C1;color:#ffffff;text-decoration:none;padding:12px 32px;border-radius:8px;font-weight:600;">
-        Découvrir nos produits
-      </a>
-    </div>
-  `);
 }
 
 function orderConfirmationTemplate(data: {

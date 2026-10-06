@@ -11,34 +11,9 @@ import { vendors, users, products, orders } from '@/server/db/schema';
 import { isCollected, isPlaced } from '@/server/orders/status';
 import { TRPCError } from '@trpc/server';
 import { sendVendorApprovedEmail } from '@/lib/email';
-import { isAllowedImageUrl } from '@/lib/image-hosts';
 import { fromCursor, newestFirst, toPage } from '../pagination';
 
 export const vendorRouter = createTRPCRouter({
-  // Get vendor by ID (public)
-  byId: publicProcedure
-    .input(z.object({ id: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const vendor = await ctx.db.query.vendors.findFirst({
-        where: eq(vendors.id, input.id),
-        with: {
-          products: {
-            where: (products, { eq }) => eq(products.active, true),
-            limit: 10,
-          },
-        },
-      });
-
-      if (!vendor || !vendor.approved) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Vendor not found',
-        });
-      }
-
-      return vendor;
-    }),
-
   // Get all approved vendors (public)
   list: publicProcedure
     .input(
@@ -155,41 +130,6 @@ export const vendorRouter = createTRPCRouter({
     };
   }),
 
-  // Update vendor profile
-  update: protectedProcedure
-    .input(
-      z.object({
-        businessName: z.string().min(2).optional(),
-        description: z.string().optional(),
-        logo: z.string().refine(isAllowedImageUrl, { message: 'Image non autorisée' }).optional(),
-        website: z.string().url().optional().or(z.literal('')),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      const vendor = await ctx.db.query.vendors.findFirst({
-        where: eq(vendors.userId, ctx.session.user.id),
-      });
-
-      if (!vendor) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Vendor profile not found',
-        });
-      }
-
-      const [updatedVendor] = await ctx.db
-        .update(vendors)
-        .set({
-          ...input,
-          website: input.website || null,
-          updatedAt: new Date(),
-        })
-        .where(eq(vendors.id, vendor.id))
-        .returning();
-
-      return updatedVendor;
-    }),
-
   // Admin: List all vendors
   adminList: adminProcedure
     .input(
@@ -222,31 +162,6 @@ export const vendorRouter = createTRPCRouter({
       });
 
       return toPage(items, input.limit);
-    }),
-
-  // Admin: Get pending vendor applications
-  pendingApplications: adminProcedure
-    .input(
-      z.object({
-        limit: z.number().min(1).max(50).default(20),
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const pendingVendors = await ctx.db.query.vendors.findMany({
-        where: eq(vendors.approved, false),
-        limit: input.limit,
-        with: {
-          user: {
-            columns: {
-              id: true,
-              email: true,
-              name: true,
-            },
-          },
-        },
-      });
-
-      return pendingVendors;
     }),
 
   // Admin: Approve vendor
@@ -309,8 +224,6 @@ export const vendorRouter = createTRPCRouter({
         .update(users)
         .set({ role: 'customer', updatedAt: new Date() })
         .where(eq(users.id, vendor.userId));
-
-      // TODO: Send rejection email with reason
 
       return { success: true };
     }),

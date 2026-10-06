@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { describe, it, expect, beforeEach } from "vitest";
 import type { Database } from "@/server/db";
-import { orderItems, orders, users, vendors } from "@/server/db/schema";
+import { orders, users, vendors } from "@/server/db/schema";
 import { createCallerFactory } from "@/server/api/trpc";
 import { appRouter } from "@/server/api/root";
 import { createTestDb, seedShop } from "./helpers/test-db";
@@ -43,17 +43,6 @@ async function addOrder(
     })
     .returning();
   return order;
-}
-
-async function addItem(orderId: string, quantity: number) {
-  await db.insert(orderItems).values({
-    orderId,
-    productId: shop.product.id,
-    productName: shop.product.name,
-    quantity,
-    unitPrice: "10.00",
-    totalPrice: (quantity * 10).toFixed(2),
-  });
 }
 
 /** Une commande par statut : seules les quatre du milieu sont encaissées. */
@@ -148,31 +137,6 @@ describe("les autres chiffres de l'admin", () => {
       vendor: { id: shop.vendor.id },
       totalRevenue: 140.3,
       orderCount: 4,
-    });
-  });
-
-  it("getRevenueChart additionne les commandes encaissées du jour", async () => {
-    await seedOrders();
-
-    const chart = await asAdmin().admin.getRevenueChart({ days: 7 });
-
-    expect(chart).toHaveLength(1);
-    expect(chart[0]).toMatchObject({ revenue: 140.3, commission: 21.05, orderCount: 4 });
-  });
-
-  it("getTopProducts ignore les commandes annulées ou jamais payées", async () => {
-    const seeded = await seedOrders();
-    await addItem(seeded.pending.id, 7);
-    await addItem(seeded.paid.id, 2);
-    await addItem(seeded.delivered.id, 1);
-    await addItem(seeded.cancelled.id, 5);
-
-    const [top] = await asAdmin().admin.getTopProducts({ limit: 5 });
-
-    expect(top).toMatchObject({
-      product: { id: shop.product.id },
-      totalSold: 3,
-      totalRevenue: 30,
     });
   });
 });

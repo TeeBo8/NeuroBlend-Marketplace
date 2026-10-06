@@ -24,6 +24,7 @@ import { useCartStore } from '@/stores/cart-store';
 import { toast } from 'sonner';
 import { trackAddToCart } from '@/lib/analytics';
 import { ReviewForm } from '@/components/product/review-form';
+import { LoadMore } from '@/components/load-more';
 import { ProductRecommendations } from '@/components/ai/product-recommendations';
 
 function StarRating({ rating }: { rating: number }) {
@@ -48,6 +49,17 @@ export function ProductDetail({ id }: { id: string }) {
   const router = useRouter();
 
   const { data: product, isLoading, error } = api.product.byId.useQuery({ id });
+  // La fiche arrive avec ses dix derniers avis ; les suivants se chargent à
+  // la demande.
+  const {
+    data: reviewPages,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = api.review.byProduct.useInfiniteQuery(
+    { productId: id, limit: 10 },
+    { getNextPageParam: (lastPage) => lastPage.nextCursor }
+  );
 
   if (isLoading) {
     return (
@@ -95,6 +107,8 @@ export function ProductDetail({ id }: { id: string }) {
       )
     : null;
   const { count: reviewCount, average: averageRating } = product.reviewStats;
+  const reviews =
+    reviewPages?.pages.flatMap((page) => page.items) ?? product.reviews;
 
   return (
     <>
@@ -405,9 +419,9 @@ export function ProductDetail({ id }: { id: string }) {
           </div>
 
           {/* Existing Reviews */}
-          {product.reviews && product.reviews.length > 0 && (
+          {reviews.length > 0 && (
             <div className="space-y-4">
-              {product.reviews.map((review) => (
+              {reviews.map((review) => (
                 <Card key={review.id}>
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between mb-2">
@@ -447,6 +461,11 @@ export function ProductDetail({ id }: { id: string }) {
                   </CardContent>
                 </Card>
               ))}
+              <LoadMore
+                hasNextPage={hasNextPage}
+                isFetchingNextPage={isFetchingNextPage}
+                onLoadMore={() => fetchNextPage()}
+              />
             </div>
           )}
         </div>

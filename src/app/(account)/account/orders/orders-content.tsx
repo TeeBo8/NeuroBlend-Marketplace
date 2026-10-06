@@ -5,12 +5,12 @@ import {
   Package,
   ArrowRight,
   Coffee,
-  Loader2,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { api } from '@/trpc/client';
+import { LoadMore } from '@/components/load-more';
 import { formatPrice, formatDate, cn } from '@/lib/utils';
 import { ORDER_STATUSES } from '@/lib/constants';
 import { useState } from 'react';
@@ -189,24 +189,11 @@ export function OrdersContent() {
           })}
 
           {/* Load More */}
-          {hasNextPage && (
-            <div className="flex justify-center pt-4">
-              <Button
-                variant="outline"
-                onClick={() => fetchNextPage()}
-                disabled={isFetchingNextPage}
-              >
-                {isFetchingNextPage ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Chargement...
-                  </>
-                ) : (
-                  'Charger plus de commandes'
-                )}
-              </Button>
-            </div>
-          )}
+          <LoadMore
+            hasNextPage={hasNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+            onLoadMore={() => fetchNextPage()}
+          />
         </div>
       )}
     </div>

@@ -67,6 +67,7 @@ export function ReviewForm({ productId }: { productId: string }) {
       setTitle('');
       setComment('');
       utils.product.byId.invalidate({ id: productId });
+      utils.review.byProduct.invalidate({ productId });
     },
     onError: (error) => {
       toast.error(error.message);

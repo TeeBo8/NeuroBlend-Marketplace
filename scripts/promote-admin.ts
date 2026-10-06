@@ -1,19 +1,10 @@
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
-
-// Load .env.local manually
-const envPath = resolve(process.cwd(), '.env.local');
-const envContent = readFileSync(envPath, 'utf-8');
-for (const line of envContent.split('\n')) {
-  const trimmed = line.trim();
-  if (!trimmed || trimmed.startsWith('#')) continue;
-  const eqIndex = trimmed.indexOf('=');
-  if (eqIndex === -1) continue;
-  const key = trimmed.slice(0, eqIndex);
-  const value = trimmed.slice(eqIndex + 1);
-  process.env[key] = value;
-}
-
+/**
+ * Donne le rôle admin à un compte existant.
+ * Usage : pnpm db:promote-admin <email>
+ *
+ * Il n'existe volontairement aucun écran pour créer le premier admin : il se
+ * nomme depuis la machine qui a accès à la base.
+ */
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { eq } from 'drizzle-orm';
@@ -22,25 +13,31 @@ import { users } from '../src/server/db/schema';
 async function main() {
   const email = process.argv[2];
   if (!email) {
-    console.error('Usage: npx tsx scripts/promote-admin.ts <email>');
+    console.error('Usage : pnpm db:promote-admin <email>');
+    process.exit(1);
+  }
+  if (!process.env.DATABASE_URL) {
+    console.error('DATABASE_URL est absente : vérifier .env.local');
     process.exit(1);
   }
 
-  const sql = neon(process.env.DATABASE_URL!);
-  const db = drizzle(sql);
+  const db = drizzle(neon(process.env.DATABASE_URL));
 
   const [updated] = await db
     .update(users)
     .set({ role: 'admin', updatedAt: new Date() })
     .where(eq(users.email, email))
-    .returning({ id: users.id, email: users.email, role: users.role });
+    .returning({ email: users.email, role: users.role });
 
   if (!updated) {
-    console.error(`User with email "${email}" not found.`);
+    console.error(`Aucun compte avec l'adresse « ${email} ».`);
     process.exit(1);
   }
 
-  console.log(`User ${updated.email} promoted to admin!`);
+  console.log(`${updated.email} est maintenant admin.`);
 }
 
-main().catch(console.error);
+main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

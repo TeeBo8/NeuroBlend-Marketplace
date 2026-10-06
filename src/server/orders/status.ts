@@ -6,7 +6,7 @@ import { orders } from '@/server/db/schema';
  * dans le chiffre d'affaires quand elle avance de « payée » à « livrée » ;
  * elle n'en sort que si elle est annulée.
  */
-export const COLLECTED_STATUSES = [
+const COLLECTED_STATUSES = [
   'paid',
   'processing',
   'shipped',

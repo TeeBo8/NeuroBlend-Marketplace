@@ -49,6 +49,23 @@ async function getReviewStats(db: Database, productId: string) {
   return { count: Number(stats.count), average: Number(stats.average) };
 }
 
+// A product taken off the catalogue stays reachable for the people who
+// manage it: its own vendor (to edit it) and the admins.
+async function canSeeInactive(
+  ctx: { db: Database; session: { user: { id: string; role?: string | null } } | null },
+  product: { vendorId: string }
+) {
+  const user = ctx.session?.user;
+  if (!user) return false;
+  if (user.role === 'admin') return true;
+
+  const ownVendor = await ctx.db.query.vendors.findFirst({
+    where: and(eq(vendors.id, product.vendorId), eq(vendors.userId, user.id)),
+    columns: { id: true },
+  });
+  return ownVendor !== undefined;
+}
+
 export const productRouter = createTRPCRouter({
   // Get all products (public)
   list: publicProcedure
@@ -135,51 +152,7 @@ export const productRouter = createTRPCRouter({
         },
       });
 
-      if (!product) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Product not found',
-        });
-      }
-
-      return {
-        ...product,
-        reviewStats: await getReviewStats(ctx.db, product.id),
-      };
-    }),
-
-  // Get product by slug
-  bySlug: publicProcedure
-    .input(z.object({ slug: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const product = await ctx.db.query.products.findFirst({
-        where: eq(products.slug, input.slug),
-        with: {
-          vendor: {
-            columns: {
-              id: true,
-              businessName: true,
-              logo: true,
-              description: true,
-            },
-          },
-          reviews: {
-            with: {
-              user: {
-                columns: {
-                  id: true,
-                  name: true,
-                  image: true,
-                },
-              },
-            },
-            orderBy: (reviews, { desc }) => [desc(reviews.createdAt)],
-            limit: 10,
-          },
-        },
-      });
-
-      if (!product) {
+      if (!product || !(product.active || (await canSeeInactive(ctx, product)))) {
         throw new TRPCError({
           code: 'NOT_FOUND',
           message: 'Product not found',

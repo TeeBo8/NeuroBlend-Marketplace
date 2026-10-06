@@ -245,8 +245,6 @@ export const orderRouter = createTRPCRouter({
         });
       }
 
-      // TODO: Send status update email to customer
-
       return updatedOrder;
     }),
 
@@ -362,8 +360,6 @@ export const orderRouter = createTRPCRouter({
           message: 'The order has changed in the meantime, please reload',
         });
       }
-
-      // TODO: Send cancellation email
 
       return (await ctx.db.query.orders.findFirst({
         where: eq(orders.id, order.id),

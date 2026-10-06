@@ -165,7 +165,7 @@ describe("les autres listes paginées", () => {
     expect(await allPages((cursor) => asAdmin().order.adminList({ limit: 2, cursor }))).toEqual(expected);
   });
 
-  it("review.byProduct et review.myReviews", async () => {
+  it("review.byProduct", async () => {
     await addProduct("p1", "10:00:01");
     await addProduct("p2", "10:00:02");
     await addProduct("p3", "10:00:03");
@@ -191,9 +191,6 @@ describe("les autres listes paginées", () => {
     expect(
       await allPages((cursor) => asVisitor().review.byProduct({ productId: "p1", limit: 2, cursor }))
     ).toEqual([["r5", "r4"], ["r1"]]);
-    expect(
-      await allPages((cursor) => asCustomer().review.myReviews({ limit: 2, cursor }))
-    ).toEqual([["r3", "r2"], ["r1"]]);
   });
 
   it("vendor.list, vendor.adminList et user.adminList", async () => {

@@ -36,7 +36,7 @@ export const auth = betterAuth({
   },
 });
 
-export type Session = typeof auth.$Infer.Session;
+type Session = typeof auth.$Infer.Session;
 
 // Extended user type with role
 export type SessionUser = Session['user'] & {
