@@ -19,7 +19,7 @@ export function VendorsContent() {
   return (
     <>
       {/* Hero */}
-      <section className="relative text-primary-foreground overflow-hidden">
+      <section className="relative text-white overflow-hidden">
         <div className="absolute inset-0">
           <video
             autoPlay
@@ -32,13 +32,13 @@ export function VendorsContent() {
             <source src="/images/hero/coffee-beans-hero.mp4" type="video/mp4" />
           </video>
         </div>
-        <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/90 to-indigo-800 opacity-80" />
+        <div className="absolute inset-0 bg-black/60" />
         <div className="relative container mx-auto px-4 py-16 md:py-20">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
               Nos torréfacteurs
             </h1>
-            <p className="text-xl text-primary-foreground/80">
+            <p className="text-xl text-white/80">
               Des artisans passionnés qui créent des capsules d&apos;exception
               pour les esprits neuroatypiques.
             </p>

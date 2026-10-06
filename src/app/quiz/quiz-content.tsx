@@ -26,6 +26,7 @@ import {
   trackQuizComplete,
   trackQuizRestart,
 } from "@/lib/analytics";
+import { PageHero } from '@/components/layout/page-hero';
 
 // ─── Types ───────────────────────────────────────────────
 
@@ -273,18 +274,9 @@ export function QuizContent() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-secondary via-secondary/80 to-primary text-foreground">
-        <div className="container mx-auto px-4 py-12 md:py-16 text-center">
-          <h1 className="text-3xl md:text-5xl font-bold mb-3">
-            {isResults ? profile?.emoji + " " + profile?.title : "Trouvez votre café idéal"}
-          </h1>
-          <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
-            {isResults
-              ? "Voici votre profil et nos recommandations personnalisées"
-              : "3 questions pour découvrir le blend adapté à votre esprit"}
-          </p>
-        </div>
-      </section>
+      <PageHero title={isResults ? profile?.emoji + " " + profile?.title : "Trouvez votre café idéal"} centered>
+        {isResults ? "Voici votre profil et nos recommandations personnalisées" : "3 questions pour découvrir le blend adapté à votre esprit"}
+      </PageHero>
 
       <section className="py-12 md:py-16 bg-background">
         <div className="container mx-auto px-4 max-w-3xl">

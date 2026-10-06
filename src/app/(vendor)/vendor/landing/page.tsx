@@ -152,30 +152,24 @@ export default function VendorLandingPage() {
       />
 
       {/* Hero */}
-      <section className="relative bg-primary text-primary-foreground overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 right-10 w-72 h-72 bg-primary-foreground rounded-full blur-3xl" />
-          <div className="absolute bottom-10 left-20 w-96 h-96 bg-secondary rounded-full blur-3xl" />
-        </div>
-
-        <div className="relative container mx-auto px-4 py-24 md:py-36">
+      <section className="border-b bg-secondary/40">
+        <div className="container mx-auto px-4 py-20 md:py-28">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 rounded-full bg-primary-foreground/15 backdrop-blur-sm px-4 py-2 text-sm font-medium text-primary-foreground mb-6">
+            <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary mb-6">
               <Store className="h-4 w-4" />
               Espace torréfacteurs
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+            <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-balance mb-6 leading-tight">
               Vendez votre café à 15-20% de la population française
             </h1>
-            <p className="text-lg md:text-2xl text-primary-foreground/80 mb-8 leading-relaxed">
+            <p className="text-lg md:text-2xl text-muted-foreground mb-8 leading-relaxed">
               Rejoignez {APP_NAME} et touchez une communauté passionnée
-              d&apos;esprits neuroatypiques. <strong className="text-primary-foreground">0€ d&apos;inscription</strong>,{" "}
-              <strong className="text-primary-foreground">{DEFAULT_COMMISSION_RATE}% de commission</strong> seulement.
+              d&apos;esprits neuroatypiques. <strong className="text-foreground">0€ d&apos;inscription</strong>,{" "}
+              <strong className="text-foreground">{DEFAULT_COMMISSION_RATE}% de commission</strong> seulement.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button
                 size="lg"
-                variant="secondary"
                 className="text-base px-8 py-6 font-semibold"
                 asChild
               >
@@ -186,7 +180,6 @@ export default function VendorLandingPage() {
             </div>
           </div>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background to-transparent" />
       </section>
 
       {/* Value Propositions */}

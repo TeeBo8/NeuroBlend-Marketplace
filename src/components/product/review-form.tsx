@@ -39,7 +39,7 @@ function InteractiveStarRating({
                 'w-7 h-7 transition-colors',
                 starValue <= (hovered || rating)
                   ? 'fill-yellow-400 text-yellow-400'
-                  : 'fill-gray-200 text-gray-200'
+                  : 'fill-muted text-muted'
               )}
             />
           </button>
@@ -92,7 +92,7 @@ export function ReviewForm({ productId }: { productId: string }) {
     return (
       <Card className="border-dashed">
         <CardContent className="flex flex-col items-center justify-center py-8 text-center">
-          <Star className="w-10 h-10 text-gray-300 mb-3" />
+          <Star className="w-10 h-10 text-muted-foreground/40 mb-3" />
           <p className="text-muted-foreground mb-3">
             Connectez-vous pour laisser un avis
           </p>

@@ -73,7 +73,7 @@ export default function AdminLayout({
     return (
       <div className="container mx-auto px-4 py-16">
         <div className="flex flex-col items-center justify-center text-center max-w-md mx-auto">
-          <div className="w-24 h-24 rounded-full bg-red-100 flex items-center justify-center mb-6">
+          <div className="w-24 h-24 rounded-full bg-red-500/15 flex items-center justify-center mb-6">
             <Shield className="w-12 h-12 text-red-300" />
           </div>
           <h1 className="text-2xl font-bold text-foreground mb-2">
@@ -118,9 +118,9 @@ export default function AdminLayout({
           <div className="md:sticky md:top-24 space-y-6">
             {/* Admin info */}
             <div className="flex items-center gap-3 px-1">
-              <Avatar className="h-12 w-12 border-2 border-red-100">
+              <Avatar className="h-12 w-12 border-2 border-red-500/30">
                 <AvatarImage src={user.image || undefined} alt={user.name || 'Avatar'} />
-                <AvatarFallback className="bg-red-100 text-red-700 font-semibold">
+                <AvatarFallback className="bg-red-500/15 text-red-700 dark:text-red-300 font-semibold">
                   {initials}
                 </AvatarFallback>
               </Avatar>
@@ -128,7 +128,7 @@ export default function AdminLayout({
                 <p className="font-semibold text-foreground truncate">
                   {user.name || 'Admin'}
                 </p>
-                <Badge variant="secondary" className="bg-red-100 text-red-700 text-xs">
+                <Badge variant="secondary" className="bg-red-500/15 text-red-700 dark:text-red-300 text-xs">
                   Administrateur
                 </Badge>
               </div>

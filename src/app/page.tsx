@@ -96,7 +96,7 @@ export default function HomePage() {
       <JsonLd data={websiteSchema()} />
 
       {/* Hero Section */}
-      <section className="relative bg-primary text-primary-foreground overflow-hidden">
+      <section className="relative bg-neutral-900 text-white overflow-hidden">
         {/* Video background with image fallback */}
         <div className="absolute inset-0">
           <video
@@ -109,7 +109,9 @@ export default function HomePage() {
           >
             <source src="/images/hero/cappuccino-hero.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-primary/75" />
+          {/* Voile sombre neutre, identique en clair et en sombre : le texte
+              reste blanc et lisible sur la vidéo. */}
+          <div className="absolute inset-0 bg-black/55" />
         </div>
 
         <div className="relative container mx-auto px-4 py-24 md:py-36">
@@ -117,11 +119,11 @@ export default function HomePage() {
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
               Votre cerveau mérite un café à sa hauteur
             </h1>
-            <p className="text-lg md:text-2xl text-primary-foreground/80 mb-8 leading-relaxed">
+            <p className="text-lg md:text-2xl text-white/85 mb-8 leading-relaxed">
               Des blends créés par des torréfacteurs artisanaux, adaptés aux
-              profils <strong className="text-primary-foreground">HPI</strong>,{" "}
-              <strong className="text-primary-foreground">ADHD</strong> et{" "}
-              <strong className="text-primary-foreground">Hypersensibles</strong>.
+              profils <strong className="text-white">HPI</strong>,{" "}
+              <strong className="text-white">ADHD</strong> et{" "}
+              <strong className="text-white">Hypersensibles</strong>.
             </p>
 
             {/* Trust badges */}
@@ -133,7 +135,7 @@ export default function HomePage() {
               ].map((badge) => (
                 <span
                   key={badge.label}
-                  className="inline-flex items-center gap-2 rounded-full bg-primary-foreground/15 backdrop-blur-sm px-4 py-2 text-sm font-medium text-primary-foreground"
+                  className="inline-flex items-center gap-2 rounded-full bg-white/15 backdrop-blur-sm px-4 py-2 text-sm font-medium text-white"
                 >
                   <badge.icon className="h-4 w-4" />
                   {badge.label}
@@ -147,7 +149,7 @@ export default function HomePage() {
                 label="Faire le quiz"
                 location="hero"
                 variant="secondary"
-                className="text-base px-8 py-6 font-semibold"
+                className="bg-white text-neutral-900 hover:bg-white/90 text-base px-8 py-6 font-semibold"
               >
                 Faire le quiz
               </TrackedCta>
@@ -156,7 +158,7 @@ export default function HomePage() {
                 label="Tous nos cafés"
                 location="hero"
                 variant="outline"
-                className="bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10 text-base px-8 py-6"
+                className="bg-transparent border-white/70 text-white hover:bg-white/10 hover:text-white text-base px-8 py-6"
               >
                 Tous nos cafés
               </TrackedCta>

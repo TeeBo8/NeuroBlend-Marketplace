@@ -77,15 +77,15 @@ export function SubscriptionsContent() {
     <div className="container mx-auto px-4 py-8">
       {/* Success / Cancelled messages */}
       {success && (
-        <div className="mb-8 p-4 bg-green-50 border border-green-200 rounded-lg text-center">
-          <p className="text-green-800 font-medium">
+        <div className="mb-8 p-4 bg-green-500/10 border border-green-500/30 rounded-lg text-center">
+          <p className="text-green-700 dark:text-green-300 font-medium">
             Abonnement activé avec succès ! Bienvenue dans le club NeuroBlend.
           </p>
         </div>
       )}
       {cancelled && (
-        <div className="mb-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-center">
-          <p className="text-yellow-800 font-medium">
+        <div className="mb-8 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg text-center">
+          <p className="text-yellow-700 dark:text-yellow-300 font-medium">
             Abonnement annulé. Vous pouvez réessayer quand vous le souhaitez.
           </p>
         </div>

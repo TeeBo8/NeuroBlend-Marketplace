@@ -20,7 +20,7 @@ export default function GlobalError({
     <div className="flex min-h-[calc(100vh-12rem)] items-center justify-center px-4 py-16">
       <div className="text-center max-w-lg">
         {/* Error icon */}
-        <div className="mx-auto mb-8 w-24 h-24 rounded-full bg-red-100 flex items-center justify-center">
+        <div className="mx-auto mb-8 w-24 h-24 rounded-full bg-red-500/15 flex items-center justify-center">
           <AlertTriangle className="w-12 h-12 text-destructive" />
         </div>
 

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Coffee, Heart, Brain, Users } from 'lucide-react';
 import { APP_NAME } from '@/lib/constants';
+import { PageHero } from '@/components/layout/page-hero';
 
 export const metadata: Metadata = {
   title: 'À propos — Notre histoire et nos valeurs',
@@ -49,21 +50,9 @@ export default function AboutPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-primary via-primary/90 to-indigo-800 text-primary-foreground">
-        <div className="container mx-auto px-4 py-20 md:py-28">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Le café qui comprend votre esprit
-            </h1>
-            <p className="text-xl text-primary-foreground/80 leading-relaxed">
-              {APP_NAME} est né d&apos;une conviction simple : les personnes
-              neuroatypiques méritent un café pensé pour elles. Pas un café
-              &laquo;&nbsp;adapté&nbsp;&raquo;, mais un café qui célèbre leur
-              différence.
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero title="Le café qui comprend votre esprit">
+        {APP_NAME} est né d&apos;une conviction simple : les personnes neuroatypiques méritent un café pensé pour elles. Pas un café &laquo;&nbsp;adapté&nbsp;&raquo;, mais un café qui célèbre leur différence.
+      </PageHero>
 
       {/* Story */}
       <section className="py-20 bg-background">

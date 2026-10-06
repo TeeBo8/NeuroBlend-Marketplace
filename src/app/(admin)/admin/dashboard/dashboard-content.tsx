@@ -17,15 +17,7 @@ import { Button } from '@/components/ui/button';
 import { api } from '@/trpc/client';
 import { formatPrice, formatDate } from '@/lib/utils';
 import { ORDER_STATUSES } from '@/lib/constants';
-
-const statusColorMap: Record<string, string> = {
-  pending: 'bg-yellow-100 text-yellow-800',
-  paid: 'bg-green-100 text-green-800',
-  processing: 'bg-blue-100 text-blue-800',
-  shipped: 'bg-purple-100 text-purple-800',
-  delivered: 'bg-green-100 text-green-800',
-  cancelled: 'bg-red-100 text-red-800',
-};
+import { ORDER_STATUS_BADGE } from '@/lib/order-status-badge';
 
 export function AdminDashboardContent() {
   const { data: stats, isLoading: statsLoading } = api.admin.getStats.useQuery();
@@ -52,17 +44,17 @@ export function AdminDashboardContent() {
 
       {/* Pending vendors alert */}
       {stats && stats.pendingVendors > 0 && (
-        <div className="rounded-lg bg-yellow-50 border border-yellow-200 p-4 flex items-start gap-3">
-          <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5 shrink-0" />
+        <div className="rounded-lg bg-yellow-500/10 border border-yellow-500/30 p-4 flex items-start gap-3">
+          <AlertTriangle className="h-5 w-5 text-yellow-700 dark:text-yellow-300 mt-0.5 shrink-0" />
           <div className="flex-1">
-            <p className="font-medium text-yellow-800">
+            <p className="font-medium text-yellow-700 dark:text-yellow-300">
               {stats.pendingVendors} demande{stats.pendingVendors > 1 ? 's' : ''} vendeur en attente
             </p>
-            <p className="text-sm text-yellow-700 mt-1">
+            <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
               Des vendeurs attendent votre validation pour commencer à vendre.
             </p>
           </div>
-          <Button asChild size="sm" variant="outline" className="shrink-0 border-yellow-300 text-yellow-700 hover:bg-yellow-100">
+          <Button asChild size="sm" variant="outline" className="shrink-0 border-yellow-500/30 text-yellow-700 dark:text-yellow-300 hover:bg-yellow-500/15">
             <Link href="/admin/vendors">Voir</Link>
           </Button>
         </div>
@@ -73,8 +65,8 @@ export function AdminDashboardContent() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100">
-                <Users className="h-6 w-6 text-blue-600" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-500/15">
+                <Users className="h-6 w-6 text-blue-700 dark:text-blue-300" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Utilisateurs</p>
@@ -101,8 +93,8 @@ export function AdminDashboardContent() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-chart-2/20">
-                <Package className="h-6 w-6 text-chart-2" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                <Package className="h-6 w-6 text-primary" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Produits</p>
@@ -115,8 +107,8 @@ export function AdminDashboardContent() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange-100">
-                <ShoppingCart className="h-6 w-6 text-orange-600" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange-500/15">
+                <ShoppingCart className="h-6 w-6 text-orange-700 dark:text-orange-300" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Commandes</p>
@@ -132,8 +124,8 @@ export function AdminDashboardContent() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-                <TrendingUp className="h-6 w-6 text-green-600" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-500/15">
+                <TrendingUp className="h-6 w-6 text-green-700 dark:text-green-300" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">GMV (Volume total)</p>
@@ -148,8 +140,8 @@ export function AdminDashboardContent() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100">
-                <DollarSign className="h-6 w-6 text-emerald-600" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/15">
+                <DollarSign className="h-6 w-6 text-emerald-700 dark:text-emerald-300" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Commissions gagnées</p>
@@ -178,7 +170,7 @@ export function AdminDashboardContent() {
                     key={status}
                     className="flex items-center gap-2 rounded-lg border px-4 py-3"
                   >
-                    <Badge variant="secondary" className={statusColorMap[status] || ''}>
+                    <Badge variant="secondary" className={ORDER_STATUS_BADGE[status] || ''}>
                       {statusInfo?.label || status}
                     </Badge>
                     <span className="text-lg font-bold text-foreground">{item.count}</span>
@@ -235,7 +227,7 @@ export function AdminDashboardContent() {
                       </div>
                     </div>
                     <div className="flex items-center gap-3 shrink-0">
-                      <Badge variant="secondary" className={statusColorMap[status] || ''}>
+                      <Badge variant="secondary" className={ORDER_STATUS_BADGE[status] || ''}>
                         {statusInfo?.label || status}
                       </Badge>
                       <span className="font-semibold text-foreground">
@@ -305,8 +297,8 @@ export function AdminDashboardContent() {
           href="/admin/users"
           className="flex items-center gap-4 p-5 rounded-lg border hover:border-primary/30 hover:bg-primary/5 transition-colors group"
         >
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 group-hover:bg-blue-200 transition-colors">
-            <Users className="h-5 w-5 text-blue-600" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500/15 group-hover:bg-blue-500/25 transition-colors">
+            <Users className="h-5 w-5 text-blue-700 dark:text-blue-300" />
           </div>
           <div>
             <p className="font-medium text-foreground">Utilisateurs</p>
@@ -329,8 +321,8 @@ export function AdminDashboardContent() {
           href="/admin/orders"
           className="flex items-center gap-4 p-5 rounded-lg border hover:border-primary/30 hover:bg-primary/5 transition-colors group"
         >
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 group-hover:bg-orange-200 transition-colors">
-            <ShoppingCart className="h-5 w-5 text-orange-600" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-500/15 group-hover:bg-orange-500/25 transition-colors">
+            <ShoppingCart className="h-5 w-5 text-orange-700 dark:text-orange-300" />
           </div>
           <div>
             <p className="font-medium text-foreground">Commandes</p>
@@ -341,8 +333,8 @@ export function AdminDashboardContent() {
           href="/admin/products"
           className="flex items-center gap-4 p-5 rounded-lg border hover:border-primary/30 hover:bg-primary/5 transition-colors group"
         >
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-chart-2/20 group-hover:bg-chart-2/30 transition-colors">
-            <Package className="h-5 w-5 text-chart-2" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+            <Package className="h-5 w-5 text-primary" />
           </div>
           <div>
             <p className="font-medium text-foreground">Produits</p>

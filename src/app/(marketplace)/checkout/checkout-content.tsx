@@ -252,7 +252,7 @@ export function CheckoutContent() {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Livraison</span>
-                  <span className="font-medium text-green-600">Gratuite</span>
+                  <span className="font-medium text-green-700 dark:text-green-300">Gratuite</span>
                 </div>
                 <Separator />
                 <div className="flex justify-between">

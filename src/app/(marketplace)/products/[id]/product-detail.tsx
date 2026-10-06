@@ -37,7 +37,7 @@ function StarRating({ rating }: { rating: number }) {
             'w-4 h-4',
             i < rating
               ? 'fill-yellow-400 text-yellow-400'
-              : 'fill-gray-200 text-gray-200'
+              : 'fill-muted text-muted'
           )}
         />
       ))}
@@ -172,7 +172,7 @@ export function ProductDetail({ id }: { id: string }) {
               {product.stock !== null && product.stock > 0 && (
                 <Badge
                   variant="outline"
-                  className="border-green-200 text-green-700"
+                  className="border-green-500/30 text-green-700 dark:text-green-300"
                 >
                   En stock
                 </Badge>
@@ -180,7 +180,7 @@ export function ProductDetail({ id }: { id: string }) {
               {product.stock !== null && product.stock === 0 && (
                 <Badge
                   variant="outline"
-                  className="border-red-200 text-red-700"
+                  className="border-red-500/30 text-red-700 dark:text-red-300"
                 >
                   Rupture de stock
                 </Badge>
@@ -351,7 +351,7 @@ export function ProductDetail({ id }: { id: string }) {
             <h2 className="text-2xl font-bold text-foreground mb-4">
               Description
             </h2>
-            <div className="prose prose-gray max-w-none">
+            <div className="rich-text">
               <p className="text-muted-foreground whitespace-pre-line">
                 {product.description}
               </p>
@@ -453,7 +453,7 @@ export function ProductDetail({ id }: { id: string }) {
                     {review.verified && (
                       <Badge
                         variant="outline"
-                        className="mt-2 text-xs border-green-200 text-green-700"
+                        className="mt-2 text-xs border-green-500/30 text-green-700 dark:text-green-300"
                       >
                         Achat vérifié
                       </Badge>

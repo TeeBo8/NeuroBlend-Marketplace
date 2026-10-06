@@ -153,3 +153,35 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Texte long (pages légales, description d'un produit) : titres, paragraphes
+   et listes mis en forme avec les couleurs du thème. */
+@layer components {
+  .rich-text {
+    @apply text-base leading-relaxed text-muted-foreground;
+  }
+  .rich-text h2 {
+    @apply mt-10 mb-3 text-xl font-semibold tracking-tight text-foreground;
+  }
+  .rich-text h2:first-child {
+    @apply mt-0;
+  }
+  .rich-text h3 {
+    @apply mt-6 mb-2 text-lg font-semibold text-foreground;
+  }
+  .rich-text p {
+    @apply mb-4;
+  }
+  .rich-text ul {
+    @apply mb-4 list-disc space-y-1.5 pl-6;
+  }
+  .rich-text ol {
+    @apply mb-4 list-decimal space-y-1.5 pl-6;
+  }
+  .rich-text strong {
+    @apply font-semibold text-foreground;
+  }
+  .rich-text a {
+    @apply text-primary underline underline-offset-4;
+  }
+}

@@ -84,8 +84,8 @@ export function RegisterContent() {
   if (existingVendor) {
     return (
       <div className="flex flex-col items-center justify-center text-center py-16">
-        <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mb-6">
-          <CheckCircle2 className="w-10 h-10 text-green-600" />
+        <div className="w-20 h-20 rounded-full bg-green-500/15 flex items-center justify-center mb-6">
+          <CheckCircle2 className="w-10 h-10 text-green-700 dark:text-green-300" />
         </div>
         <h1 className="text-2xl font-bold text-foreground mb-2">
           Vous êtes déjà vendeur !

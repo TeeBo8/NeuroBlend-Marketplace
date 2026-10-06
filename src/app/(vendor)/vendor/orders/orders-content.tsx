@@ -29,15 +29,7 @@ import { formatPrice, formatDate } from '@/lib/utils';
 import { ORDER_STATUSES } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
-
-const statusColorMap: Record<string, string> = {
-  pending: 'bg-yellow-100 text-yellow-800',
-  paid: 'bg-green-100 text-green-800',
-  processing: 'bg-blue-100 text-blue-800',
-  shipped: 'bg-purple-100 text-purple-800',
-  delivered: 'bg-green-100 text-green-800',
-  cancelled: 'bg-red-100 text-red-800',
-};
+import { ORDER_STATUS_BADGE } from '@/lib/order-status-badge';
 
 const STATUS_FILTERS = [
   { value: 'all', label: 'Toutes' },
@@ -147,7 +139,7 @@ export function VendorOrdersContent() {
                         </h3>
                         <Badge
                           variant="secondary"
-                          className={statusColorMap[status] || ''}
+                          className={ORDER_STATUS_BADGE[status] || ''}
                         >
                           {statusInfo?.label || status}
                         </Badge>
