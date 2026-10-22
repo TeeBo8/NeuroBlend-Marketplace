@@ -330,7 +330,7 @@ export function ProductDetail({ id }: { id: string }) {
                   description: product.name,
                   action: {
                     label: 'Voir le panier',
-                    onClick: () => window.location.href = '/cart',
+                    onClick: () => router.push('/cart'),
                   },
                 });
               }}
