@@ -330,6 +330,10 @@ describe("nettoyage des bacs à sable", () => {
   });
 
   it("n'est ouvert qu'à la tâche planifiée", async () => {
+    // La route lit l'heure réelle : on la cale sur NOW, sinon les bacs créés à NOW
+    // paraissent expirés dès le lendemain du 2026-10-06
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(NOW);
     process.env.CRON_SECRET = "secret-du-cron";
     const call = (authorization?: string) =>
       cleanup(
@@ -346,6 +350,7 @@ describe("nettoyage des bacs à sable", () => {
 
     delete process.env.CRON_SECRET;
     expect((await call("Bearer undefined")).status).toBe(401);
+    vi.useRealTimers();
   });
 });
 
